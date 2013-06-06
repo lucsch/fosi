@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>ColtopGIS</string>
+	<key>CFBundleGetInfoString</key>
+	<string>ColtopGIS</string>
+	<key>CFBundleIconFile</key>
+	<string>coltopgis.icns</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleLongVersionString</key>
+	<string></string>
+	<key>CFBundleName</key>
+	<string>ColtopGIS</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>Beta</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.0</string>
+	<key>CSResourcesFileMapped</key>
+	<true/>
+	<key>LSRequiresCarbon</key>
+	<true/>
+	<key>NSHumanReadableCopyright</key>
+  <string>Lucien Schreiber (c) CREALP 2013</string>
+  <!--<key>NSPrincipalClass</key>
+  <string>NSApplication</string>-->
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>c2p</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>coltop_file.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>ColtopGIS project</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>C2DP</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>NSPersistentStoreTypeKey</key>
+			<string>Binary</string>
+		</dict>
+	</array>
+</dict>
+</plist>
