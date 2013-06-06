@@ -1,29 +1,19 @@
 /***************************************************************************
- coltopgisapp.h
+ accelerators.h
  -------------------
  copyright            : (C) 2010 CREALP Lucien Schreiber 
  email                : lucien.schreiber at crealp dot vs dot ch
  ***************************************************************************/
 
-#ifndef _COLTOPGISAPP_H
-#define _COLTOPGISAPP_H
+#ifndef _ACCELERATORS_H_
+#define _ACCELERATORS_H_
 
 // wxWidgets include
 #include "wx/wxprec.h"
 #ifndef WX_PRECOMP
 #include <wx/wx.h>
 #endif
-#include <wx/config.h>
-#include <wx/stdpaths.h>
 
-class Frame;
-class App : public wxApp {
-	Frame * m_Frame;
-  public:
-    App();
-	virtual bool OnInit();
-    virtual void OnFatalException();
-};
-DECLARE_APP(App)
+WX_DECLARE_OBJARRAY(wxAcceleratorEntry, wxArrayAccelerators);
 
 #endif

@@ -1,7 +1,7 @@
 /***************************************************************************
  coltopgisframe.h
  -------------------
- copyright            : (C) 2010 CREALP Lucien Schreiber 
+ copyright            : (C) 2010 CREALP Lucien Schreiber
  email                : lucien.schreiber at crealp dot vs dot ch
  ***************************************************************************/
 #ifndef _COLTOPGISFRAME_H
@@ -36,61 +36,54 @@ const int MENU_CHECK_UPDATE = wxID_HIGHEST + 23;
 const int MENU_WEBSITE = wxID_HIGHEST + 24;
 const int MENU_FRAME_CLEAR_SELECTION = wxID_HIGHEST + 26;
 
-const wxString g_ProgName = "ColtopGIS";
-
-
+const wxString g_ProgName = "Fosi";
 
 // DND support
 class Frame;
 class ctDropFiles : public wxFileDropTarget {
-private:
-	Frame * m_Frame;
-	
 public:
 	ctDropFiles(Frame * parent);
 	virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString & filenames);
+private:
+	Frame * m_Frame;
 };
 
 
-
 class Frame : public wxFrame {
-private:
+public:
+    Frame(const wxString & title);
+    virtual ~Frame();
 	
+	bool ProjectOpen(const wxFileName & file);
+	bool AddLayers (const wxArrayString & names);
+    bool AddLayer(const wxFileName & file, long position = -1, vrRender * render = NULL,
+				  vrLabel * label = NULL, bool visible = true, bool readwrite = false);
+	inline vrViewerLayerManager * GetViewerLayerManager() const;
+	inline vrLayerManager * GetLayerManager() const;
+    
+private:
 	// vroomgis engine members
-    TOC * m_vrTOC;
+    vrViewerTOCTree * m_vrTOC;
     vrLayerManager * m_vrLayerManager;
     vrViewerLayerManager * m_vrViewerLayerManager;
     vrViewerDisplay * m_vrDisplay;
 	
-	ArrayPlugin m_Plugins;
 	wxLogWindow * m_LogWnd;
-	ProjectManager * m_ProjectManager;
 	wxMenu * m_RecentMenu;
 	wxKeyboardState m_KeyBoardState;
     WebUpdateInformationBar * m_InfoBar;
-	
 	
 	void _CreateControls();
     void _CreateMenus();
     void _CreateToolbar();
 	void _CreateAccelerators();
-	void _InitPlugins();
-    void _EndPlugins();
 	bool _ProjectQuestion(const wxString & text);
     
-    bool _ProjectSave(const wxFileName & file);
-	void _ProjectBeforeSave(const wxFileName & project);
-	void _ProjectAfterSave();
-    void _ProjectAfterOpen();
-	void _SetFrameName();
 	void _SetSelectedFeature();
     bool _RemoveLayer(long position);
 	void _PreferenceChanged(bool refresh = true);
-	bool _CheckSecurity();
 	void OnDisplaySecurityMessage(wxThreadEvent & event);
-
-
-	
+    
     void OnAbout(wxCommandEvent & event);
     void OnCheckUpdates(wxCommandEvent & event);
 	void OnPreferences(wxCommandEvent & event);
@@ -98,12 +91,6 @@ private:
     void OnWebSite (wxCommandEvent & event);
     void OnQuit(wxCommandEvent & event);
 	void OnLogWindow(wxCommandEvent & event);
-	void OnDataManager(wxCommandEvent & event);
-	void OnProjectNew(wxCommandEvent & event);
-    void OnProjectOpen(wxCommandEvent & event);
-	void OnProjectRecent(wxCommandEvent & event);
-    void OnProjectSave(wxCommandEvent & event);
-    void OnProjectSaveAs(wxCommandEvent & event);
 	void OnLayerAdd(wxCommandEvent & event);
     void OnLayerRemove(wxCommandEvent & event);
 	void OnUpdateIdle(wxIdleEvent & event);
@@ -124,25 +111,9 @@ private:
     void OnUpdateUIToolClearSelection(wxUpdateUIEvent & event);
 	
 	DECLARE_EVENT_TABLE();
-public:
-    Frame(const wxString & title);
-    virtual ~Frame();
-	
-	bool ProjectOpen(const wxFileName & file);
-	bool AddLayers (const wxArrayString & names);
-    bool AddLayer(const wxFileName & file, long position = -1, vrRender * render = NULL,
-				  vrLabel * label = NULL, bool visible = true, bool readwrite = false);
-	inline  ProjectManager * GetProjectManager() const;
-	inline vrViewerLayerManager * GetViewerLayerManager() const;
-	inline vrLayerManager * GetLayerManager() const;
-    inline ArrayPlugin * GetPlugins();
-
-
 };
 
-inline  ProjectManager * Frame::GetProjectManager() const {
-	return m_ProjectManager;
-}
+
 
 inline  vrLayerManager * Frame::GetLayerManager() const {
 	return m_vrLayerManager;
@@ -152,8 +123,5 @@ inline  vrViewerLayerManager * Frame::GetViewerLayerManager() const {
 	return m_vrViewerLayerManager;
 }
 
-inline ArrayPlugin * Frame::GetPlugins() {
-	return &m_Plugins;
-}
 
 #endif

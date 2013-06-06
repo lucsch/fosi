@@ -24,9 +24,8 @@
 class Frame;
 
 const long WEBUPDATE_CONNECTION_TIMEOUT = 2000;
-const wxString WEBUPDATE_SERVER_DOWNLOAD = "http://www.crealp.ch/index.php?option=com_content&task=view&id=382&Itemid=387";
-const wxString WEBUPDATE_SERVER_UPDATE = "http://www.crealp.ch/down/coltopgis/latestversion.txt";
-
+const wxString WEBUPDATE_SERVER_DOWNLOAD = "http://www.terranum.ch";
+const wxString WEBUPDATE_SERVER_UPDATE = "http://www.terranum.ch/down/fosi/latestversion.txt";
 
 const int INFOBAR_DOWNLOAD_BUTTON = wxID_HIGHEST + 22;
 class WebUpdateInformationBar : public wxInfoBar {

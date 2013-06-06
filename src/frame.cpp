@@ -1,49 +1,31 @@
 /***************************************************************************
- coltopgisframe.cpp
+frame.cpp
  -------------------
- copyright            : (C) 2010 CREALP Lucien Schreiber
- email                : lucien.schreiber at crealp dot vs dot ch
+ copyright            : (C) 2013 Lucien Schreiber
+ email                : lucien.schreiber at gmail dot com
  ***************************************************************************/
 
 #include "frame.h"
-#include "log.h"	// for double logging process
+#include "log.h"  // for double logging process
 #include <wx/splitter.h>
 #include <wx/stdpaths.h>
-#include "about_dlg.h"
 #include "preference_dlg.h"
 #include <wx/fileconf.h>
-#include "dataframe.h"
-#include "projectmanager.h"
-#include "database.h"
-#include "project.h"
 #include "vrrender.h"
 #include "vrlabel.h"
-#include "datapanellayers.h"
-#include "toc.h"
 #include "vrlayerraster.h"
 #include "vrprogress.h"
-#include "securitydate.h"
-#include "securitymessage.h"
-#include "lsversion_core.h"
 #include "vroomgis_bmp.h"
-
-
-
-
-#include "coltop_plugin.h"
-
+#include "accelerators.h"
+#include "wxhgversion_dlg.h"
+#include "wxhgversion_core.h"
 
 // bitmaps
-#include "../art/coltop_bmp.h"
+#include "general_bmp.h"
 
 
 
 BEGIN_EVENT_TABLE( Frame, wxFrame )
-	EVT_MENU( wxID_NEW, Frame::OnProjectNew)
-	EVT_MENU( wxID_OPEN, Frame::OnProjectOpen)
-	EVT_MENU_RANGE(wxID_FILE1, wxID_FILE9, Frame::OnProjectRecent)
-	EVT_MENU( wxID_SAVE, Frame::OnProjectSave)
-	EVT_MENU( wxID_SAVEAS, Frame::OnProjectSaveAs)
 	EVT_MENU( wxID_EXIT, Frame::OnQuit )
 	EVT_MENU( wxID_PREFERENCES, Frame::OnPreferences)
     EVT_MENU( wxID_HELP, Frame::OnUserManual)
@@ -51,7 +33,6 @@ BEGIN_EVENT_TABLE( Frame, wxFrame )
 	EVT_MENU( wxID_ABOUT, Frame::OnAbout)
     EVT_MENU( MENU_CHECK_UPDATE, Frame::OnCheckUpdates)
 	EVT_MENU( MENU_WINDOW_LOG, 	Frame::OnLogWindow)
-	EVT_MENU( MENU_WINDOW_DATA_MANAGER, Frame::OnDataManager)
 	EVT_MENU( MENU_DATA_ADD, Frame::OnLayerAdd)
 	EVT_MENU( MENU_DATA_REMOVE, Frame::OnLayerRemove)
 	EVT_IDLE( Frame::OnUpdateIdle)
@@ -65,7 +46,6 @@ BEGIN_EVENT_TABLE( Frame, wxFrame )
 	EVT_COMMAND( wxID_ANY, vrEVT_TOOL_ZOOMOUT, Frame::OnToolZoomAction)
 	EVT_COMMAND( wxID_ANY, vrEVT_TOOL_PAN, Frame::OnToolPanAction)
 	EVT_COMMAND( wxID_ANY, vrEVT_TOOL_SELECT, Frame::OnToolSelectAction)
-	EVT_THREAD(COMMAND_SECURITY_THREAD_MESSAGE, Frame::OnDisplaySecurityMessage)
 	EVT_KEY_DOWN(Frame::OnKeyDown)
 	EVT_KEY_UP(Frame::OnKeyUp)	
     EVT_UPDATE_UI(MENU_FRAME_CLEAR_SELECTION, Frame::OnUpdateUIToolClearSelection)
@@ -104,7 +84,7 @@ void Frame::_CreateControls() {
 	m_panel1 = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
-	m_vrTOC = new TOC( m_panel1, this, wxID_ANY);
+	m_vrTOC = new vrViewerTOCTree( m_panel1, wxID_ANY);
 	bSizer2->Add( m_vrTOC->GetControl(), 1, wxEXPAND, 5 );
 	m_panel1->SetSizer( bSizer2 );
     m_splitter1->Initialize(m_panel1);
@@ -252,12 +232,6 @@ void Frame::_CreateToolbar() {
 
 
 void Frame::_CreateAccelerators() {
-	// ACCELERATORS
-	/*wxAcceleratorEntry myEntries[3];
-	myEntries[0].Set(wxACCEL_NORMAL, (int) 'V', MENU_FRAME_SELECT);
-	myEntries[1].Set(wxACCEL_NORMAL, (int) 'Z', wxID_ZOOM_IN);
-	myEntries[2].Set(wxACCEL_NORMAL, (int) 'H', MENU_FRAME_PAN);*/
-	
 	wxArrayAccelerators myAccels;
 	wxAcceleratorEntry myEntry1 (wxACCEL_NORMAL, (int) 'V', MENU_FRAME_SELECT);
 	wxAcceleratorEntry myEntry2 (wxACCEL_NORMAL, (int) 'Z', wxID_ZOOM_IN);
@@ -267,9 +241,6 @@ void Frame::_CreateAccelerators() {
 	myAccels.Add(myEntry2);
 	myAccels.Add(myEntry3);
 	
-	for (unsigned int i = 0; i<m_Plugins.GetCount(); i++) {
-		m_Plugins.Item(i)->GetAccelerators(myAccels);
-	}
 	
 	wxAcceleratorEntry * myEntries = new wxAcceleratorEntry[myAccels.GetCount()];
 	for (unsigned int i = 0; i< myAccels.GetCount(); i++) {
@@ -283,278 +254,6 @@ void Frame::_CreateAccelerators() {
 	
 }
 
-
-
-void Frame::_InitPlugins() {
-	m_Plugins.Clear();
-#ifdef ctCOLTOP_PLUGIN_ENABLED
-	ctPlugin * myColtopPlugin = new ctPlugin(ctCOLTOP_PLUGIN_NAME);
-	m_Plugins.Add(myColtopPlugin);
-#endif
-	
-	// iterate plugins for adding menu and toolbar items.
-	for (unsigned int i = 0; i< m_Plugins.GetCount(); i++) {
-		m_Plugins.Item(i)->AddMenu(this);
-	}
-	GetToolBar()->Realize();
-}
-
-
-
-void Frame::_EndPlugins() {
-	for (unsigned int i = 0; i<m_Plugins.GetCount(); i++){
-		Plugin * myPlugin = m_Plugins.Item(0);
-		m_Plugins.Detach(0);
-		wxDELETE(myPlugin);
-	}
-	wxASSERT(m_Plugins.GetCount()==0);
-}
-
-
-
-bool Frame::_ProjectQuestion(const wxString & text) {
-	wxString myProjName =  m_ProjectManager->GetProjectName().GetFullName();
-	if (myProjName.IsEmpty()) {
-		myProjName = _("untitled");
-	}
-	int myAnswer = wxMessageBox(wxString::Format(_("Project '%s' was modified, Save modifications before %s"), 
-												 myProjName,
-												 text),
-								_("Project modified"),
-								wxICON_EXCLAMATION | wxYES_NO | wxCANCEL,
-								this);
-	wxCommandEvent myUnusedEvt;
-	switch (myAnswer) {
-		case wxYES:
-			_ProjectSave(m_ProjectManager->GetProjectName());
-			return true;
-			break;
-			
-		case wxNO:
-			return true;
-			break;
-			
-			
-		default:
-			return false;
-			break;
-	}
-	return false;
-}
-
-
-
-bool Frame::ProjectOpen(const wxFileName & file) {
-	// check if actual project is modified
-	if (m_ProjectManager->IsModified() == true) {
-		if (_ProjectQuestion(_("Opening project"))==false) {
-			return false;
-		}
-	}
-		
-	if (file.IsOk()) {
-		if (m_ProjectManager->Open(file) == true) {
-			_ProjectAfterOpen();
-			return true;
-		}
-		wxLogError(_("Unable to open '%s'"), file.GetFullName());
-		return false;
-	}
-	
-	// try to get a nice path
-	wxString myPath = wxStandardPaths::Get().GetDocumentsDir();
-	if (m_ProjectManager->GetProjectName().IsOk() == true) {
-		myPath = m_ProjectManager->GetProjectName().GetPath();
-	}
-	
-	wxFileDialog myDlg(this, _("Open ColtopGIS project"), myPath,"",
-					   "ColtopGIS project (*.c2p)|*.c2p", wxFD_OPEN| wxFD_FILE_MUST_EXIST);
-	
-	if (myDlg.ShowModal() == wxID_CANCEL) {
-		return false;
-	}
-	wxFileName myFileName (myDlg.GetPath());
-	bool bOpen = m_ProjectManager->Open(myFileName);
-	if (bOpen == false) {
-		wxLogError(_("Opening '%s' failed"), myFileName.GetFullName());
-	}
-	else {
-		_ProjectAfterOpen();
-	}
-	return bOpen;
-}
-
-
-
-bool Frame::_ProjectSave(const wxFileName & file) {
-	if (file.IsOk()) {
-		_ProjectBeforeSave(file);
-		bool bResult = m_ProjectManager->Save(file);
-		if (bResult == true) {
-			_ProjectAfterSave();
-		}
-		return bResult;
-	}
-	
-	// try to get a nice path
-	wxString myPath = wxStandardPaths::Get().GetDocumentsDir();
-	if (m_ProjectManager->GetProjectName().IsOk() == true) {
-		myPath = m_ProjectManager->GetProjectName().GetPath();
-	}
-	
-	
-	wxFileDialog myDlg(this, _("Save ColtopGIS project"), myPath,"",
-					   "ColtopGIS project (*.c2p)|*.c2p", wxFD_SAVE| wxFD_OVERWRITE_PROMPT);
-	
-	if (myDlg.ShowModal() == wxID_CANCEL) {
-		return false;
-	}
-	
-	wxFileName myFileName (myDlg.GetPath());
-	myFileName.SetExt("c2p");
-	_ProjectBeforeSave(myFileName);
-	bool bSave = m_ProjectManager->Save(myFileName);
-	if (bSave == false) {
-		wxLogError(_("Saving '%s' failed"), myFileName.GetFullName());
-	}else {
-		_ProjectAfterSave();
-	}
-	return bSave;
-}
-
-
-
-void Frame::_ProjectBeforeSave(const wxFileName & project) {
-	Database myDB;
-	if(myDB.Open(m_ProjectManager->GetProjectNameTemp())==false){
-		wxLogError(_("Unable to save opened file!"));
-		return;
-	}
-	ProjectBase myBaseProj(&myDB);
-	myBaseProj.ClearTOC();
-	// save path as relative ?
-	wxConfigBase * myConfig = wxConfigBase::Get(false);
-	wxASSERT(myConfig);
-	myConfig->SetPath("GENERAL");
-	bool myRelativeStatus = myConfig->ReadBool("SAVE_RELATIVE_PATH", true);
-	myConfig->SetPath("..");
-	
-    int iNbItem = m_vrViewerLayerManager->GetCount();
-    for (int i = 0; i< iNbItem; i++) {
-		myBaseProj.SaveTOC(i, m_vrViewerLayerManager->GetRenderer(i), myRelativeStatus, project);
-	}
-	
-	// save toc position for plugins items
-	for (unsigned int j = 0; j< m_Plugins.GetCount(); j++) {
-		m_Plugins.Item(j)->SaveTOC(m_vrViewerLayerManager, &myDB);
-	}
-}
-
-
-
-void Frame::_ProjectAfterSave() {
-	m_ProjectManager->SetModified(false);
-	m_ProjectManager->SetHistoryMenu(m_RecentMenu);
-}
-
-
-void Frame::_ProjectAfterOpen() {
-	m_ProjectManager->SetHistoryMenu(m_RecentMenu);
-	m_vrDisplay->SetTool(new vrDisplayToolSelect (m_vrDisplay));
-	
-	// destroy dataframe
-	DataFrame * myFrameData = (DataFrame*) FindWindowById(WINDOW_DATA_MANAGER);
-	if (myFrameData) {
-		myFrameData->Destroy();
-	}
-	
-	// close plugin frames (stereonet, etc)
-	for (unsigned int i = 0; i<m_Plugins.GetCount(); i++) {
-		m_Plugins.Item(i)->CloseWindow();
-	}
-	
-	// empty toc
-	m_vrViewerLayerManager->FreezeBegin();
-	for (int j =  m_vrViewerLayerManager->GetCount() -1; j>= 0; j--) {
-		_RemoveLayer(j);
-	}
-	
-	// load toc
-	Database myDB;
-	if(myDB.Open(m_ProjectManager->GetProjectNameTemp())==false){
-		wxLogError(_("Unable to load Table of content!"));
-		return;
-		m_vrViewerLayerManager->FreezeEnd();
-	}
-	
-	ProjectBase myBaseProj(&myDB);
-	long i = 0;
-	long myIndex = wxNOT_FOUND;
-	wxFileName myFile;
-	bool myVisible = false;
-
-	// load base project
-	while (1) {
-		vrRender * myRender = NULL;
-		vrLabel * myLabel = NULL;
-		if(myBaseProj.LoadTOC(i, myIndex, myFile, myVisible, &myRender, &myLabel, m_ProjectManager->GetProjectName())==false) {
-			wxDELETE(myRender);
-			wxDELETE(myLabel);
-			break;
-		}
-		i++;
-		wxLogMessage("Adding layer : %s @ position : %ld", myFile.GetFullName(), myIndex);
-		AddLayer(myFile, myIndex, myRender, myLabel, myVisible);
-	}
-	
-	// load project from plugins
-	i = 0;
-	for (unsigned int j = 0; j<m_Plugins.GetCount(); j++) {
-		Project * myProj = m_Plugins.Item(j)->GetProject(&myDB);
-		if (myProj == NULL) {
-			continue;
-		}
-		while (1){
-			vrRender * myRender = NULL;
-			vrLabel * myLabel = NULL;
-			bool bReadWrite = true;
-			if(myProj->LoadTOC(i, myIndex, myFile, myVisible, &myRender, &myLabel, m_ProjectManager->GetProjectNameTemp())==false) {
-				wxDELETE(myRender);
-				wxDELETE(myLabel);
-				break;
-			}
-			i++;
-			AddLayer(myFile, myIndex, myRender, myLabel, myVisible, bReadWrite);			
-		}
-		wxDELETE(myProj);
-        
-        // post-loading processing for plugins
-        m_Plugins.Item(j)->LoadTOCEnd(this, &myDB);
-	}
-	m_vrViewerLayerManager->FreezeEnd();
-	m_ProjectManager->SetModified(false);
-
-}
-
-
-
-void Frame::_SetFrameName() {
-	wxASSERT(m_ProjectManager);
-
-	// create project name
-	wxString myProjName = m_ProjectManager->GetProjectName().GetFullName();
-	if (myProjName == wxEmptyString) {
-		myProjName = _("untitled");
-	}
-	
-	// show modified status
-	if (m_ProjectManager->IsModified() == true) {
-		myProjName.Prepend(_T("*"));
-	}
-	OSXSetModified(m_ProjectManager->IsModified());
-	// display title
-	SetTitle(g_ProgName + _T(" - ") + myProjName);
-}
 
 
 
@@ -610,18 +309,12 @@ bool Frame::AddLayer(const wxFileName & file, long position, vrRender * render,
 	
 	// add files to the viewer
 	m_vrViewerLayerManager->Add(position, myLayer, render, label, visible);
-	
-	//inform plugins that layer where added
-	for (unsigned int i = 0; i<m_Plugins.GetCount(); i++) {
-		m_Plugins.Item(i)->LayerAdded(file);
-	}
 	return true;
 }
 
 
 
 bool Frame::_RemoveLayer(long position) {
-	DataFrame * myFrame = (DataFrame*) FindWindowById(WINDOW_DATA_MANAGER);
 	wxASSERT(m_vrViewerLayerManager);
 	vrRenderer * myRenderer = m_vrViewerLayerManager->GetRenderer(position);
 	if (myRenderer == NULL) {
@@ -636,16 +329,7 @@ bool Frame::_RemoveLayer(long position) {
 
 	// close layer (not used anymore);
 	m_vrLayerManager->Close(myLayer);
-	
-	if (myFrame) {
-		myFrame->EditPanel(DATAPANEL_TYPE_LAYERS, DP_REMOVE);
-	}
-	
-	//inform plugins that layer where removed
-	for (unsigned int i = 0; i<m_Plugins.GetCount(); i++) {
-		m_Plugins.Item(i)->LayerRemoved(myFile);
-	}
-	return true;
+    return true;
 }
 
 
@@ -672,77 +356,12 @@ void Frame::_PreferenceChanged(bool refresh) {
 		m_vrViewerLayerManager->Reload();
 	}
 	
-	// update background colour for empty panel
-	DataFrame * myFrameData = (DataFrame*) FindWindowById(WINDOW_DATA_MANAGER);
-	if (myFrameData && myFrameData->GetActualPanel()->GetPanelType() == DATAPANEL_TYPE_EMPTY){
-		myFrameData->GetActualPanel()->EditData();
-	}
-	
-}
-
-
-bool Frame::_CheckSecurity(){
-	SecurityDate mySecurity;
-	SecurityMessage myMessage (this);
-	
-	// get last start
-	wxDateTime myLastStartDate;
-	bool bGetLastStart = mySecurity.GetLastStart(myLastStartDate, wxConfigBase::Get(false));
-	if (bGetLastStart == false) {
-		wxLogMessage(_("Last start time not found (or not correct)! First start ?"));
-		// TODO get actual date from internet (Beta 13)
-	}
-	else {
-		wxLogMessage(_("Program started last time: %s"), myLastStartDate.FormatISOCombined(' '));
-	}
-
-	
-	// get local actual date
-	wxDateTime myActualDateLocal = mySecurity.GetActualDate();
-	wxASSERT(myActualDateLocal.IsValid());
-	
-	// check local date validity
-	bool bIsActualDateLocalValid = (mySecurity.IsDateValid(myActualDateLocal));
-	if (bIsActualDateLocalValid == false) {
- 		myMessage.SendMessageBetaExpired();
-		return false;
-	}
-	
-	if (bGetLastStart == true) {
-		if (myActualDateLocal.IsEarlierThan(myLastStartDate)) {
-             myMessage.SendMessageTimeIncorrect();
-			return false;
-		}
-	}
-	return true;
-}
-
-
-
-void Frame::OnDisplaySecurityMessage(wxThreadEvent & event){
-	bool myQuit = true;
-    if (event.GetInt() == 0){
-        myQuit = false;
-    }
-     
-    wxMessageDialog myDlg(this,
-                          event.GetString(),
-                          _("Security Alert"),
-                          wxICON_ERROR | wxCENTRE | wxOK | wxCANCEL | wxOK_DEFAULT);
-    myDlg.SetOKCancelLabels(_("ColtopGIS website"), _("Close"));
-    if(myDlg.ShowModal() == wxID_OK){
-        wxLaunchDefaultBrowser("http://www.crealp.ch/index.php?option=com_content&task=view&id=379&Itemid=383");
-    }
- 
-	if(myQuit == true){
-		Close(true);
-	}
 }
 
 
 void Frame::OnAbout(wxCommandEvent & event) {
-	AboutDLG myAbout(this);
-	myAbout.ShowModal();
+	wxHgVersionDlg myDlg (this, wxID_ANY, _T(""));
+    myDlg.ShowModal();
 }
 
 
@@ -755,10 +374,9 @@ void Frame::OnCheckUpdates(wxCommandEvent & event){
     myConfig->SetPath("..");
         
     long mySVNversion = wxNOT_FOUND;
-    lsVersion::GetSoftSVN().ToLong(&mySVNversion);
+    wxHgVersion::GetSoftNumber().ToLong(&mySVNversion);
     WebUpdateThread * myUpdate = new WebUpdateThread(m_InfoBar, myProxyInfo);
-    myUpdate->CheckNewVersion(mySVNversion, true, true, true); 
-    
+    myUpdate->CheckNewVersion(mySVNversion, true, true, true);
 }
 
 
@@ -767,7 +385,7 @@ void Frame::OnCheckUpdates(wxCommandEvent & event){
 
 
 void Frame::OnPreferences(wxCommandEvent & event){
-	PreferenceDlg myPrefDlg (this, &m_Plugins);
+	PreferenceDlg myPrefDlg (this);
 	myPrefDlg.CenterOnParent(wxBOTH);
 	int myValue = myPrefDlg.ShowModal();
 	if(myValue == wxID_OK){
@@ -800,57 +418,6 @@ void Frame::OnLogWindow(wxCommandEvent & event){
 }
 
 
-void Frame::OnDataManager(wxCommandEvent & event) {
-	DataFrame * myFrameData = (DataFrame*) FindWindowById(WINDOW_DATA_MANAGER);
-	if (myFrameData == NULL) {
-		myFrameData = new DataFrame(this, &m_Plugins, WINDOW_DATA_MANAGER);
-		myFrameData->SetSize(wxSize(800,600));
-		myFrameData->Show();
-	}
-	myFrameData->Raise();
-}
-
-
-
-void Frame::OnProjectNew(wxCommandEvent & event) {
-	if (m_ProjectManager->IsModified() == false) {
-		m_ProjectManager->New();
-		_ProjectAfterOpen();
-		return;
-	}
-	
-	if (_ProjectQuestion(_("creating new project"))==true) {
-		m_ProjectManager->New();
-		_ProjectAfterOpen();
-	}
-	
-	
-}
-
-
-
-void Frame::OnProjectOpen(wxCommandEvent & event) {
-	wxFileName myEmpytfileName;
-	ProjectOpen(myEmpytfileName);
-}
-
-
-void Frame::OnProjectRecent(wxCommandEvent & event) {
-	wxLogMessage("Opening recent : %d", event.GetId() - wxID_FILE); 
-	ProjectOpen(m_ProjectManager->GetHistoryFile(event.GetId()));
-}
-
-
-void Frame::OnProjectSave(wxCommandEvent & event) {
-	_ProjectSave(m_ProjectManager->GetProjectName());
-}
-
-
-
-void Frame::OnProjectSaveAs(wxCommandEvent & event) {
-	wxFileName myEmptyFile;
-	_ProjectSave(myEmptyFile);
-}
 
 
 
@@ -875,21 +442,13 @@ void Frame::OnLayerAdd(wxCommandEvent & event) {
 
 
 
-bool Frame::AddLayers (const wxArrayString & names){	
-	DataFrame * myDataFrame = (DataFrame*) FindWindowById(WINDOW_DATA_MANAGER);
-
+bool Frame::AddLayers (const wxArrayString & names){
 	m_vrViewerLayerManager->FreezeBegin();
 	for (unsigned int i = 0; i< names.GetCount(); i++) {
 		AddLayer(names.Item(i));
-		if (myDataFrame) {
-			myDataFrame->EditPanel(DATAPANEL_TYPE_LAYERS, DP_ADD);
-		}
-		
 	}
 	m_vrViewerLayerManager->FreezeEnd();
-	m_ProjectManager->SetModified(true);
 	return true;
-	
 }
 
 
@@ -938,26 +497,18 @@ void Frame::OnLayerRemove(wxCommandEvent & event) {
 	}
 	
 	m_vrViewerLayerManager->FreezeEnd();
-	m_ProjectManager->SetModified(true);
 }
 
 
 
 
 void Frame::OnUpdateIdle(wxIdleEvent & event) {
-	_SetFrameName();
 	_SetSelectedFeature();
 }
 
 
 
 void Frame::OnClose(wxCloseEvent & event) {
-	if ( event.CanVeto() && m_ProjectManager->IsModified()){
-		if(_ProjectQuestion(_("closing")) == false){
-			event.Veto();
-			return;
-		}
-	}
 	event.Skip();
 }
 
@@ -1030,12 +581,6 @@ void Frame::OnToolSelectAction(wxCommandEvent & event) {
 	m_vrViewerLayerManager->Reload();
 	wxDELETE(myMsg);
 	
-    vrRenderer * myActualSelectedRender = m_vrViewerLayerManager->GetRenderer(m_vrTOC->GetSelection());
-	// inform plugins that selection is done.
-	for (unsigned int i = 0; i< m_Plugins.GetCount(); i++) {
-		m_Plugins.Item(i)->SelectionChanged(myActualSelectedRender);
-	}
-	
 }
 
 
@@ -1043,12 +588,6 @@ void Frame::OnToolClearSelection(wxCommandEvent & event) {
     wxASSERT(m_vrViewerLayerManager);
     m_vrViewerLayerManager->ClearSelection();
     m_vrViewerLayerManager->Reload();
-    
-    // inform plugins that selection is done.
-    vrRenderer * myActualSelectedRender = m_vrViewerLayerManager->GetRenderer(m_vrTOC->GetSelection());
-	for (unsigned int i = 0; i< m_Plugins.GetCount(); i++) {
-		m_Plugins.Item(i)->SelectionChanged(myActualSelectedRender);
-	}
 }
 
 
@@ -1135,7 +674,7 @@ wxFrame(NULL, FRAME_WINDOW, title) {
 	wxLog::SetLogLevel(wxLOG_Info);
 	wxLog * myDlgLog = new tmLogGuiSeverity(wxLOG_Warning);
 	delete wxLog::SetActiveTarget(myDlgLog);
-	m_LogWnd = new wxLogWindow(this, "ColtopGIS Log", false, true);
+	m_LogWnd = new wxLogWindow(this, "Fosi Log", false, true);
     
     //setlocale(LC_NUMERIC, "C");
 	
@@ -1151,6 +690,7 @@ wxFrame(NULL, FRAME_WINDOW, title) {
 	CreateStatusBar(3);
     // disable help menu into statusbar
     SetStatusBarPane(-1);
+    SetStatusText(g_ProgName + _(" version: ") + wxHgVersion::GetSoftNumber(), 2);
     
 	_CreateControls();
 	_CreateMenus();
@@ -1166,26 +706,13 @@ wxFrame(NULL, FRAME_WINDOW, title) {
 	m_vrLayerManager = new vrLayerManager();
 	m_vrViewerLayerManager = new vrViewerLayerManager(m_vrLayerManager, this, m_vrDisplay , m_vrTOC);
 		
-	// plugins
-	_InitPlugins();
 	_CreateAccelerators();
-	m_ProjectManager = new ProjectManager(&m_Plugins);
-	wxCommandEvent myUnusedEvent;
-	OnProjectNew(myUnusedEvent);
-	
 	
 	m_vrDisplay->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(Frame::OnKeyDown),NULL, this);
 	m_vrDisplay->Connect(wxEVT_KEY_UP, wxKeyEventHandler(Frame::OnKeyUp),NULL, this);
 
 	m_vrDisplay->SetFocus();
 	_PreferenceChanged(false);
-	
-    
-    // check security and updates
-    if(_CheckSecurity()==true){
-        SecurityDate myDate;
-        myDate.SetLastStart(myDate.GetActualDate(), wxConfigBase::Get(false));
-    }
 	
     // DND
     m_vrTOC->GetControl()->SetDropTarget(new ctDropFiles(this));
@@ -1202,7 +729,7 @@ wxFrame(NULL, FRAME_WINDOW, title) {
     }
         
     long mySVNversion = wxNOT_FOUND;
-    lsVersion::GetSoftSVN().ToLong(&mySVNversion);
+    wxHgVersion::GetSoftNumber().ToLong(&mySVNversion);
     WebUpdateThread * myUpdate = new WebUpdateThread(m_InfoBar, myProxyInfo);
     myUpdate->CheckNewVersion(mySVNversion, true, false, true);    
 }
@@ -1215,14 +742,10 @@ Frame::~Frame() {
 
 	// don't delete m_vrViewerLayerManager, will be deleted by the manager
 	wxDELETE(m_vrLayerManager);
-	wxDELETE(m_ProjectManager);
 
 	delete wxLog::SetActiveTarget (NULL);
 
 	uninitialize_images();
 	vroomgis_clear_images();
-	_EndPlugins();
-	
-
 }
 

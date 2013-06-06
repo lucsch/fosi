@@ -29,8 +29,13 @@ INCLUDE_DIRECTORIES(${GDAL_INCLUDE_DIR})
 # WXWIDGETS
 #SET (wxWidgets_ROOT_DIR "/Users/lucien/DATA/PROGRAMATION/_LIB/64/_LIBWXSVN")
 set(wxWidgets_CONFIG_EXECUTABLE  "/Users/lucien/DATA/PROGRAMATION/_LIB/64/_LIBWXSVN/bin/wx-config")
-find_package(wxWidgets REQUIRED core base adv)
+find_package(wxWidgets REQUIRED core base adv qa xml)
 include( "${wxWidgets_USE_FILE}" )
+
+# VROOMGIS 
+include("../plugins/vroomgis/vroomgis/build/cmake/Use_vroomGISlib.cmake")
+include("../plugins/vroomgis/plugins/lscrashreport/build/use_lscrashreport.cmake")
+include("../plugins/vroomgis/plugins/wxhgversion/build/use_wxhgversion.cmake")
 
 # Special bundle for APPLE
 #IF( APPLE )
@@ -48,8 +53,8 @@ IF(WIN32)
   SET(SRC_FILES "${SRC_FILES} ../src/resource.rc")
 ENDIF(WIN32)
 
-ADD_EXECUTABLE (${CMAKE_PROJECT_NAME}  ${SRC_FILES} ${HEAD_FILES} "../src/resource.rc")
-TARGET_LINK_LIBRARIES(${CMAKE_PROJECT_NAME} ${GDAL_LIBRARY} ${wxWidgets_LIBRARIES} ${VROOMGIS_LIBRARY}) 
+ADD_EXECUTABLE (${CMAKE_PROJECT_NAME} ${BUILD_TYPE}  ${SRC_FILES} ${HEAD_FILES} "../src/resource.rc")
+TARGET_LINK_LIBRARIES(${CMAKE_PROJECT_NAME} ${GDAL_LIBRARY} ${wxWidgets_LIBRARIES} ${VROOMGIS_LIBRARY} ${LSCRASHREPORT_NAME} ${WXHGVERSION_NAME}) 
 
 
 # Special bundle for APPLE

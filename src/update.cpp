@@ -10,11 +10,6 @@
 #include <wx/tokenzr.h>
 #include "frame.h"
 
-
-
-
-
-
 BEGIN_EVENT_TABLE(WebUpdateInformationBar, wxInfoBar)
 EVT_BUTTON (INFOBAR_DOWNLOAD_BUTTON, WebUpdateInformationBar::OnCommandDownload)
 EVT_THREAD (THREAD_MESSAGE_NEW_VERSION, WebUpdateInformationBar::OnNewVersion)
@@ -29,7 +24,6 @@ void  WebUpdateInformationBar::_ClearBar(){
         RemoveButton(INFOBAR_DOWNLOAD_BUTTON);
     }
 }
-
 
 
 void WebUpdateInformationBar::OnCommandDownload(wxCommandEvent & event) {
@@ -60,11 +54,9 @@ void WebUpdateInformationBar::OnNoNewVersion(wxThreadEvent & event) {
 }
 
 
-
 WebUpdateInformationBar::WebUpdateInformationBar(Frame * parent) : wxInfoBar((wxWindow*)parent, wxID_ANY) {
     m_Parent = parent;
 }
-
 
 
 WebUpdateInformationBar::~WebUpdateInformationBar() {

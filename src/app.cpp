@@ -8,6 +8,7 @@
 
 #include "app.h"
 #include "frame.h"
+#include "lscrashreport.h"
 
 IMPLEMENT_APP(App);
 
@@ -37,18 +38,6 @@ bool App::OnInit(){
     return true;
 }
 
-
-void App::MacOpenFile(const wxString &fileName){
-	wxFileName myFile (fileName);
-	if (myFile.GetExt() != _T("c2p")) {
-		wxLogError("Unknown file type");
-		return;
-	}
-	if (m_Frame) {
-		m_Frame->ProjectOpen(myFile);
-	}
-	wxLogMessage(_("Project found : %s"), myFile.GetFullName());
-}
 
 
 void App::OnFatalException(){

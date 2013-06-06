@@ -1,8 +1,8 @@
 /***************************************************************************
  preferencedlg.h
  -------------------
- copyright            : (C) 2010 CREALP Lucien Schreiber 
- email                : lucien.schreiber at crealp dot vs dot ch
+ copyright            : (C) 2013  Lucien Schreiber
+ email                : lucien.schreiber at gmail dot com
  ***************************************************************************/
 
 #ifndef _PREFERENCEDLG_H_
@@ -15,19 +15,15 @@
 #endif
 
 #include <wx/propdlg.h>
-#include "plugin.h"
-
 
 class PreferenceDlg : public wxPropertySheetDialog {
-  private:
-    ArrayPlugin * m_Plugins;
-
-    void OnSave(wxCommandEvent & event);
-
-  public:
-    PreferenceDlg(wxWindow * parent, ArrayPlugin * plugins);
+public:
+    PreferenceDlg(wxWindow * parent);
     virtual ~PreferenceDlg();
-	DECLARE_EVENT_TABLE();
-
+    DECLARE_EVENT_TABLE();
+    
+private:
+    void OnSave(wxCommandEvent & event);
+    
 };
 #endif
