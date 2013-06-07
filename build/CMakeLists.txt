@@ -3,11 +3,12 @@ cmake_minimum_required(VERSION 2.8)
 
 PROJECT ("Fosi")
 
+SET(CMAKE_PREFIX_PATH /home/lucien/programmation/LIB/_LIBGIS)
 # USER DEFINED VARIABLES 
-SET (GDAL_ROOT "/Users/lucien/DATA/PROGRAMATION/_LIB/64/_LIBGIS")
-#SET (wxWidgets_ROOT_DIR "/Users/lucien/DATA/PROGRAMATION/_LIB/64/_LIBWXSVN")
-set(wxWidgets_CONFIG_EXECUTABLE  "/Users/lucien/DATA/PROGRAMATION/_LIB/64/_LIBWXSVN/bin/wx-config")
-SET(wxWIDGETS_PATH_SVN "/Users/lucien/DATA/PROGRAMATION/_LIB/64/wxWidgets-svn")
+#SET (GDAL_ROOT "/Users/lucien/DATA/PROGRAMATION/_LIB/64/_LIBGIS")
+##SET (wxWidgets_ROOT_DIR "/Users/lucien/DATA/PROGRAMATION/_LIB/64/_LIBWXSVN")
+#set(wxWidgets_CONFIG_EXECUTABLE  "/Users/lucien/DATA/PROGRAMATION/_LIB/64/_LIBWXSVN/bin/wx-config")
+#SET(wxWIDGETS_PATH_SVN "/Users/lucien/DATA/PROGRAMATION/_LIB/64/wxWidgets-svn")
 
 
 # SOURCES FILES
@@ -41,6 +42,8 @@ INCLUDE_DIRECTORIES(${CURL_INCLUDE_DIR})
 find_package(wxWidgets REQUIRED core base adv qa xml)
 include( "${wxWidgets_USE_FILE}" )
 
+MESSAGE("gdal: ${GDAL_LIBRARY}")
+
 # VROOMGIS 
 include("../plugins/vroomgis/vroomgis/build/cmake/Use_vroomGISlib.cmake")
 include("../plugins/vroomgis/plugins/lscrashreport/build/use_lscrashreport.cmake")
@@ -61,8 +64,9 @@ IF(WIN32)
 ENDIF(WIN32)
 
 ADD_EXECUTABLE (${CMAKE_PROJECT_NAME} ${BUILD_TYPE}  ${SRC_FILES} ${HEAD_FILES} "../src/resource.rc")
+MESSAGE("Libraries: ${GDAL_LIBRARY}, ${wxWidgets_LIBRARIES}, ${VROOMGIS_LIBRARY}, ${LSCRASHREPORT_NAME}, ${WXHGVERSION_NAME}")
 TARGET_LINK_LIBRARIES(${CMAKE_PROJECT_NAME} ${GDAL_LIBRARY} ${wxWidgets_LIBRARIES} ${VROOMGIS_LIBRARY} ${LSCRASHREPORT_NAME} ${WXHGVERSION_NAME}) 
-
+TARGET_LINK_LIBRARIES(${VROOMGIS_LIBRARY} ${GDAL_LIBRARY} ${wxWidgets_LIBRARIES})
 
 # Special bundle for APPLE
 IF( APPLE )
