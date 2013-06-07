@@ -361,13 +361,13 @@ void Frame::OnPreferences(wxCommandEvent & event){
 
 
 void Frame::OnUserManual(wxCommandEvent & event) {
-    wxLaunchDefaultBrowser("http://www.crealp.ch/coltopgis/documentation/doku.php");
+    wxLaunchDefaultBrowser("http://www.google.ch");
 }
 
 
 
 void Frame::OnWebSite (wxCommandEvent & event){
-    wxLaunchDefaultBrowser("http://www.crealp.ch/index.php?option=com_content&view=article&id=379&Itemid=292");
+    wxLaunchDefaultBrowser("http://www.terranum.ch");
 }
 
 
