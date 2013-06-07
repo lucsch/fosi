@@ -10,12 +10,11 @@
 extern void initialize_images(void);
 extern void uninitialize_images(void);
 
-extern wxBitmap *_img_coltopgis_sml;
+extern wxBitmap *_img_app_sml;
 extern wxBitmap *_img_toolbar_pan;
 extern wxBitmap *_img_toolbar_select;
 extern wxBitmap *_img_toolbar_zoom;
 extern wxBitmap *_img_toolbar_zoom_fit;
-extern wxBitmap *_img_toolbar_datamanager;
 extern wxBitmap *_img_generic_export;
 extern wxBitmap *_img_generic_quit;
 

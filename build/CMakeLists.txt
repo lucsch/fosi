@@ -38,14 +38,12 @@ include("../plugins/vroomgis/plugins/lscrashreport/build/use_lscrashreport.cmake
 include("../plugins/vroomgis/plugins/wxhgversion/build/use_wxhgversion.cmake")
 
 # Special bundle for APPLE
-#IF( APPLE )
-	# Adding icon and file icon
-  #	SET(APP_ICON_LOCATION "${PROJECT_SOURCE_DIR}/../art/coltopgis.icns")
-  #SET(APP_ICON_FILE_LOCATION "${PROJECT_SOURCE_DIR}/../art/coltop_file.icns")
-  #SET_SOURCE_FILES_PROPERTIES(${APP_ICON_LOCATION} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-  #SET_SOURCE_FILES_PROPERTIES(${APP_ICON_FILE_LOCATION} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-  #SET(MAIN_SRC_FILES ${MAIN_SRC_FILES} ${APP_ICON_LOCATION} ${APP_ICON_FILE_LOCATION})
-#ENDIF (APPLE)
+IF( APPLE )
+  #Adding icon and file icon
+  SET(APP_ICON_LOCATION "${PROJECT_SOURCE_DIR}/../art/fosi.icns")
+  SET_SOURCE_FILES_PROPERTIES(${APP_ICON_LOCATION} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+  SET(SRC_FILES ${SRC_FILES} ${APP_ICON_LOCATION} ${APP_ICON_FILE_LOCATION})
+ENDIF (APPLE)
 
 SET(BUILD_TYPE "MACOSX_BUNDLE")
 IF(WIN32)
@@ -58,10 +56,10 @@ TARGET_LINK_LIBRARIES(${CMAKE_PROJECT_NAME} ${GDAL_LIBRARY} ${wxWidgets_LIBRARIE
 
 
 # Special bundle for APPLE
-#IF( APPLE )
-	# Set a custom plist file for the app bundle
-  #	set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES 
-  #		MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/custominfo.plist)
-#ENDIF (APPLE)
+IF( APPLE )
+  # Set a custom plist file for the app bundle
+  set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES 
+    MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/custominfo.plist)
+ENDIF (APPLE)
 
 

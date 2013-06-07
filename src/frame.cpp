@@ -1,5 +1,5 @@
 /***************************************************************************
-frame.cpp
+ frame.cpp
  -------------------
  copyright            : (C) 2013 Lucien Schreiber
  email                : lucien.schreiber at gmail dot com
@@ -19,10 +19,7 @@ frame.cpp
 #include "accelerators.h"
 #include "wxhgversion_dlg.h"
 #include "wxhgversion_core.h"
-
-// bitmaps
 #include "general_bmp.h"
-
 
 
 BEGIN_EVENT_TABLE( Frame, wxFrame )
@@ -53,11 +50,11 @@ END_EVENT_TABLE()
 
 
 
-
 ctDropFiles::ctDropFiles(Frame * parent){
 	wxASSERT(parent);
 	m_Frame = parent;
 }
+
 
 
 bool ctDropFiles::OnDropFiles(wxCoord x, wxCoord y,const wxArrayString & filenames){
@@ -68,7 +65,6 @@ bool ctDropFiles::OnDropFiles(wxCoord x, wxCoord y,const wxArrayString & filenam
 	m_Frame->AddLayers(filenames);
 	return true;
 }
-
 
 
 
@@ -105,7 +101,6 @@ void Frame::_CreateControls() {
     m_InfoBar = new WebUpdateInformationBar(this);
     bSizer1->Add(m_InfoBar, wxSizerFlags().Expand());
 
-
     this->SetSizer(bSizer1);
     bSizer1->SetSizeHints(this);
     
@@ -122,33 +117,16 @@ void Frame::_CreateMenus() {
 
 	// PROJECT
 	wxMenu* m_menu1 = new wxMenu();
-	m_menu1->Append( new wxMenuItem( m_menu1, wxID_NEW) );
-	
-	wxMenuItem* m_separator1;
-	m_separator1 = m_menu1->AppendSeparator();
-	
-	m_menu1->Append( new wxMenuItem( m_menu1, wxID_OPEN));
-	
-	m_RecentMenu = new wxMenu();
-	m_menu1->Append( wxID_ANY, _("Recent"), m_RecentMenu );
-	
-	wxMenuItem* m_separator2;
-	m_separator2 = m_menu1->AppendSeparator();
-	
-	m_menu1->Append( new wxMenuItem( m_menu1, wxID_SAVE));
-	m_menu1->Append( new wxMenuItem( m_menu1, wxID_SAVEAS, _("Save as...\tCtrl+Shift+S")));
-	
-	m_menu1->Append( new wxMenuItem( m_menu1, wxID_EXIT));
+#ifndef __WXMAC__
+    m_menu1->Append( new wxMenuItem( m_menu1, wxID_EXIT));
 	m_menubar1->Append( m_menu1, _("Project") );
-
+#endif 
 	
 	// DATA
 	wxMenu* m_menu5 = new wxMenu();
 	m_menu5->Append( new wxMenuItem( m_menu5, MENU_DATA_ADD,_("Add layer..."), wxEmptyString, wxITEM_NORMAL ) );
 	m_menu5->Append(  new wxMenuItem( m_menu5, MENU_DATA_REMOVE, _("Remove layer...") , wxEmptyString, wxITEM_NORMAL ) );
-	
-	m_menubar1->Append( m_menu5, _("Data") ); 
-	
+	m_menubar1->Append( m_menu5, _("Data") );
 	
 	// SELECTION
 	wxMenu* m_menu51;
@@ -156,9 +134,7 @@ void Frame::_CreateMenus() {
 	m_menu51->Append( new wxMenuItem( m_menu51, MENU_FRAME_SELECT, _("Select tool\tV"), wxEmptyString, wxITEM_NORMAL ));
 	m_menu51->Append( new wxMenuItem( m_menu51, MENU_FRAME_CLEAR_SELECTION,
 									 _("Clear selection"), wxEmptyString, wxITEM_NORMAL ));
-	
 	m_menubar1->Append( m_menu51, _("Selection") ); 
-	
 	
 	// VIEW
 	wxMenu* m_menu6;
@@ -169,17 +145,13 @@ void Frame::_CreateMenus() {
 	m_menu6->Append( new wxMenuItem( m_menu6, wxID_ZOOM_FIT,_("Zoom to Fit\tCtrl+0"), wxEmptyString, wxITEM_NORMAL ) );
 	m_menubar1->Append( m_menu6, _("View") ); 
 	
-
 	// WINDOW
 	wxMenu* m_menu2 = new wxMenu();
-	m_menu2->Append(new wxMenuItem( m_menu2, MENU_WINDOW_DATA_MANAGER, _("Data Manager...\tCtrl+D") , wxEmptyString, wxITEM_NORMAL ) );
 	m_menu2->Append(new wxMenuItem( m_menu2, MENU_WINDOW_LOG, _("Log window...\tCtrl+L"), wxEmptyString, wxITEM_NORMAL ) );
 	
 	// Bug #42, append preference into the Window menu, except for Mac where it goes into Application menu 
 	m_menu2->Append(new wxMenuItem(m_menu1, wxID_PREFERENCES));
-	
 	m_menubar1->Append( m_menu2, _("Window") );
-
 
 	// HELP
 	wxMenu* m_menu3 = new wxMenu();
@@ -189,7 +161,6 @@ void Frame::_CreateMenus() {
     m_menu3->AppendSeparator();
 	m_menu3->Append( new wxMenuItem( m_menu3, MENU_CHECK_UPDATE, _("Check for updates") , wxEmptyString, wxITEM_NORMAL ));
     m_menubar1->Append( m_menu3, _("Help") );
-
 	this->SetMenuBar( m_menubar1 );
 	
 	// ACCELERATORS
@@ -200,8 +171,6 @@ void Frame::_CreateMenus() {
 	wxAcceleratorTable myAccelTable (3, myEntries);
 	wxASSERT(m_vrDisplay);
 	m_vrDisplay->SetAcceleratorTable(myAccelTable);
-
-	
 }
 
 
@@ -224,8 +193,6 @@ void Frame::_CreateToolbar() {
 	m_toolBar1->AddTool( wxID_ZOOM_IN, myZoom2Name , wxBitmap(*_img_toolbar_zoom), wxNullBitmap, wxITEM_NORMAL, myZoom2Name, wxEmptyString );
 	wxString myPanName = _("Pan");
 	m_toolBar1->AddTool( MENU_FRAME_PAN, myPanName, wxBitmap(*_img_toolbar_pan), wxNullBitmap, wxITEM_NORMAL, myPanName, wxEmptyString );
-	wxString myDataManagerName = _("Data Manager");
-	m_toolBar1->AddTool( MENU_WINDOW_DATA_MANAGER, myDataManagerName, wxBitmap(*_img_toolbar_datamanager), wxNullBitmap, wxITEM_NORMAL, myDataManagerName, wxEmptyString );
 	m_toolBar1->Realize();
 }
 
@@ -241,7 +208,6 @@ void Frame::_CreateAccelerators() {
 	myAccels.Add(myEntry2);
 	myAccels.Add(myEntry3);
 	
-	
 	wxAcceleratorEntry * myEntries = new wxAcceleratorEntry[myAccels.GetCount()];
 	for (unsigned int i = 0; i< myAccels.GetCount(); i++) {
 		*(myEntries+i) = myAccels.Item(i);
@@ -251,9 +217,7 @@ void Frame::_CreateAccelerators() {
 	wxASSERT(m_vrDisplay);
 	m_vrDisplay->SetAcceleratorTable(myAccelTable);
 	wxDELETEA(myEntries);
-	
 }
-
 
 
 
@@ -264,8 +228,9 @@ void Frame::_SetSelectedFeature() {
 	
 	int mySel = m_vrViewerLayerManager->GetSelectionCount();
 	GetStatusBar()->SetStatusText(wxString::Format(_("%d Feature(s) selected"),mySel),1);
-	
 }
+
+
 
 bool Frame::AddLayer(const wxFileName & file, long position, vrRender * render,
 					 vrLabel * label, bool visible, bool readwrite) {
@@ -333,6 +298,7 @@ bool Frame::_RemoveLayer(long position) {
 }
 
 
+
 void Frame::_PreferenceChanged(bool refresh) {
 	// update main panel color
 	wxConfigBase * myConfig = wxConfigBase::Get(false);
@@ -359,8 +325,10 @@ void Frame::_PreferenceChanged(bool refresh) {
 }
 
 
+
 void Frame::OnAbout(wxCommandEvent & event) {
 	wxHgVersionDlg myDlg (this, wxID_ANY, _T(""));
+    myDlg.SetBitmapLogo(*_img_app_sml);
     myDlg.ShowModal();
 }
 
@@ -381,9 +349,6 @@ void Frame::OnCheckUpdates(wxCommandEvent & event){
 
 
 
-
-
-
 void Frame::OnPreferences(wxCommandEvent & event){
 	PreferenceDlg myPrefDlg (this);
 	myPrefDlg.CenterOnParent(wxBOTH);
@@ -394,15 +359,16 @@ void Frame::OnPreferences(wxCommandEvent & event){
 }
 
 
+
 void Frame::OnUserManual(wxCommandEvent & event) {
     wxLaunchDefaultBrowser("http://www.crealp.ch/coltopgis/documentation/doku.php");
 }
 
 
+
 void Frame::OnWebSite (wxCommandEvent & event){
     wxLaunchDefaultBrowser("http://www.crealp.ch/index.php?option=com_content&view=article&id=379&Itemid=292");
 }
-
 
 
 
@@ -416,8 +382,6 @@ void Frame::OnLogWindow(wxCommandEvent & event){
 	m_LogWnd->Show(true);
 	m_LogWnd->GetFrame()->Raise();
 }
-
-
 
 
 
@@ -452,6 +416,7 @@ bool Frame::AddLayers (const wxArrayString & names){
 }
 
 
+
 void Frame::OnLayerRemove(wxCommandEvent & event) {
 	wxArrayString myLayersName;
 	int myDipsIndex = wxNOT_FOUND;
@@ -464,7 +429,6 @@ void Frame::OnLayerRemove(wxCommandEvent & event) {
 		else {
 			myDipsIndex = i;
 		}
-
 	}
 	
 	if (myLayersName.IsEmpty()) {
@@ -501,7 +465,6 @@ void Frame::OnLayerRemove(wxCommandEvent & event) {
 
 
 
-
 void Frame::OnUpdateIdle(wxIdleEvent & event) {
 	_SetSelectedFeature();
 }
@@ -511,6 +474,7 @@ void Frame::OnUpdateIdle(wxIdleEvent & event) {
 void Frame::OnClose(wxCloseEvent & event) {
 	event.Skip();
 }
+
 
 
 void Frame::OnKeyDown(wxKeyEvent & event) {
@@ -563,9 +527,11 @@ void Frame::OnToolZoomToFit(wxCommandEvent & event) {
 }
 
 
+
 void Frame::OnToolSelect(wxCommandEvent & event) {
 	m_vrDisplay->SetTool(new vrDisplayToolSelect(m_vrDisplay));
 }
+
 
 
 void Frame::OnToolSelectAction(wxCommandEvent & event) {
@@ -584,11 +550,13 @@ void Frame::OnToolSelectAction(wxCommandEvent & event) {
 }
 
 
+
 void Frame::OnToolClearSelection(wxCommandEvent & event) {
     wxASSERT(m_vrViewerLayerManager);
     m_vrViewerLayerManager->ClearSelection();
     m_vrViewerLayerManager->Reload();
 }
+
 
 
 void Frame::OnToolZoom(wxCommandEvent & event) {
@@ -630,6 +598,7 @@ void Frame::OnToolPan(wxCommandEvent & event) {
 }
 
 
+
 void Frame::OnToolPanAction(wxCommandEvent & event) {
 	vrDisplayToolMessage * myMsg = (vrDisplayToolMessage*)event.GetClientData();
 	wxASSERT(myMsg);
@@ -655,7 +624,6 @@ void Frame::OnToolPanAction(wxCommandEvent & event) {
 
 
 
-
 void Frame::OnUpdateUIToolClearSelection(wxUpdateUIEvent & event) {
     if (m_vrViewerLayerManager && m_vrViewerLayerManager->GetSelectionCount() > 0) {
         event.Enable(true);
@@ -663,8 +631,6 @@ void Frame::OnUpdateUIToolClearSelection(wxUpdateUIEvent & event) {
     }
     event.Enable(false);
 }
-
-
 
 
 
@@ -697,10 +663,9 @@ wxFrame(NULL, FRAME_WINDOW, title) {
 	_CreateToolbar();
 
 	// add icon (windows / linux)
-	wxIcon myColtopIcon;
-	myColtopIcon.CopyFromBitmap(*_img_coltopgis_sml);
-	SetIcon(myColtopIcon);
-
+	wxIcon myIcon;
+	myIcon.CopyFromBitmap(*_img_app_sml);
+	SetIcon(myIcon);
 
 	// vroomGIS
 	m_vrLayerManager = new vrLayerManager();
@@ -748,4 +713,3 @@ Frame::~Frame() {
 	uninitialize_images();
 	vroomgis_clear_images();
 }
-
