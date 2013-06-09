@@ -26,26 +26,8 @@ SOURCE_GROUP (header FILES ${HEAD_FILES})
 INCLUDE_DIRECTORIES("${CMAKE_SOURCE_DIR}/../src/")
 INCLUDE_DIRECTORIES("${CMAKE_SOURCE_DIR}/../art/")
 
-# PLUGINS
-FIND_PACKAGE(GDAL)
-INCLUDE_DIRECTORIES(${GDAL_INCLUDE_DIR})
-
-#SET (CMAKE_FIND_FRAMEWORK "")
-FIND_PACKAGE(GEOS PATHS "../plugins/vroomgis/vroomgis/build/cmake/")
-INCLUDE_DIRECTORIES(${GEOS_INCLUDE_DIR})
-
-FIND_PACKAGE(PROJ PATHS "../plugins/vroomgis/vroomgis/build/cmake/")
-INCLUDE_DIRECTORIES(${PROJ_INCLUDE_DIR})
-
-FIND_PACKAGE(CURL)
-INCLUDE_DIRECTORIES(${CURL_INCLUDE_DIR})
-
-find_package(wxWidgets REQUIRED core base adv qa xml)
-include( "${wxWidgets_USE_FILE}" )
-
-MESSAGE("gdal: ${GDAL_LIBRARY}")
-
 # VROOMGIS 
+SET (SEARCH_VROOMGIS_LIBS ON)
 include("../plugins/vroomgis/vroomgis/build/cmake/Use_vroomGISlib.cmake")
 include("../plugins/vroomgis/plugins/lscrashreport/build/use_lscrashreport.cmake")
 include("../plugins/vroomgis/plugins/wxhgversion/build/use_wxhgversion.cmake")
@@ -66,8 +48,8 @@ ENDIF(WIN32)
 
 ADD_EXECUTABLE (${CMAKE_PROJECT_NAME} ${BUILD_TYPE}  ${SRC_FILES} ${HEAD_FILES} "../src/resource.rc")
 #MESSAGE("Libraries: ${GDAL_LIBRARY}, ${wxWidgets_LIBRARIES}, ${VROOMGIS_LIBRARY}, ${LSCRASHREPORT_NAME}, ${WXHGVERSION_NAME}")
-TARGET_LINK_LIBRARIES(${CMAKE_PROJECT_NAME} ${GDAL_LIBRARY} ${wxWidgets_LIBRARIES} ${VROOMGIS_LIBRARY} ${LSCRASHREPORT_NAME} ${WXHGVERSION_NAME}) 
-TARGET_LINK_LIBRARIES(${VROOMGIS_LIBRARY} ${GDAL_LIBRARY} ${wxWidgets_LIBRARIES})
+TARGET_LINK_LIBRARIES(${CMAKE_PROJECT_NAME} ${wxWidgets_LIBRARIES} ${VROOMGIS_LIBRARY} ${LSCRASHREPORT_NAME} ${WXHGVERSION_NAME}) 
+#TARGET_LINK_LIBRARIES(${VROOMGIS_LIBRARY} ${GDAL_LIBRARY} ${wxWidgets_LIBRARIES})
 
 # Special bundle for APPLE
 IF( APPLE )
