@@ -1,7 +1,7 @@
 /***************************************************************************
  preferencedlg.h
  -------------------
- copyright            : (C) 2013  Lucien Schreiber
+ copyright            : (C) 2013 Lucien Schreiber
  email                : lucien.schreiber at gmail dot com
  ***************************************************************************/
 

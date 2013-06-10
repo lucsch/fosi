@@ -1,21 +1,17 @@
 /***************************************************************************
  preferencedlg.cpp
  -------------------
- copyright            : (C) 2010 CREALP Lucien Schreiber 
- email                : lucien.schreiber at crealp dot vs dot ch
+ copyright            : (C) 2013 Lucien Schreiber
+ email                : lucien.schreiber at gmail dot com
  ***************************************************************************/
-
 
 #include "preference_dlg.h"
 #include <wx/bookctrl.h>
-
 #include "preferencepanel.h"
-
 
 BEGIN_EVENT_TABLE(PreferenceDlg, wxDialog)
 EVT_BUTTON(wxID_OK, PreferenceDlg::OnSave)
 END_EVENT_TABLE()
-
 
 
 void PreferenceDlg::OnSave(wxCommandEvent & event) {

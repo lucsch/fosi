@@ -1,6 +1,6 @@
 #define wxUSE_RC_MANIFEST 1
 #define WX_CPU_X86 1
 #include "wx/msw/wx.rc"
-coltopgis ICON "../art/coltopgis.ico"
+app ICON "../art/fosi.ico"
 
 

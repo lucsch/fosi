@@ -1,8 +1,8 @@
 /***************************************************************************
  accelerators.h
  -------------------
- copyright            : (C) 2010 CREALP Lucien Schreiber 
- email                : lucien.schreiber at crealp dot vs dot ch
+ copyright            : (C) 2013 Lucien Schreiber
+ email                : lucien.schreiber at gmail dot com
  ***************************************************************************/
 
 #ifndef _ACCELERATORS_H_

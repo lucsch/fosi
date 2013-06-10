@@ -2,8 +2,8 @@
  update.h
  Deals with update process by cheking internet for new versions
  -------------------
- copyright            : (C) 2009 CREALP Lucien Schreiber 
- email                : lucien.schreiber at crealp dot vs dot ch
+ copyright            : (C) 2013 Lucien Schreiber 
+ email                : lucien.schreiber at gmail dot com
  ***************************************************************************/
 
 #ifndef _WEBUPDATE_H_
@@ -11,8 +11,6 @@
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
-
-// Include wxWidgets' headers
 #ifndef WX_PRECOMP
 #include <wx/wx.h>
 #endif

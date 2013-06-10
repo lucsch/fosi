@@ -1,12 +1,12 @@
 /***************************************************************************
- coltopgisapp.h
+ app.h
  -------------------
- copyright            : (C) 2010 CREALP Lucien Schreiber 
- email                : lucien.schreiber at crealp dot vs dot ch
+ copyright            : (C) 2013 Lucien Schreiber 
+ email                : lucien.schreiber at gmail dot com
  ***************************************************************************/
 
-#ifndef _COLTOPGISAPP_H
-#define _COLTOPGISAPP_H
+#ifndef _APP_H_
+#define _APP_H_
 
 // wxWidgets include
 #include "wx/wxprec.h"

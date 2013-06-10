@@ -1,8 +1,8 @@
 /***************************************************************************
- coltopgisapp.cpp
+ app.cpp
  -------------------
- copyright            : (C) 2010 CREALP Lucien Schreiber 
- email                : lucien.schreiber at crealp dot vs dot ch
+ copyright            : (C) 2013 Lucien Schreiber
+ email                : lucien.schreiber at gmail dot com
  ***************************************************************************/
 
 
@@ -52,13 +52,13 @@ void App::OnFatalException(){
     wxString myProxyInfo = myConfig->Read("PROXY_INFO", wxEmptyString);
     myConfig->SetPath("..");
     
-    if (myCrashReport.SendReportWeb(_T("http://www.crealp.ch/crashreport/upload_file.php"), myProxyInfo)==false){
+    if (myCrashReport.SendReportWeb(_T("http://www.terranum.ch/crashreport/upload_file.php"), myProxyInfo)==false){
         wxString myDocPath = wxStandardPaths::Get().GetDocumentsDir();
         if(myCrashReport.SaveReportFile(myDocPath)==false){
             wxLogError(_("Unable to save the crashreport!"));
             return;
         }
-        wxLogWarning(_("Connection problem! crashreport wasn't sent. crashreport was saved into '%s'\nplease send it manually to lucien.schreiber@crealp.vs.ch"), myDocPath);
+        wxLogWarning(_("Connection problem! crashreport wasn't sent. crashreport was saved into '%s'\nplease send it manually to lucien.schreiber@gmail.com"), myDocPath);
     }
 }
 

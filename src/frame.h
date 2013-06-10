@@ -1,11 +1,11 @@
 /***************************************************************************
- coltopgisframe.h
+ frame.h
  -------------------
- copyright            : (C) 2010 CREALP Lucien Schreiber
- email                : lucien.schreiber at crealp dot vs dot ch
+ copyright            : (C) 2013 Lucien Schreiber
+ email                : lucien.schreiber at gmail dot com
  ***************************************************************************/
-#ifndef _COLTOPGISFRAME_H
-#define _COLTOPGISFRAME_H
+#ifndef _FRAME_H_
+#define _FRAME_H_
 
 #include "wx/wxprec.h"
 #ifndef WX_PRECOMP
