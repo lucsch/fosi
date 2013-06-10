@@ -23,29 +23,30 @@
 
 
 BEGIN_EVENT_TABLE( Frame, wxFrame )
-	EVT_MENU( wxID_EXIT, Frame::OnQuit )
-	EVT_MENU( wxID_PREFERENCES, Frame::OnPreferences)
-    EVT_MENU( wxID_HELP, Frame::OnUserManual)
-    EVT_MENU( MENU_WEBSITE, Frame::OnWebSite)
-	EVT_MENU( wxID_ABOUT, Frame::OnAbout)
-    EVT_MENU( MENU_CHECK_UPDATE, Frame::OnCheckUpdates)
-	EVT_MENU( MENU_WINDOW_LOG, 	Frame::OnLogWindow)
-	EVT_MENU( MENU_DATA_ADD, Frame::OnLayerAdd)
-	EVT_MENU( MENU_DATA_REMOVE, Frame::OnLayerRemove)
-	EVT_IDLE( Frame::OnUpdateIdle)
-	EVT_CLOSE( Frame::OnClose)
-	EVT_MENU( MENU_FRAME_SELECT, Frame::OnToolSelect)
-    EVT_MENU( MENU_FRAME_CLEAR_SELECTION, Frame::OnToolClearSelection)
-	EVT_MENU( wxID_ZOOM_IN, Frame::OnToolZoom)
-	EVT_MENU( wxID_ZOOM_FIT, Frame::OnToolZoomToFit)
-	EVT_MENU( MENU_FRAME_PAN,  Frame::OnToolPan)
-	EVT_COMMAND( wxID_ANY, vrEVT_TOOL_ZOOM, Frame::OnToolZoomAction)
-	EVT_COMMAND( wxID_ANY, vrEVT_TOOL_ZOOMOUT, Frame::OnToolZoomAction)
-	EVT_COMMAND( wxID_ANY, vrEVT_TOOL_PAN, Frame::OnToolPanAction)
-	EVT_COMMAND( wxID_ANY, vrEVT_TOOL_SELECT, Frame::OnToolSelectAction)
-	EVT_KEY_DOWN(Frame::OnKeyDown)
-	EVT_KEY_UP(Frame::OnKeyUp)
-    EVT_UPDATE_UI(MENU_FRAME_CLEAR_SELECTION, Frame::OnUpdateUIToolClearSelection)
+EVT_MENU( wxID_EXIT, Frame::OnQuit )
+EVT_MENU( wxID_PREFERENCES, Frame::OnPreferences)
+EVT_MENU( wxID_HELP, Frame::OnUserManual)
+EVT_MENU( MENU_WEBSITE, Frame::OnWebSite)
+EVT_MENU( wxID_ABOUT, Frame::OnAbout)
+EVT_MENU( MENU_CHECK_UPDATE, Frame::OnCheckUpdates)
+EVT_MENU( MENU_WINDOW_LOG, 	Frame::OnLogWindow)
+EVT_MENU( MENU_DATA_ADD, Frame::OnLayerAdd)
+EVT_MENU( MENU_DATA_REMOVE, Frame::OnLayerRemove)
+EVT_IDLE( Frame::OnUpdateIdle)
+EVT_CLOSE( Frame::OnClose)
+EVT_MENU( MENU_FRAME_SELECT, Frame::OnToolSelect)
+EVT_MENU( MENU_FRAME_CLEAR_SELECTION, Frame::OnToolClearSelection)
+EVT_MENU( wxID_ZOOM_IN, Frame::OnToolZoom)
+EVT_MENU( wxID_ZOOM_FIT, Frame::OnToolZoomToFit)
+EVT_MENU( MENU_FRAME_PAN,  Frame::OnToolPan)
+EVT_MENU(MENU_FRAME_CREATE_SLBL, Frame::OnCreateSLBL)
+EVT_COMMAND( wxID_ANY, vrEVT_TOOL_ZOOM, Frame::OnToolZoomAction)
+EVT_COMMAND( wxID_ANY, vrEVT_TOOL_ZOOMOUT, Frame::OnToolZoomAction)
+EVT_COMMAND( wxID_ANY, vrEVT_TOOL_PAN, Frame::OnToolPanAction)
+EVT_COMMAND( wxID_ANY, vrEVT_TOOL_SELECT, Frame::OnToolSelectAction)
+EVT_KEY_DOWN(Frame::OnKeyDown)
+EVT_KEY_UP(Frame::OnKeyUp)
+EVT_UPDATE_UI(MENU_FRAME_CLEAR_SELECTION, Frame::OnUpdateUIToolClearSelection)
 END_EVENT_TABLE()
 
 
@@ -117,10 +118,9 @@ void Frame::_CreateMenus() {
 
 	// PROJECT
 	wxMenu* m_menu1 = new wxMenu();
-#ifndef __WXMAC__
     m_menu1->Append( new wxMenuItem( m_menu1, wxID_EXIT));
+    m_menu1->Append(new wxMenuItem(m_menu1, MENU_FRAME_CREATE_SLBL, _("Create SLBL...\tCtrl+N")));
 	m_menubar1->Append( m_menu1, _("Project") );
-#endif
 
 	// DATA
 	wxMenu* m_menu5 = new wxMenu();
@@ -518,6 +518,12 @@ void Frame::OnKeyUp(wxKeyEvent & event) {
 		m_vrDisplay->SetToolZoom();
 	}
 	event.Skip();
+}
+
+
+
+void Frame::OnCreateSLBL (wxCommandEvent & event){
+    wxLogMessage(_("Creating SLBL"));
 }
 
 
