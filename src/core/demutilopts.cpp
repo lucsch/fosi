@@ -6,10 +6,10 @@
 #include <fstream>
 //#include <boost/format.hpp>
 
-ParFit::ParFit() : bSlopeLimit(false), tolerance( 0 ), maxThickness( 1e5 )
+/*ParFit::ParFit() : bSlopeLimit(false), tolerance( 0 ), maxThickness( 1e5 )
 	, deepening( ParFit::normal ), mindiff( .1 ), pixR( 1.5 ), maxiter( 3000 )
 	, reportProgress( NULL ), reportInterval( 100 ), reportObject( NULL )
-    , increasing(false) {}
+    , increasing(false) {} */
 
 /*void getDEMFitOpts( po::options_description &desc, ParFit &param ) {
 	desc.add_options()

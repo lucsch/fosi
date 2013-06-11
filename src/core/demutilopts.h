@@ -3,8 +3,9 @@
 
 using namespace std;
 
-struct ParFit {
-	int maxiter;
+class ParFit {
+public:
+    int maxiter;
 	double tolerance;
 	double maxThickness;
 	bool bSlopeLimit;
@@ -18,7 +19,22 @@ struct ParFit {
 	void *reportObject;
 	double volume;
 	bool increasing;
-	ParFit();
+	ParFit(){
+        maxiter = 3000;
+        tolerance = 0.0;
+        maxThickness = 1e5;
+        bSlopeLimit = false;
+        dSlopeLimit = 0.0;
+        deepening = ParFit::normal;
+        mindiff = 0.1;
+        returnAsDiff = false;
+        pixR = 1.5;
+        reportInterval = 100;
+        reportObject = NULL;
+        reportProgress = NULL;
+        volume = 0.0;
+        increasing = false;
+    };
 };
 
 char const *const enumStringsCommand[] = {"dem2rgb", "demfit", "test", "matterock"};

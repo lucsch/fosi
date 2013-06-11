@@ -20,6 +20,20 @@ CreateSLBL_DLG::~CreateSLBL_DLG(){
 
 
 
+bool CreateSLBL_DLG::TransferDataToWindow(){
+    m_OptMinDiffCtrl->SetValue(m_Params.mindiff);
+    m_OptMaxIterCtrl->SetValue(m_Params.maxiter);
+    return true;
+}
+
+
+
+bool CreateSLBL_DLG::TransferDataFromWindow(){
+    return true;
+}
+
+
+
 void CreateSLBL_DLG::_CreateControls(){
     this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -93,7 +107,7 @@ void CreateSLBL_DLG::_CreateControls(){
 	m_staticText4->Wrap( -1 );
 	fgSizer1->Add( m_staticText4, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_OptMinDiffCtrl = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
+	m_OptMinDiffCtrl = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1000000, 0, 0.1);
 	fgSizer1->Add( m_OptMinDiffCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	

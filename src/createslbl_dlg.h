@@ -15,6 +15,8 @@
 #endif
 #include <wx/filepicker.h>
 #include <wx/spinctrl.h>
+#include "core/demutilopts.h"
+
 
 class CreateSLBL_DLG : public wxDialog
 {	
@@ -24,6 +26,9 @@ public:
                    const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
     ~CreateSLBL_DLG();
     
+    virtual bool TransferDataToWindow();
+    virtual bool TransferDataFromWindow();
+    
 private:
     wxComboBox* m_InputListCtrl;
     wxButton* m_InputBrowseBtnCtrl;
@@ -31,7 +36,8 @@ private:
     wxComboBox* m_MaskListCtrl;
     wxButton* m_MaskBrowseBtnCtrl;
     wxSpinCtrl* m_OptMaxIterCtrl;
-    wxSpinCtrl* m_OptMinDiffCtrl;
+    wxSpinCtrlDouble* m_OptMinDiffCtrl;
+    ParFit m_Params;
     
     void _CreateControls();
 };
