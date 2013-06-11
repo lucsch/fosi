@@ -20,6 +20,7 @@
 #include "wxhgversion_dlg.h"
 #include "wxhgversion_core.h"
 #include "general_bmp.h"
+#include "createslbl_dlg.h"
 
 
 BEGIN_EVENT_TABLE( Frame, wxFrame )
@@ -523,7 +524,8 @@ void Frame::OnKeyUp(wxKeyEvent & event) {
 
 
 void Frame::OnCreateSLBL (wxCommandEvent & event){
-    wxLogMessage(_("Creating SLBL"));
+    CreateSLBL_DLG myDlg (this);
+    myDlg.ShowModal();
 }
 
 
