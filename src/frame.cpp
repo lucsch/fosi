@@ -51,6 +51,8 @@ BEGIN_EVENT_TABLE( Frame, wxFrame )
 	EVT_KEY_UP(Frame::OnKeyUp)
     EVT_UPDATE_UI(MENU_FRAME_CLEAR_SELECTION, Frame::OnUpdateUIToolClearSelection)
     EVT_UPDATE_UI(MENU_DATA_REMOVE, Frame::OnUpdateUIRemoveLayer)
+    EVT_UPDATE_UI(MENU_EDITION_START, Frame::OnUpdateEditionStart)
+    EVT_UPDATE_UI(MENU_EDITION_STOP, Frame::OnUpdateEditionStop)
 END_EVENT_TABLE()
 
 
@@ -718,6 +720,26 @@ void Frame::OnUpdateUIRemoveLayer (wxUpdateUIEvent & event){
     }
     event.Enable(false);
 }
+
+
+
+void Frame::OnUpdateEditionStart (wxUpdateUIEvent & event){
+    if (m_vrTOC && m_vrTOC->GetSelection() != wxNOT_FOUND) {
+        event.Enable(true);
+        return;
+    }
+    event.Enable(false);
+}
+
+
+void Frame::OnUpdateEditionStop (wxUpdateUIEvent & event){
+    if (m_vrViewerLayerManager->GetEditionRenderer() == NULL) {
+        event.Enable(false);
+        return;
+    }
+    event.Enable(true);
+}
+
 
 
 Frame::Frame(const wxString & title) :

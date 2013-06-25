@@ -118,7 +118,8 @@ private:
     // Update UI functions
     void OnUpdateUIToolClearSelection(wxUpdateUIEvent & event);
     void OnUpdateUIRemoveLayer (wxUpdateUIEvent & event);
-	
+    void OnUpdateEditionStart (wxUpdateUIEvent & event);
+    void OnUpdateEditionStop (wxUpdateUIEvent & event);
 	DECLARE_EVENT_TABLE();
 };
 
