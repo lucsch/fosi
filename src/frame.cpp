@@ -16,6 +16,7 @@
 #include "vrlayerraster.h"
 #include "vrlayervector.h"
 #include "vrprogress.h"
+#include "vrshapeeditor.h"
 #include "vroomgis_bmp.h"
 #include "accelerators.h"
 #include "wxhgversion_dlg.h"
@@ -43,10 +44,17 @@ BEGIN_EVENT_TABLE( Frame, wxFrame )
 	EVT_MENU( wxID_ZOOM_IN, Frame::OnToolZoom)
 	EVT_MENU( wxID_ZOOM_FIT, Frame::OnToolZoomToFit)
 	EVT_MENU( MENU_FRAME_PAN,  Frame::OnToolPan)
+    EVT_MENU(MENU_TOOL_DRAW, Frame::OnToolDraw)
+    EVT_MENU(MENU_TOOL_MODFIY, Frame::OnToolModify)
 	EVT_COMMAND( wxID_ANY, vrEVT_TOOL_ZOOM, Frame::OnToolZoomAction)
 	EVT_COMMAND( wxID_ANY, vrEVT_TOOL_ZOOMOUT, Frame::OnToolZoomAction)
 	EVT_COMMAND( wxID_ANY, vrEVT_TOOL_PAN, Frame::OnToolPanAction)
 	EVT_COMMAND( wxID_ANY, vrEVT_TOOL_SELECT, Frame::OnToolSelectAction)
+    EVT_COMMAND(wxID_ANY, vrEVT_TOOL_EDIT, Frame::OnToolDrawAction)
+    EVT_COMMAND(wxID_ANY, vrEVT_TOOL_EDIT_FINISHED, Frame::OnToolDrawAction)
+    EVT_COMMAND(wxID_ANY, vrEVT_TOOL_MODIFY, Frame::OnToolModifySearch)
+    EVT_COMMAND(wxID_ANY, vrEVT_TOOL_MODIFY_FINISHED, Frame::OnToolModifyUpdate)
+
 	EVT_KEY_DOWN(Frame::OnKeyDown)
 	EVT_KEY_UP(Frame::OnKeyUp)
     EVT_UPDATE_UI(MENU_FRAME_CLEAR_SELECTION, Frame::OnUpdateUIToolClearSelection)
@@ -150,6 +158,10 @@ void Frame::_CreateMenus() {
 	m_menu52 = new wxMenu();
 	m_menu52->Append( new wxMenuItem( m_menu52, MENU_EDITION_START, _("Start Edition"), wxEmptyString, wxITEM_NORMAL ));
 	m_menu52->Append( new wxMenuItem( m_menu52, MENU_EDITION_STOP, _("Stop Edition"), wxEmptyString, wxITEM_NORMAL ));
+    m_menu52->AppendSeparator();
+    m_menu52->Append( new wxMenuItem( m_menu52, MENU_TOOL_DRAW, _("Draw\tD"), wxEmptyString, wxITEM_NORMAL ));
+    m_menu52->Append( new wxMenuItem( m_menu52, MENU_TOOL_MODFIY, _("Modify\tM"), wxEmptyString, wxITEM_NORMAL ));
+    
 	m_menubar1->Append( m_menu52, _("Edition") );
 
 	// VIEW
@@ -219,10 +231,14 @@ void Frame::_CreateAccelerators() {
 	wxAcceleratorEntry myEntry1 (wxACCEL_NORMAL, (int) 'V', MENU_FRAME_SELECT);
 	wxAcceleratorEntry myEntry2 (wxACCEL_NORMAL, (int) 'Z', wxID_ZOOM_IN);
 	wxAcceleratorEntry myEntry3 (wxACCEL_NORMAL, (int) 'H', MENU_FRAME_PAN);
+	wxAcceleratorEntry myEntry4 (wxACCEL_NORMAL, (int) 'D', MENU_TOOL_DRAW);
+	wxAcceleratorEntry myEntry5 (wxACCEL_NORMAL, (int) 'M', MENU_TOOL_MODFIY);
 
 	myAccels.Add(myEntry1);
 	myAccels.Add(myEntry2);
 	myAccels.Add(myEntry3);
+    myAccels.Add(myEntry4);
+    myAccels.Add(myEntry5);
 
 	wxAcceleratorEntry * myEntries = new wxAcceleratorEntry[myAccels.GetCount()];
 	for (unsigned int i = 0; i< myAccels.GetCount(); i++) {
@@ -618,14 +634,13 @@ void Frame::OnToolSelectAction(wxCommandEvent & event) {
 	wxASSERT(myMsg);
 
 	m_vrViewerLayerManager->ClearSelection();
-	if(m_vrViewerLayerManager->Select(myMsg->m_Rect) == wxNOT_FOUND){
+	if(m_vrViewerLayerManager->Select(myMsg->m_Rect,m_vrViewerLayerManager->GetEditionRenderer()) == wxNOT_FOUND){
 		wxDELETE(myMsg);
 		return;
 	}
 
 	m_vrViewerLayerManager->Reload();
 	wxDELETE(myMsg);
-
 }
 
 
@@ -703,6 +718,191 @@ void Frame::OnToolPanAction(wxCommandEvent & event) {
 
 
 
+void Frame::OnToolDraw (wxCommandEvent & event){
+    vrRenderer * myRendererEdit = m_vrViewerLayerManager->GetEditionRenderer();
+    if (myRendererEdit == NULL) {
+        return;
+    }
+    
+    vrLayerVector * myLayerVect = static_cast<vrLayerVector*> (myRendererEdit->GetLayer());
+    OGRwkbGeometryType myGeomType = myLayerVect->GetGeometryType();
+    switch (wkbFlatten(myGeomType)) {
+        case wkbPoint:
+        case wkbMultiPoint:
+            m_vrDisplay->SetTool(new vrDisplayToolEdit(m_vrDisplay));
+            break;
+   
+        case wkbLineString:
+        case wkbMultiLineString:
+        case wkbPolygon:
+        case wkbMultiPolygon:
+            m_vrDisplay->SetTool(new vrDisplayToolEditLine(m_vrDisplay));
+            break;
+            
+        default:
+            wxLogError(_("Geometry not supported for edition: %d"), wkbFlatten(myGeomType));
+            break;
+    }
+    
+    if(m_Editor) {
+        // Editor exists, assume view has changed
+        m_Editor->ViewChanged();
+        m_Editor->DrawShapeEdit(m_vrViewerLayerManager->GetEditionRenderer()->GetRender());
+    }
+}
+
+
+
+void Frame::OnToolDrawAction (wxCommandEvent & event){
+    vrDisplayToolMessage * myMsg = (vrDisplayToolMessage*)event.GetClientData();
+	wxASSERT(myMsg);
+    
+    vrRenderer * myRendererEdit = m_vrViewerLayerManager->GetEditionRenderer();
+    if (myRendererEdit == NULL) {
+        wxDELETE(myMsg);
+        return;
+    }
+    vrLayerVector * myLayerVect = static_cast<vrLayerVector*> (myRendererEdit->GetLayer());
+
+    // create editor if not exists
+    if (m_Editor == NULL) {
+        OGRwkbGeometryType myGeomType = myLayerVect->GetGeometryType();
+        switch (wkbFlatten(myGeomType)) {
+            case wkbPoint:
+            case wkbMultiPoint:
+                m_Editor = new vrShapeEditorPoint(m_vrDisplay);
+                break;
+                
+            case wkbLineString:
+            case wkbMultiLineString:
+                m_Editor = new vrShapeEditorLine(m_vrDisplay);
+                break;
+                
+            case wkbPolygon:
+            case wkbMultiPolygon:
+                m_Editor = new vrShapeEditorPolygon(m_vrDisplay);
+                break;
+                
+            default:
+                wxLogError(_("Geometry not supported for edition: %d"), wkbFlatten(myGeomType));
+                wxDELETE(myMsg);
+                return;
+        }
+    }
+    
+    wxPoint2DDouble myRealPt (0,0);
+    m_vrDisplay->GetCoordinate()->ConvertFromPixels(myMsg->m_Position, myRealPt);
+    wxASSERT(m_Editor);
+    m_Editor->AddVertex(myRealPt);
+    
+    if (myMsg->m_EvtType == vrEVT_TOOL_EDIT) {
+        m_Editor->DrawShapeEdit(myRendererEdit->GetRender());
+    }
+    else if (myMsg->m_EvtType == vrEVT_TOOL_EDIT_FINISHED){
+        vrLayerVectorOGR * myMemoryLayer = static_cast<vrLayerVectorOGR*>(myRendererEdit->GetLayer());
+        long myAddedId = myMemoryLayer->AddFeature(m_Editor->GetGeometryRef());
+        myMemoryLayer->SetSelectedID(myAddedId);
+        wxDELETE(m_Editor);
+        m_vrViewerLayerManager->Reload();
+    }
+    wxDELETE(myMsg);
+}
+
+
+void Frame::OnToolModify (wxCommandEvent & event){
+    m_vrDisplay->SetTool(new vrDisplayToolModify (m_vrDisplay));
+}
+
+
+
+void Frame::OnToolModifySearch (wxCommandEvent & event){
+    vrDisplayToolMessage * myMsg = (vrDisplayToolMessage*)event.GetClientData();
+	wxASSERT(myMsg);
+    
+    vrRenderer * myMemoryRenderer = m_vrViewerLayerManager->GetEditionRenderer();
+    wxASSERT(myMemoryRenderer);
+    vrLayerVectorOGR * myMemoryLayer = static_cast<vrLayerVectorOGR*>(myMemoryRenderer->GetLayer());
+    wxASSERT(myMemoryLayer);
+    
+    vrRealRect myRealRect;
+    m_vrDisplay->GetCoordinate()->ConvertFromPixels(myMsg->m_Rect, myRealRect);
+    wxDELETE(myMsg);
+    myMemoryLayer->Select(myRealRect);
+    wxArrayLong * mySelectedIDs = myMemoryLayer->GetSelectedIDs();
+    wxASSERT(mySelectedIDs);
+    if (mySelectedIDs->GetCount() != 0) {
+        wxLogMessage(_T("Selected Geometries ID: %ld (number: %ld)"), mySelectedIDs->Item(0), mySelectedIDs->GetCount());
+        // copy geometry vertex to tool
+        OGRFeature * myFeature = myMemoryLayer->GetFeature(mySelectedIDs->Item(0));
+        vrDisplayToolModify * myModifyTool = (vrDisplayToolModify*)m_vrDisplay->GetTool();
+        wxASSERT(myModifyTool);
+        myModifyTool->SetActiveGeometry(myFeature->GetGeometryRef(), myMemoryLayer->GetGeometryType(), m_vrDisplay->GetCoordinate());
+        OGRFeature::DestroyFeature(myFeature);
+        m_vrViewerLayerManager->Reload();
+    }
+}
+
+
+
+void Frame::OnToolModifyUpdate (wxCommandEvent & event){
+    vrDisplayToolMessage * myMsg = (vrDisplayToolMessage*)event.GetClientData();
+	wxASSERT(myMsg);
+    
+    vrRenderer * myMemoryRenderer = m_vrViewerLayerManager->GetEditionRenderer();
+    wxASSERT(myMemoryRenderer);
+    vrLayerVectorOGR * myMemoryLayer = (vrLayerVectorOGR*) myMemoryRenderer->GetLayer();
+    wxASSERT(myMemoryLayer);
+    
+    wxPoint2DDouble myRealPt;
+    m_vrDisplay->GetCoordinate()->ConvertFromPixels(myMsg->m_Position, myRealPt);
+    int myVertexIndex = myMsg->m_LongData;
+    wxDELETE(myMsg);
+    
+    wxArrayLong * mySelectedIDs = myMemoryLayer->GetSelectedIDs();
+    wxASSERT(mySelectedIDs);
+    wxASSERT(mySelectedIDs->GetCount() > 0);
+    
+    // update geometry and send new geometry to the modify tool
+    OGRFeature * myFeature = myMemoryLayer->GetFeature(mySelectedIDs->Item(0));
+    switch (myMemoryLayer->GetGeometryType()) {
+        case wkbLineString: // line
+        {
+            OGRLineString * myLine = (OGRLineString*) myFeature->GetGeometryRef();
+            myLine->setPoint(myVertexIndex, myRealPt.m_x, myRealPt.m_y);
+        }
+            break;
+            
+            
+        case wkbPolygon:
+        {
+            OGRPolygon * myPolygon = (OGRPolygon*) myFeature->GetGeometryRef();
+            OGRLineString * myLine = (OGRLineString*) myPolygon->getExteriorRing();
+            myLine->setPoint(myVertexIndex, myRealPt.m_x, myRealPt.m_y);
+        }
+            break;
+            
+            
+        case wkbPoint:
+        {
+            OGRPoint * myPt = (OGRPoint*) myFeature->GetGeometryRef();
+            myPt->setX(myRealPt.m_x);
+            myPt->setY(myRealPt.m_y);
+        }
+            break;
+            
+        default:
+            wxLogError(_T("Modification of geometry type: %d isn't supported!"), myMemoryLayer->GetGeometryType());
+            break;
+    }
+    myMemoryLayer->SetFeature(myFeature);
+    vrDisplayToolModify * myModifyTool = (vrDisplayToolModify*)m_vrDisplay->GetTool();
+    myModifyTool->SetActiveGeometry(myFeature->GetGeometryRef(), myMemoryLayer->GetGeometryType(), m_vrDisplay->GetCoordinate());
+    OGRFeature::DestroyFeature(myFeature);
+    m_vrViewerLayerManager->Reload();
+}
+
+
+
 void Frame::OnUpdateUIToolClearSelection(wxUpdateUIEvent & event) {
     if (m_vrViewerLayerManager && m_vrViewerLayerManager->GetSelectionCount() > 0) {
         event.Enable(true);
@@ -757,6 +957,7 @@ wxFrame(NULL, FRAME_WINDOW, title) {
 	m_vrViewerLayerManager = NULL;
 	m_vrDisplay = NULL;
 	m_vrLayerManager = NULL;
+    m_Editor = NULL;
 
 	// Design interface
 	initialize_images();

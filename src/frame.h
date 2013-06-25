@@ -22,6 +22,7 @@ class vrLayerManager;
 class vrViewerLayerManager;
 class vrViewerDisplay;
 class ProjectManager;
+class vrShapeEditor;
 
 // Identifier
 const int FRAME_WINDOW = wxID_HIGHEST + 1;
@@ -35,6 +36,8 @@ const int MENU_DATA_REMOVE = wxID_HIGHEST + 8;
 const int MENU_DATA_MEMORY_ADD = wxID_HIGHEST + 9;
 const int MENU_EDITION_START = wxID_HIGHEST + 10;
 const int MENU_EDITION_STOP = wxID_HIGHEST + 11;
+const int MENU_TOOL_DRAW = wxID_HIGHEST + 12;
+const int MENU_TOOL_MODFIY = wxID_HIGHEST + 13;
 const int MENU_CHECK_UPDATE = wxID_HIGHEST + 23;
 const int MENU_WEBSITE = wxID_HIGHEST + 24;
 const int MENU_FRAME_CLEAR_SELECTION = wxID_HIGHEST + 26;
@@ -70,6 +73,7 @@ private:
     vrLayerManager * m_vrLayerManager;
     vrViewerLayerManager * m_vrViewerLayerManager;
     vrViewerDisplay * m_vrDisplay;
+    vrShapeEditor * m_Editor;
 	
 	wxLogWindow * m_LogWnd;
 	wxMenu * m_RecentMenu;
@@ -115,6 +119,12 @@ private:
     void OnToolPan(wxCommandEvent & event);
     void OnToolPanAction(wxCommandEvent & event);
     
+    void OnToolDraw (wxCommandEvent & event);
+    void OnToolDrawAction (wxCommandEvent & event);
+    void OnToolModify (wxCommandEvent & event);
+    void OnToolModifySearch (wxCommandEvent & event);
+    void OnToolModifyUpdate (wxCommandEvent & event);
+
     // Update UI functions
     void OnUpdateUIToolClearSelection(wxUpdateUIEvent & event);
     void OnUpdateUIRemoveLayer (wxUpdateUIEvent & event);
