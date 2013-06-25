@@ -22,6 +22,7 @@ class vrLayerManager;
 class vrViewerLayerManager;
 class vrViewerDisplay;
 class ProjectManager;
+class vrShapeEditor;
 
 // Identifier
 const int FRAME_WINDOW = wxID_HIGHEST + 1;
@@ -32,6 +33,13 @@ const int MENU_WINDOW_DATA_MANAGER = wxID_HIGHEST + 5;
 const int WINDOW_DATA_MANAGER = wxID_HIGHEST + 6;
 const int MENU_DATA_ADD = wxID_HIGHEST + 7;
 const int MENU_DATA_REMOVE = wxID_HIGHEST + 8;
+const int MENU_DATA_MEMORY_ADD = wxID_HIGHEST + 9;
+const int MENU_EDITION_START = wxID_HIGHEST + 10;
+const int MENU_EDITION_STOP = wxID_HIGHEST + 11;
+const int MENU_TOOL_DRAW = wxID_HIGHEST + 12;
+const int MENU_TOOL_MODFIY = wxID_HIGHEST + 13;
+const int MENU_FEATURE_DELETE = wxID_HIGHEST + 14;
+const int MENU_DATA_SAVE_SELECTED = wxID_HIGHEST + 15;
 const int MENU_CHECK_UPDATE = wxID_HIGHEST + 23;
 const int MENU_WEBSITE = wxID_HIGHEST + 24;
 const int MENU_FRAME_CLEAR_SELECTION = wxID_HIGHEST + 26;
@@ -68,6 +76,7 @@ private:
     vrLayerManager * m_vrLayerManager;
     vrViewerLayerManager * m_vrViewerLayerManager;
     vrViewerDisplay * m_vrDisplay;
+    vrShapeEditor * m_Editor;
 	
 	wxLogWindow * m_LogWnd;
 	wxMenu * m_RecentMenu;
@@ -78,7 +87,7 @@ private:
     void _CreateMenus();
     void _CreateToolbar();
 	void _CreateAccelerators();
-	bool _ProjectQuestion(const wxString & text);
+    wxString _GetMemoryLayerNameFromUser(const wxString & name);
     
 	void _SetSelectedFeature();
     bool _RemoveLayer(long position);
@@ -94,6 +103,13 @@ private:
 	void OnLogWindow(wxCommandEvent & event);
 	void OnLayerAdd(wxCommandEvent & event);
     void OnLayerRemove(wxCommandEvent & event);
+    void OnLayerMemoryAdd(wxCommandEvent & event);
+    
+    void OnEditionStart (wxCommandEvent & event);
+    void OnEditionStop (wxCommandEvent & event);
+    void OnDeleteFeature (wxCommandEvent & event);
+    void OnSaveSelectedLayer (wxCommandEvent & event);
+
 	void OnUpdateIdle(wxIdleEvent & event);
 	void OnClose(wxCloseEvent & event);
 	void OnKeyDown(wxKeyEvent & event);
@@ -109,9 +125,19 @@ private:
     void OnToolPan(wxCommandEvent & event);
     void OnToolPanAction(wxCommandEvent & event);
     
+    void OnToolDraw (wxCommandEvent & event);
+    void OnToolDrawAction (wxCommandEvent & event);
+    void OnToolModify (wxCommandEvent & event);
+    void OnToolModifySearch (wxCommandEvent & event);
+    void OnToolModifyUpdate (wxCommandEvent & event);
+
     // Update UI functions
     void OnUpdateUIToolClearSelection(wxUpdateUIEvent & event);
-	
+    void OnUpdateUIRemoveLayer (wxUpdateUIEvent & event);
+    void OnUpdateEditionStart (wxUpdateUIEvent & event);
+    void OnUpdateEditionPossible (wxUpdateUIEvent & event);
+    void OnUpdateDeletePossible (wxUpdateUIEvent & event);
+    void OnUpdateUISaveSelectedLayer (wxUpdateUIEvent & event);
 	DECLARE_EVENT_TABLE();
 };
 

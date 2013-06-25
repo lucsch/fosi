@@ -17,6 +17,8 @@ extern wxBitmap *_img_toolbar_zoom;
 extern wxBitmap *_img_toolbar_zoom_fit;
 extern wxBitmap *_img_generic_export;
 extern wxBitmap *_img_generic_quit;
-
+extern wxBitmap *_img_toolbar_edit;
+extern wxBitmap *_img_toolbar_modify;
+extern wxBitmap *_img_toolbar_start;
 
 #endif /* _COLTOP_BMP_H_ */

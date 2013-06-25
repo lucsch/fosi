@@ -14,7 +14,9 @@
 #include "vrrender.h"
 #include "vrlabel.h"
 #include "vrlayerraster.h"
+#include "vrlayervector.h"
 #include "vrprogress.h"
+#include "vrshapeeditor.h"
 #include "vroomgis_bmp.h"
 #include "accelerators.h"
 #include "wxhgversion_dlg.h"
@@ -24,30 +26,49 @@
 
 
 BEGIN_EVENT_TABLE( Frame, wxFrame )
-EVT_MENU( wxID_EXIT, Frame::OnQuit )
-EVT_MENU( wxID_PREFERENCES, Frame::OnPreferences)
-EVT_MENU( wxID_HELP, Frame::OnUserManual)
-EVT_MENU( MENU_WEBSITE, Frame::OnWebSite)
-EVT_MENU( wxID_ABOUT, Frame::OnAbout)
-EVT_MENU( MENU_CHECK_UPDATE, Frame::OnCheckUpdates)
-EVT_MENU( MENU_WINDOW_LOG, 	Frame::OnLogWindow)
-EVT_MENU( MENU_DATA_ADD, Frame::OnLayerAdd)
-EVT_MENU( MENU_DATA_REMOVE, Frame::OnLayerRemove)
-EVT_IDLE( Frame::OnUpdateIdle)
-EVT_CLOSE( Frame::OnClose)
-EVT_MENU( MENU_FRAME_SELECT, Frame::OnToolSelect)
-EVT_MENU( MENU_FRAME_CLEAR_SELECTION, Frame::OnToolClearSelection)
-EVT_MENU( wxID_ZOOM_IN, Frame::OnToolZoom)
-EVT_MENU( wxID_ZOOM_FIT, Frame::OnToolZoomToFit)
-EVT_MENU( MENU_FRAME_PAN,  Frame::OnToolPan)
-EVT_MENU(MENU_FRAME_CREATE_SLBL, Frame::OnCreateSLBL)
-EVT_COMMAND( wxID_ANY, vrEVT_TOOL_ZOOM, Frame::OnToolZoomAction)
-EVT_COMMAND( wxID_ANY, vrEVT_TOOL_ZOOMOUT, Frame::OnToolZoomAction)
-EVT_COMMAND( wxID_ANY, vrEVT_TOOL_PAN, Frame::OnToolPanAction)
-EVT_COMMAND( wxID_ANY, vrEVT_TOOL_SELECT, Frame::OnToolSelectAction)
-EVT_KEY_DOWN(Frame::OnKeyDown)
-EVT_KEY_UP(Frame::OnKeyUp)
-EVT_UPDATE_UI(MENU_FRAME_CLEAR_SELECTION, Frame::OnUpdateUIToolClearSelection)
+    EVT_MENU(MENU_FRAME_CREATE_SLBL, Frame::OnCreateSLBL)
+	EVT_MENU( wxID_EXIT, Frame::OnQuit )
+	EVT_MENU( wxID_PREFERENCES, Frame::OnPreferences)
+    EVT_MENU( wxID_HELP, Frame::OnUserManual)
+    EVT_MENU( MENU_WEBSITE, Frame::OnWebSite)
+	EVT_MENU( wxID_ABOUT, Frame::OnAbout)
+    EVT_MENU( MENU_CHECK_UPDATE, Frame::OnCheckUpdates)
+	EVT_MENU( MENU_WINDOW_LOG, 	Frame::OnLogWindow)
+	EVT_MENU( MENU_DATA_ADD, Frame::OnLayerAdd)
+    EVT_MENU(MENU_DATA_MEMORY_ADD, Frame::OnLayerMemoryAdd)
+	EVT_MENU( MENU_DATA_REMOVE, Frame::OnLayerRemove)
+    EVT_MENU(MENU_EDITION_START, Frame::OnEditionStart)
+    EVT_MENU(MENU_EDITION_STOP, Frame::OnEditionStop)
+	EVT_IDLE( Frame::OnUpdateIdle)
+	EVT_CLOSE( Frame::OnClose)
+	EVT_MENU( MENU_FRAME_SELECT, Frame::OnToolSelect)
+    EVT_MENU( MENU_FRAME_CLEAR_SELECTION, Frame::OnToolClearSelection)
+	EVT_MENU( wxID_ZOOM_IN, Frame::OnToolZoom)
+	EVT_MENU( wxID_ZOOM_FIT, Frame::OnToolZoomToFit)
+	EVT_MENU( MENU_FRAME_PAN,  Frame::OnToolPan)
+    EVT_MENU(MENU_TOOL_DRAW, Frame::OnToolDraw)
+    EVT_MENU(MENU_TOOL_MODFIY, Frame::OnToolModify)
+    EVT_MENU(MENU_FEATURE_DELETE, Frame::OnDeleteFeature)
+    EVT_MENU(MENU_DATA_SAVE_SELECTED, Frame::OnSaveSelectedLayer)
+	EVT_COMMAND( wxID_ANY, vrEVT_TOOL_ZOOM, Frame::OnToolZoomAction)
+	EVT_COMMAND( wxID_ANY, vrEVT_TOOL_ZOOMOUT, Frame::OnToolZoomAction)
+	EVT_COMMAND( wxID_ANY, vrEVT_TOOL_PAN, Frame::OnToolPanAction)
+	EVT_COMMAND( wxID_ANY, vrEVT_TOOL_SELECT, Frame::OnToolSelectAction)
+    EVT_COMMAND(wxID_ANY, vrEVT_TOOL_EDIT, Frame::OnToolDrawAction)
+    EVT_COMMAND(wxID_ANY, vrEVT_TOOL_EDIT_FINISHED, Frame::OnToolDrawAction)
+    EVT_COMMAND(wxID_ANY, vrEVT_TOOL_MODIFY, Frame::OnToolModifySearch)
+    EVT_COMMAND(wxID_ANY, vrEVT_TOOL_MODIFY_FINISHED, Frame::OnToolModifyUpdate)
+
+	EVT_KEY_DOWN(Frame::OnKeyDown)
+	EVT_KEY_UP(Frame::OnKeyUp)
+    EVT_UPDATE_UI(MENU_FRAME_CLEAR_SELECTION, Frame::OnUpdateUIToolClearSelection)
+    EVT_UPDATE_UI(MENU_DATA_REMOVE, Frame::OnUpdateUIRemoveLayer)
+    EVT_UPDATE_UI(MENU_EDITION_START, Frame::OnUpdateEditionStart)
+    EVT_UPDATE_UI(MENU_EDITION_STOP, Frame::OnUpdateEditionPossible)
+    EVT_UPDATE_UI(MENU_TOOL_DRAW, Frame::OnUpdateEditionPossible)
+    EVT_UPDATE_UI(MENU_TOOL_MODFIY, Frame::OnUpdateEditionPossible)
+    EVT_UPDATE_UI(MENU_FEATURE_DELETE, Frame::OnUpdateDeletePossible)
+    EVT_UPDATE_UI(MENU_DATA_SAVE_SELECTED, Frame::OnUpdateUISaveSelectedLayer)
 END_EVENT_TABLE()
 
 
@@ -126,7 +147,13 @@ void Frame::_CreateMenus() {
 	// DATA
 	wxMenu* m_menu5 = new wxMenu();
 	m_menu5->Append( new wxMenuItem( m_menu5, MENU_DATA_ADD,_("Add layer..."), wxEmptyString, wxITEM_NORMAL ) );
-	m_menu5->Append(  new wxMenuItem( m_menu5, MENU_DATA_REMOVE, _("Remove layer...") , wxEmptyString, wxITEM_NORMAL ) );
+    m_menu5->Append( new wxMenuItem( m_menu5, MENU_DATA_MEMORY_ADD, _("Add memory layer...")));
+    m_menu5->AppendSeparator();
+    m_menu5->Append(new wxMenuItem(m_menu5, MENU_DATA_SAVE_SELECTED, _("Save selected layer..."), wxEmptyString, wxITEM_NORMAL));
+    m_menu5->AppendSeparator();
+    m_menu5->Append(  new wxMenuItem( m_menu5, MENU_DATA_REMOVE, _("Remove layer...") , wxEmptyString, wxITEM_NORMAL ) );
+    
+    
 	m_menubar1->Append( m_menu5, _("Data") );
 
 	// SELECTION
@@ -136,6 +163,22 @@ void Frame::_CreateMenus() {
 	m_menu51->Append( new wxMenuItem( m_menu51, MENU_FRAME_CLEAR_SELECTION,
 									 _("Clear selection"), wxEmptyString, wxITEM_NORMAL ));
 	m_menubar1->Append( m_menu51, _("Selection") );
+    
+    // EDITION
+    wxMenu* m_menu52;
+	m_menu52 = new wxMenu();
+	m_menu52->Append( new wxMenuItem( m_menu52, MENU_EDITION_START, _("Start Edition"), wxEmptyString, wxITEM_NORMAL ));
+	m_menu52->Append( new wxMenuItem( m_menu52, MENU_EDITION_STOP, _("Stop Edition"), wxEmptyString, wxITEM_NORMAL ));
+    m_menu52->AppendSeparator();
+    m_menu52->Append( new wxMenuItem( m_menu52, MENU_TOOL_DRAW, _("Draw\tD"), wxEmptyString, wxITEM_NORMAL ));
+    m_menu52->Append( new wxMenuItem( m_menu52, MENU_TOOL_MODFIY, _("Modify\tM"), wxEmptyString, wxITEM_NORMAL ));
+    m_menu52->AppendSeparator();
+	wxString myDelShortcut = "\tDel";
+#ifdef __WXMAC__
+	myDelShortcut = "\tBack";
+#endif
+    m_menu52->Append(new wxMenuItem( m_menu52, MENU_FEATURE_DELETE, _("Delete selected features") + myDelShortcut, wxEmptyString, wxITEM_NORMAL ));
+	m_menubar1->Append( m_menu52, _("Edition") );
 
 	// VIEW
 	wxMenu* m_menu6;
@@ -194,7 +237,13 @@ void Frame::_CreateToolbar() {
 	m_toolBar1->AddTool( wxID_ZOOM_IN, myZoom2Name , wxBitmap(*_img_toolbar_zoom), wxNullBitmap, wxITEM_NORMAL, myZoom2Name, wxEmptyString );
 	wxString myPanName = _("Pan");
 	m_toolBar1->AddTool( MENU_FRAME_PAN, myPanName, wxBitmap(*_img_toolbar_pan), wxNullBitmap, wxITEM_NORMAL, myPanName, wxEmptyString );
-	m_toolBar1->Realize();
+    wxString myEditTxt = _("Start Edition");
+	m_toolBar1->AddTool( MENU_EDITION_START, myEditTxt, wxBitmap(*_img_toolbar_start), wxNullBitmap, wxITEM_NORMAL, myEditTxt, wxEmptyString );
+    myEditTxt = _("Draw");
+	m_toolBar1->AddTool( MENU_TOOL_DRAW, myEditTxt, wxBitmap(*_img_toolbar_edit), wxNullBitmap, wxITEM_NORMAL, myEditTxt, wxEmptyString );
+    myEditTxt = _("Modify");
+	m_toolBar1->AddTool( MENU_TOOL_MODFIY, myEditTxt, wxBitmap(*_img_toolbar_modify), wxNullBitmap, wxITEM_NORMAL, myEditTxt, wxEmptyString );
+ 	m_toolBar1->Realize();
 }
 
 
@@ -204,10 +253,14 @@ void Frame::_CreateAccelerators() {
 	wxAcceleratorEntry myEntry1 (wxACCEL_NORMAL, (int) 'V', MENU_FRAME_SELECT);
 	wxAcceleratorEntry myEntry2 (wxACCEL_NORMAL, (int) 'Z', wxID_ZOOM_IN);
 	wxAcceleratorEntry myEntry3 (wxACCEL_NORMAL, (int) 'H', MENU_FRAME_PAN);
+	wxAcceleratorEntry myEntry4 (wxACCEL_NORMAL, (int) 'D', MENU_TOOL_DRAW);
+	wxAcceleratorEntry myEntry5 (wxACCEL_NORMAL, (int) 'M', MENU_TOOL_MODFIY);
 
 	myAccels.Add(myEntry1);
 	myAccels.Add(myEntry2);
 	myAccels.Add(myEntry3);
+    myAccels.Add(myEntry4);
+    myAccels.Add(myEntry5);
 
 	wxAcceleratorEntry * myEntries = new wxAcceleratorEntry[myAccels.GetCount()];
 	for (unsigned int i = 0; i< myAccels.GetCount(); i++) {
@@ -408,6 +461,122 @@ void Frame::OnLayerAdd(wxCommandEvent & event) {
 
 
 
+void Frame::OnLayerMemoryAdd(wxCommandEvent & event){
+    // ask for spatial types
+    const wxString myNames [] = {_("Points"), _("Lines"), _("Polygons")};
+    wxSingleChoiceDialog myTypDlg(this, _("Select layer spatial type"), _("Memory layer"), sizeof(myNames) / sizeof(wxString), &myNames[0]);
+    if (myTypDlg.ShowModal() != wxID_OK) {
+        return;
+    }
+    
+    // ask for layer name
+    wxString myName = _GetMemoryLayerNameFromUser(myNames[myTypDlg.GetSelection()]);
+    if (myName == wxEmptyString) {
+        return;
+    }
+    wxFileName myMemoryLayerName ("", myName, "memory");
+    
+    m_vrViewerLayerManager->FreezeBegin();
+	vrLayerVectorOGR * myLayer = new vrLayerVectorOGR();
+    int mySpatialTypes [] = {wkbPoint, wkbLineString, wkbPolygon};
+	if(myLayer->Create(myMemoryLayerName, mySpatialTypes[myTypDlg.GetSelection()])==false){
+		wxFAIL;
+	}
+	m_vrLayerManager->Add(myLayer);
+	m_vrViewerLayerManager->Add(-1, myLayer);
+	m_vrViewerLayerManager->FreezeEnd();
+}
+
+
+void Frame::OnEditionStart (wxCommandEvent & event){
+    vrRenderer * mySelectedRenderer =  m_vrViewerLayerManager->GetRenderer(m_vrTOC->GetSelection());
+    if (mySelectedRenderer == NULL) {
+        return;
+    }
+    m_vrViewerLayerManager->StopEdition();
+    m_vrViewerLayerManager->StartEdition(mySelectedRenderer);
+}
+
+
+
+void Frame::OnEditionStop (wxCommandEvent & event){
+    m_vrViewerLayerManager->StopEdition();
+}
+
+
+
+void Frame::OnDeleteFeature (wxCommandEvent & event){
+    vrLayerVector * myLayer = static_cast<vrLayerVector *>(m_vrViewerLayerManager->GetEditionRenderer()->GetLayer());
+    if (myLayer == NULL) {
+        return;
+    }
+    for (unsigned int i = 0; i< myLayer->GetSelectedIDs()->GetCount(); i++) {
+        myLayer->DeleteFeature(myLayer->GetSelectedIDs()->Item(i));
+    }
+    m_vrViewerLayerManager->Reload();
+}
+
+
+
+void Frame::OnSaveSelectedLayer (wxCommandEvent & event){
+    vrLayerVectorOGR * myMemoryLayer = static_cast<vrLayerVectorOGR*>(m_vrViewerLayerManager->GetRenderer(m_vrTOC->GetSelection())->GetLayer());
+    wxASSERT(myMemoryLayer);
+    
+    wxString mySaveFileName = wxFileSelector(_("Choose a filename for the shapefile"),
+                                             wxEmptyString,
+                                             wxEmptyString,
+                                             _T("shp"),
+                                             _T("ESRI Shapefiles (*.shp)|*.shp"),
+                                             wxFD_SAVE, this);
+    if (mySaveFileName.IsEmpty() == true) {
+        wxLogMessage(_("Saving canceled!"));
+        return;
+    }
+    
+    wxFileName mySaveFile(mySaveFileName);
+    mySaveFile.SetExt(_T("shp"));
+    
+    vrLayerVectorOGR myShapefile;
+    if(myShapefile.Create(mySaveFile, myMemoryLayer->GetGeometryType())==false){
+        wxLogError(_("Creating '%s' failed!"), mySaveFile.GetFullPath());
+        return;
+    }
+    
+    bool restart = false;
+    myMemoryLayer->ClearSpatialFilter();
+    for (long i = 0; i<myMemoryLayer->GetFeatureCount(); i++) {
+        restart = false;
+        if(i == 0){
+            restart = true;
+        }
+        OGRFeature * myFeature = myMemoryLayer->GetNextFeature(restart);
+        wxASSERT(myFeature);
+        myShapefile.AddFeature(myFeature->GetGeometryRef());
+        OGRFeature::DestroyFeature(myFeature);
+    }
+    wxLogMessage(_("'%s' saved as: '%s'"), myMemoryLayer->GetDisplayName().GetName(), mySaveFile.GetFullName());
+}
+
+
+
+wxString Frame::_GetMemoryLayerNameFromUser(const wxString & name){
+    wxTextEntryDialog myNameDlg(this, _("Layer Names"));
+    myNameDlg.SetValue(name);
+    if (myNameDlg.ShowModal() != wxID_OK) {
+        return wxEmptyString;
+    }
+    
+    wxFileName myFileName ("", myNameDlg.GetValue(), "memory");
+    if( m_vrLayerManager->GetLayer(myFileName) != NULL){
+        wxLogError(_("Name '%s' allready exists, please choose another name!"), myNameDlg.GetValue());
+        return _GetMemoryLayerNameFromUser(name);
+    }
+    
+    return myNameDlg.GetValue();
+}
+
+
+
 bool Frame::AddLayers (const wxArrayString & names){
 	m_vrViewerLayerManager->FreezeBegin();
 	for (unsigned int i = 0; i< names.GetCount(); i++) {
@@ -548,14 +717,13 @@ void Frame::OnToolSelectAction(wxCommandEvent & event) {
 	wxASSERT(myMsg);
 
 	m_vrViewerLayerManager->ClearSelection();
-	if(m_vrViewerLayerManager->Select(myMsg->m_Rect) == wxNOT_FOUND){
+	if(m_vrViewerLayerManager->Select(myMsg->m_Rect,m_vrViewerLayerManager->GetEditionRenderer()) == wxNOT_FOUND){
 		wxDELETE(myMsg);
 		return;
 	}
 
 	m_vrViewerLayerManager->Reload();
 	wxDELETE(myMsg);
-
 }
 
 
@@ -633,6 +801,191 @@ void Frame::OnToolPanAction(wxCommandEvent & event) {
 
 
 
+void Frame::OnToolDraw (wxCommandEvent & event){
+    vrRenderer * myRendererEdit = m_vrViewerLayerManager->GetEditionRenderer();
+    if (myRendererEdit == NULL) {
+        return;
+    }
+    
+    vrLayerVector * myLayerVect = static_cast<vrLayerVector*> (myRendererEdit->GetLayer());
+    OGRwkbGeometryType myGeomType = myLayerVect->GetGeometryType();
+    switch (wkbFlatten(myGeomType)) {
+        case wkbPoint:
+        case wkbMultiPoint:
+            m_vrDisplay->SetTool(new vrDisplayToolEdit(m_vrDisplay));
+            break;
+   
+        case wkbLineString:
+        case wkbMultiLineString:
+        case wkbPolygon:
+        case wkbMultiPolygon:
+            m_vrDisplay->SetTool(new vrDisplayToolEditLine(m_vrDisplay));
+            break;
+            
+        default:
+            wxLogError(_("Geometry not supported for edition: %d"), wkbFlatten(myGeomType));
+            break;
+    }
+    
+    if(m_Editor) {
+        // Editor exists, assume view has changed
+        m_Editor->ViewChanged();
+        m_Editor->DrawShapeEdit(m_vrViewerLayerManager->GetEditionRenderer()->GetRender());
+    }
+}
+
+
+
+void Frame::OnToolDrawAction (wxCommandEvent & event){
+    vrDisplayToolMessage * myMsg = (vrDisplayToolMessage*)event.GetClientData();
+	wxASSERT(myMsg);
+    
+    vrRenderer * myRendererEdit = m_vrViewerLayerManager->GetEditionRenderer();
+    if (myRendererEdit == NULL) {
+        wxDELETE(myMsg);
+        return;
+    }
+    vrLayerVector * myLayerVect = static_cast<vrLayerVector*> (myRendererEdit->GetLayer());
+
+    // create editor if not exists
+    if (m_Editor == NULL) {
+        OGRwkbGeometryType myGeomType = myLayerVect->GetGeometryType();
+        switch (wkbFlatten(myGeomType)) {
+            case wkbPoint:
+            case wkbMultiPoint:
+                m_Editor = new vrShapeEditorPoint(m_vrDisplay);
+                break;
+                
+            case wkbLineString:
+            case wkbMultiLineString:
+                m_Editor = new vrShapeEditorLine(m_vrDisplay);
+                break;
+                
+            case wkbPolygon:
+            case wkbMultiPolygon:
+                m_Editor = new vrShapeEditorPolygon(m_vrDisplay);
+                break;
+                
+            default:
+                wxLogError(_("Geometry not supported for edition: %d"), wkbFlatten(myGeomType));
+                wxDELETE(myMsg);
+                return;
+        }
+    }
+    
+    wxPoint2DDouble myRealPt (0,0);
+    m_vrDisplay->GetCoordinate()->ConvertFromPixels(myMsg->m_Position, myRealPt);
+    wxASSERT(m_Editor);
+    m_Editor->AddVertex(myRealPt);
+    
+    if (myMsg->m_EvtType == vrEVT_TOOL_EDIT) {
+        m_Editor->DrawShapeEdit(myRendererEdit->GetRender());
+    }
+    else if (myMsg->m_EvtType == vrEVT_TOOL_EDIT_FINISHED){
+        vrLayerVectorOGR * myMemoryLayer = static_cast<vrLayerVectorOGR*>(myRendererEdit->GetLayer());
+        long myAddedId = myMemoryLayer->AddFeature(m_Editor->GetGeometryRef());
+        myMemoryLayer->SetSelectedID(myAddedId);
+        wxDELETE(m_Editor);
+        m_vrViewerLayerManager->Reload();
+    }
+    wxDELETE(myMsg);
+}
+
+
+void Frame::OnToolModify (wxCommandEvent & event){
+    m_vrDisplay->SetTool(new vrDisplayToolModify (m_vrDisplay));
+}
+
+
+
+void Frame::OnToolModifySearch (wxCommandEvent & event){
+    vrDisplayToolMessage * myMsg = (vrDisplayToolMessage*)event.GetClientData();
+	wxASSERT(myMsg);
+    
+    vrRenderer * myMemoryRenderer = m_vrViewerLayerManager->GetEditionRenderer();
+    wxASSERT(myMemoryRenderer);
+    vrLayerVectorOGR * myMemoryLayer = static_cast<vrLayerVectorOGR*>(myMemoryRenderer->GetLayer());
+    wxASSERT(myMemoryLayer);
+    
+    vrRealRect myRealRect;
+    m_vrDisplay->GetCoordinate()->ConvertFromPixels(myMsg->m_Rect, myRealRect);
+    wxDELETE(myMsg);
+    myMemoryLayer->Select(myRealRect);
+    wxArrayLong * mySelectedIDs = myMemoryLayer->GetSelectedIDs();
+    wxASSERT(mySelectedIDs);
+    if (mySelectedIDs->GetCount() != 0) {
+        wxLogMessage(_T("Selected Geometries ID: %ld (number: %ld)"), mySelectedIDs->Item(0), mySelectedIDs->GetCount());
+        // copy geometry vertex to tool
+        OGRFeature * myFeature = myMemoryLayer->GetFeature(mySelectedIDs->Item(0));
+        vrDisplayToolModify * myModifyTool = (vrDisplayToolModify*)m_vrDisplay->GetTool();
+        wxASSERT(myModifyTool);
+        myModifyTool->SetActiveGeometry(myFeature->GetGeometryRef(), myMemoryLayer->GetGeometryType(), m_vrDisplay->GetCoordinate());
+        OGRFeature::DestroyFeature(myFeature);
+        m_vrViewerLayerManager->Reload();
+    }
+}
+
+
+
+void Frame::OnToolModifyUpdate (wxCommandEvent & event){
+    vrDisplayToolMessage * myMsg = (vrDisplayToolMessage*)event.GetClientData();
+	wxASSERT(myMsg);
+    
+    vrRenderer * myMemoryRenderer = m_vrViewerLayerManager->GetEditionRenderer();
+    wxASSERT(myMemoryRenderer);
+    vrLayerVectorOGR * myMemoryLayer = (vrLayerVectorOGR*) myMemoryRenderer->GetLayer();
+    wxASSERT(myMemoryLayer);
+    
+    wxPoint2DDouble myRealPt;
+    m_vrDisplay->GetCoordinate()->ConvertFromPixels(myMsg->m_Position, myRealPt);
+    int myVertexIndex = myMsg->m_LongData;
+    wxDELETE(myMsg);
+    
+    wxArrayLong * mySelectedIDs = myMemoryLayer->GetSelectedIDs();
+    wxASSERT(mySelectedIDs);
+    wxASSERT(mySelectedIDs->GetCount() > 0);
+    
+    // update geometry and send new geometry to the modify tool
+    OGRFeature * myFeature = myMemoryLayer->GetFeature(mySelectedIDs->Item(0));
+    switch (myMemoryLayer->GetGeometryType()) {
+        case wkbLineString: // line
+        {
+            OGRLineString * myLine = (OGRLineString*) myFeature->GetGeometryRef();
+            myLine->setPoint(myVertexIndex, myRealPt.m_x, myRealPt.m_y);
+        }
+            break;
+            
+            
+        case wkbPolygon:
+        {
+            OGRPolygon * myPolygon = (OGRPolygon*) myFeature->GetGeometryRef();
+            OGRLineString * myLine = (OGRLineString*) myPolygon->getExteriorRing();
+            myLine->setPoint(myVertexIndex, myRealPt.m_x, myRealPt.m_y);
+        }
+            break;
+            
+            
+        case wkbPoint:
+        {
+            OGRPoint * myPt = (OGRPoint*) myFeature->GetGeometryRef();
+            myPt->setX(myRealPt.m_x);
+            myPt->setY(myRealPt.m_y);
+        }
+            break;
+            
+        default:
+            wxLogError(_T("Modification of geometry type: %d isn't supported!"), myMemoryLayer->GetGeometryType());
+            break;
+    }
+    myMemoryLayer->SetFeature(myFeature);
+    vrDisplayToolModify * myModifyTool = (vrDisplayToolModify*)m_vrDisplay->GetTool();
+    myModifyTool->SetActiveGeometry(myFeature->GetGeometryRef(), myMemoryLayer->GetGeometryType(), m_vrDisplay->GetCoordinate());
+    OGRFeature::DestroyFeature(myFeature);
+    m_vrViewerLayerManager->Reload();
+}
+
+
+
 void Frame::OnUpdateUIToolClearSelection(wxUpdateUIEvent & event) {
     if (m_vrViewerLayerManager && m_vrViewerLayerManager->GetSelectionCount() > 0) {
         event.Enable(true);
@@ -641,6 +994,66 @@ void Frame::OnUpdateUIToolClearSelection(wxUpdateUIEvent & event) {
     event.Enable(false);
 }
 
+
+
+void Frame::OnUpdateUIRemoveLayer (wxUpdateUIEvent & event){
+    if (m_vrViewerLayerManager && m_vrViewerLayerManager->GetCount() > 0) {
+        event.Enable(true);
+        return;
+    }
+    event.Enable(false);
+}
+
+
+
+void Frame::OnUpdateEditionStart (wxUpdateUIEvent & event){
+    if (m_vrTOC && m_vrTOC->GetSelection() != wxNOT_FOUND) {
+        if (m_vrViewerLayerManager->GetRenderer( m_vrTOC->GetSelection()) != m_vrViewerLayerManager->GetEditionRenderer()) {
+            event.Enable(true);
+            return;
+        }
+    }
+    event.Enable(false);
+}
+
+
+
+void Frame::OnUpdateEditionPossible (wxUpdateUIEvent & event){
+    if (m_vrViewerLayerManager->GetEditionRenderer() == NULL) {
+        event.Enable(false);
+        return;
+    }
+    event.Enable(true);
+}
+
+
+
+void Frame::OnUpdateDeletePossible (wxUpdateUIEvent & event){
+    if (m_vrViewerLayerManager->GetEditionRenderer() != NULL) {
+        vrLayerVector * myLayer = static_cast<vrLayerVector*>(m_vrViewerLayerManager->GetEditionRenderer()->GetLayer());
+        wxASSERT(myLayer);
+        if(myLayer->GetSelectedIDs()->GetCount() > 0){
+            event.Enable(true);
+            return;
+        }
+    }
+    event.Enable(false);
+}
+
+
+
+void Frame::OnUpdateUISaveSelectedLayer (wxUpdateUIEvent & event){
+    if (m_vrTOC && m_vrTOC->GetSelection() != wxNOT_FOUND) {
+        vrLayerVector * myLayer = static_cast<vrLayerVector*>(m_vrViewerLayerManager->GetRenderer(m_vrTOC->GetSelection())->GetLayer());
+        
+        if (myLayer != NULL && myLayer->GetType() >= vrDRIVER_VECTOR_SHP && myLayer->GetType() <= vrDRIVER_VECTOR_MEMORY){
+            event.Enable(true);
+            return;
+        }
+    }
+    event.Enable(false);
+    return;
+}
 
 
 Frame::Frame(const wxString & title) :
@@ -658,6 +1071,7 @@ wxFrame(NULL, FRAME_WINDOW, title) {
 	m_vrViewerLayerManager = NULL;
 	m_vrDisplay = NULL;
 	m_vrLayerManager = NULL;
+    m_Editor = NULL;
 
 	// Design interface
 	initialize_images();
