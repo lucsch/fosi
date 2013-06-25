@@ -60,7 +60,10 @@ BEGIN_EVENT_TABLE( Frame, wxFrame )
     EVT_UPDATE_UI(MENU_FRAME_CLEAR_SELECTION, Frame::OnUpdateUIToolClearSelection)
     EVT_UPDATE_UI(MENU_DATA_REMOVE, Frame::OnUpdateUIRemoveLayer)
     EVT_UPDATE_UI(MENU_EDITION_START, Frame::OnUpdateEditionStart)
-    EVT_UPDATE_UI(MENU_EDITION_STOP, Frame::OnUpdateEditionStop)
+    EVT_UPDATE_UI(MENU_EDITION_STOP, Frame::OnUpdateEditionPossible)
+    EVT_UPDATE_UI(MENU_TOOL_DRAW, Frame::OnUpdateEditionPossible)
+    EVT_UPDATE_UI(MENU_TOOL_MODFIY, Frame::OnUpdateEditionPossible)
+
 END_EVENT_TABLE()
 
 
@@ -932,7 +935,7 @@ void Frame::OnUpdateEditionStart (wxUpdateUIEvent & event){
 }
 
 
-void Frame::OnUpdateEditionStop (wxUpdateUIEvent & event){
+void Frame::OnUpdateEditionPossible (wxUpdateUIEvent & event){
     if (m_vrViewerLayerManager->GetEditionRenderer() == NULL) {
         event.Enable(false);
         return;

@@ -129,7 +129,7 @@ private:
     void OnUpdateUIToolClearSelection(wxUpdateUIEvent & event);
     void OnUpdateUIRemoveLayer (wxUpdateUIEvent & event);
     void OnUpdateEditionStart (wxUpdateUIEvent & event);
-    void OnUpdateEditionStop (wxUpdateUIEvent & event);
+    void OnUpdateEditionPossible (wxUpdateUIEvent & event);
 	DECLARE_EVENT_TABLE();
 };
 
