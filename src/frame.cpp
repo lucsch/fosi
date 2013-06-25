@@ -46,6 +46,7 @@ BEGIN_EVENT_TABLE( Frame, wxFrame )
 	EVT_MENU( MENU_FRAME_PAN,  Frame::OnToolPan)
     EVT_MENU(MENU_TOOL_DRAW, Frame::OnToolDraw)
     EVT_MENU(MENU_TOOL_MODFIY, Frame::OnToolModify)
+    EVT_MENU(MENU_FEATURE_DELETE, Frame::OnDeleteFeature)
 	EVT_COMMAND( wxID_ANY, vrEVT_TOOL_ZOOM, Frame::OnToolZoomAction)
 	EVT_COMMAND( wxID_ANY, vrEVT_TOOL_ZOOMOUT, Frame::OnToolZoomAction)
 	EVT_COMMAND( wxID_ANY, vrEVT_TOOL_PAN, Frame::OnToolPanAction)
@@ -63,7 +64,7 @@ BEGIN_EVENT_TABLE( Frame, wxFrame )
     EVT_UPDATE_UI(MENU_EDITION_STOP, Frame::OnUpdateEditionPossible)
     EVT_UPDATE_UI(MENU_TOOL_DRAW, Frame::OnUpdateEditionPossible)
     EVT_UPDATE_UI(MENU_TOOL_MODFIY, Frame::OnUpdateEditionPossible)
-
+    EVT_UPDATE_UI(MENU_FEATURE_DELETE, Frame::OnUpdateDeletePossible)
 END_EVENT_TABLE()
 
 
@@ -164,7 +165,12 @@ void Frame::_CreateMenus() {
     m_menu52->AppendSeparator();
     m_menu52->Append( new wxMenuItem( m_menu52, MENU_TOOL_DRAW, _("Draw\tD"), wxEmptyString, wxITEM_NORMAL ));
     m_menu52->Append( new wxMenuItem( m_menu52, MENU_TOOL_MODFIY, _("Modify\tM"), wxEmptyString, wxITEM_NORMAL ));
-    
+    m_menu52->AppendSeparator();
+	wxString myDelShortcut = "\tDel";
+#ifdef __WXMAC__
+	myDelShortcut = "\tBack";
+#endif
+    m_menu52->Append(new wxMenuItem( m_menu52, MENU_FEATURE_DELETE, _("Delete selected features") + myDelShortcut, wxEmptyString, wxITEM_NORMAL ));
 	m_menubar1->Append( m_menu52, _("Edition") );
 
 	// VIEW
@@ -224,7 +230,13 @@ void Frame::_CreateToolbar() {
 	m_toolBar1->AddTool( wxID_ZOOM_IN, myZoom2Name , wxBitmap(*_img_toolbar_zoom), wxNullBitmap, wxITEM_NORMAL, myZoom2Name, wxEmptyString );
 	wxString myPanName = _("Pan");
 	m_toolBar1->AddTool( MENU_FRAME_PAN, myPanName, wxBitmap(*_img_toolbar_pan), wxNullBitmap, wxITEM_NORMAL, myPanName, wxEmptyString );
-	m_toolBar1->Realize();
+    wxString myEditTxt = _("Start Edition");
+	m_toolBar1->AddTool( MENU_EDITION_START, myEditTxt, wxBitmap(*_img_toolbar_start), wxNullBitmap, wxITEM_NORMAL, myEditTxt, wxEmptyString );
+    myEditTxt = _("Draw");
+	m_toolBar1->AddTool( MENU_TOOL_DRAW, myEditTxt, wxBitmap(*_img_toolbar_edit), wxNullBitmap, wxITEM_NORMAL, myEditTxt, wxEmptyString );
+    myEditTxt = _("Modify");
+	m_toolBar1->AddTool( MENU_TOOL_MODFIY, myEditTxt, wxBitmap(*_img_toolbar_modify), wxNullBitmap, wxITEM_NORMAL, myEditTxt, wxEmptyString );
+ 	m_toolBar1->Realize();
 }
 
 
@@ -482,6 +494,19 @@ void Frame::OnEditionStart (wxCommandEvent & event){
 
 void Frame::OnEditionStop (wxCommandEvent & event){
     m_vrViewerLayerManager->StopEdition();
+}
+
+
+
+void Frame::OnDeleteFeature (wxCommandEvent & event){
+    vrLayerVector * myLayer = static_cast<vrLayerVector *>(m_vrViewerLayerManager->GetEditionRenderer()->GetLayer());
+    if (myLayer == NULL) {
+        return;
+    }
+    for (unsigned int i = 0; i< myLayer->GetSelectedIDs()->GetCount(); i++) {
+        myLayer->DeleteFeature(myLayer->GetSelectedIDs()->Item(i));
+    }
+    m_vrViewerLayerManager->Reload();
 }
 
 
@@ -928,11 +953,14 @@ void Frame::OnUpdateUIRemoveLayer (wxUpdateUIEvent & event){
 
 void Frame::OnUpdateEditionStart (wxUpdateUIEvent & event){
     if (m_vrTOC && m_vrTOC->GetSelection() != wxNOT_FOUND) {
-        event.Enable(true);
-        return;
+        if (m_vrViewerLayerManager->GetRenderer( m_vrTOC->GetSelection()) != m_vrViewerLayerManager->GetEditionRenderer()) {
+            event.Enable(true);
+            return;
+        }
     }
     event.Enable(false);
 }
+
 
 
 void Frame::OnUpdateEditionPossible (wxUpdateUIEvent & event){
@@ -941,6 +969,20 @@ void Frame::OnUpdateEditionPossible (wxUpdateUIEvent & event){
         return;
     }
     event.Enable(true);
+}
+
+
+
+void Frame::OnUpdateDeletePossible (wxUpdateUIEvent & event){
+    if (m_vrViewerLayerManager->GetEditionRenderer() != NULL) {
+        vrLayerVector * myLayer = static_cast<vrLayerVector*>(m_vrViewerLayerManager->GetEditionRenderer()->GetLayer());
+        wxASSERT(myLayer);
+        if(myLayer->GetSelectedIDs()->GetCount() > 0){
+            event.Enable(true);
+            return;
+        }
+    }
+    event.Enable(false);
 }
 
 

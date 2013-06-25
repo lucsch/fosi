@@ -38,6 +38,7 @@ const int MENU_EDITION_START = wxID_HIGHEST + 10;
 const int MENU_EDITION_STOP = wxID_HIGHEST + 11;
 const int MENU_TOOL_DRAW = wxID_HIGHEST + 12;
 const int MENU_TOOL_MODFIY = wxID_HIGHEST + 13;
+const int MENU_FEATURE_DELETE = wxID_HIGHEST + 14;
 const int MENU_CHECK_UPDATE = wxID_HIGHEST + 23;
 const int MENU_WEBSITE = wxID_HIGHEST + 24;
 const int MENU_FRAME_CLEAR_SELECTION = wxID_HIGHEST + 26;
@@ -104,6 +105,7 @@ private:
     
     void OnEditionStart (wxCommandEvent & event);
     void OnEditionStop (wxCommandEvent & event);
+    void OnDeleteFeature (wxCommandEvent & event);
 
 	void OnUpdateIdle(wxIdleEvent & event);
 	void OnClose(wxCloseEvent & event);
@@ -130,6 +132,7 @@ private:
     void OnUpdateUIRemoveLayer (wxUpdateUIEvent & event);
     void OnUpdateEditionStart (wxUpdateUIEvent & event);
     void OnUpdateEditionPossible (wxUpdateUIEvent & event);
+    void OnUpdateDeletePossible (wxUpdateUIEvent & event);
 	DECLARE_EVENT_TABLE();
 };
 
