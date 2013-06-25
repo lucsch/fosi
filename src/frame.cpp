@@ -47,6 +47,7 @@ BEGIN_EVENT_TABLE( Frame, wxFrame )
     EVT_MENU(MENU_TOOL_DRAW, Frame::OnToolDraw)
     EVT_MENU(MENU_TOOL_MODFIY, Frame::OnToolModify)
     EVT_MENU(MENU_FEATURE_DELETE, Frame::OnDeleteFeature)
+    EVT_MENU(MENU_DATA_SAVE_SELECTED, Frame::OnSaveSelectedLayer)
 	EVT_COMMAND( wxID_ANY, vrEVT_TOOL_ZOOM, Frame::OnToolZoomAction)
 	EVT_COMMAND( wxID_ANY, vrEVT_TOOL_ZOOMOUT, Frame::OnToolZoomAction)
 	EVT_COMMAND( wxID_ANY, vrEVT_TOOL_PAN, Frame::OnToolPanAction)
@@ -65,6 +66,7 @@ BEGIN_EVENT_TABLE( Frame, wxFrame )
     EVT_UPDATE_UI(MENU_TOOL_DRAW, Frame::OnUpdateEditionPossible)
     EVT_UPDATE_UI(MENU_TOOL_MODFIY, Frame::OnUpdateEditionPossible)
     EVT_UPDATE_UI(MENU_FEATURE_DELETE, Frame::OnUpdateDeletePossible)
+    EVT_UPDATE_UI(MENU_DATA_SAVE_SELECTED, Frame::OnUpdateUISaveSelectedLayer)
 END_EVENT_TABLE()
 
 
@@ -146,7 +148,11 @@ void Frame::_CreateMenus() {
 	m_menu5->Append( new wxMenuItem( m_menu5, MENU_DATA_ADD,_("Add layer..."), wxEmptyString, wxITEM_NORMAL ) );
     m_menu5->Append( new wxMenuItem( m_menu5, MENU_DATA_MEMORY_ADD, _("Add memory layer...")));
     m_menu5->AppendSeparator();
-	m_menu5->Append(  new wxMenuItem( m_menu5, MENU_DATA_REMOVE, _("Remove layer...") , wxEmptyString, wxITEM_NORMAL ) );
+    m_menu5->Append(new wxMenuItem(m_menu5, MENU_DATA_SAVE_SELECTED, _("Save selected layer..."), wxEmptyString, wxITEM_NORMAL));
+    m_menu5->AppendSeparator();
+    m_menu5->Append(  new wxMenuItem( m_menu5, MENU_DATA_REMOVE, _("Remove layer...") , wxEmptyString, wxITEM_NORMAL ) );
+    
+    
 	m_menubar1->Append( m_menu5, _("Data") );
 
 	// SELECTION
@@ -507,6 +513,47 @@ void Frame::OnDeleteFeature (wxCommandEvent & event){
         myLayer->DeleteFeature(myLayer->GetSelectedIDs()->Item(i));
     }
     m_vrViewerLayerManager->Reload();
+}
+
+
+
+void Frame::OnSaveSelectedLayer (wxCommandEvent & event){
+    vrLayerVectorOGR * myMemoryLayer = static_cast<vrLayerVectorOGR*>(m_vrViewerLayerManager->GetRenderer(m_vrTOC->GetSelection())->GetLayer());
+    wxASSERT(myMemoryLayer);
+    
+    wxString mySaveFileName = wxFileSelector(_("Choose a filename for the shapefile"),
+                                             wxEmptyString,
+                                             wxEmptyString,
+                                             _T("shp"),
+                                             _T("ESRI Shapefiles (*.shp)|*.shp"),
+                                             wxFD_SAVE, this);
+    if (mySaveFileName.IsEmpty() == true) {
+        wxLogMessage(_("Saving canceled!"));
+        return;
+    }
+    
+    wxFileName mySaveFile(mySaveFileName);
+    mySaveFile.SetExt(_T("shp"));
+    
+    vrLayerVectorOGR myShapefile;
+    if(myShapefile.Create(mySaveFile, myMemoryLayer->GetGeometryType())==false){
+        wxLogError(_("Creating '%s' failed!"), mySaveFile.GetFullPath());
+        return;
+    }
+    
+    bool restart = false;
+    myMemoryLayer->ClearSpatialFilter();
+    for (long i = 0; i<myMemoryLayer->GetFeatureCount(); i++) {
+        restart = false;
+        if(i == 0){
+            restart = true;
+        }
+        OGRFeature * myFeature = myMemoryLayer->GetNextFeature(restart);
+        wxASSERT(myFeature);
+        myShapefile.AddFeature(myFeature->GetGeometryRef());
+        OGRFeature::DestroyFeature(myFeature);
+    }
+    wxLogMessage(_("'%s' saved as: '%s'"), myMemoryLayer->GetDisplayName().GetName(), mySaveFile.GetFullName());
 }
 
 
@@ -985,6 +1032,20 @@ void Frame::OnUpdateDeletePossible (wxUpdateUIEvent & event){
     event.Enable(false);
 }
 
+
+
+void Frame::OnUpdateUISaveSelectedLayer (wxUpdateUIEvent & event){
+    if (m_vrTOC && m_vrTOC->GetSelection() != wxNOT_FOUND) {
+        vrLayerVector * myLayer = static_cast<vrLayerVector*>(m_vrViewerLayerManager->GetRenderer(m_vrTOC->GetSelection())->GetLayer());
+        
+        if (myLayer != NULL && myLayer->GetType() >= vrDRIVER_VECTOR_SHP && myLayer->GetType() <= vrDRIVER_VECTOR_MEMORY){
+            event.Enable(true);
+            return;
+        }
+    }
+    event.Enable(false);
+    return;
+}
 
 
 Frame::Frame(const wxString & title) :
