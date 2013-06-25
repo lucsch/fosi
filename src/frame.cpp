@@ -34,6 +34,8 @@ BEGIN_EVENT_TABLE( Frame, wxFrame )
 	EVT_MENU( MENU_DATA_ADD, Frame::OnLayerAdd)
     EVT_MENU(MENU_DATA_MEMORY_ADD, Frame::OnLayerMemoryAdd)
 	EVT_MENU( MENU_DATA_REMOVE, Frame::OnLayerRemove)
+    EVT_MENU(MENU_EDITION_START, Frame::OnEditionStart)
+    EVT_MENU(MENU_EDITION_STOP, Frame::OnEditionStop)
 	EVT_IDLE( Frame::OnUpdateIdle)
 	EVT_CLOSE( Frame::OnClose)
 	EVT_MENU( MENU_FRAME_SELECT, Frame::OnToolSelect)
@@ -140,6 +142,13 @@ void Frame::_CreateMenus() {
 	m_menu51->Append( new wxMenuItem( m_menu51, MENU_FRAME_CLEAR_SELECTION,
 									 _("Clear selection"), wxEmptyString, wxITEM_NORMAL ));
 	m_menubar1->Append( m_menu51, _("Selection") );
+    
+    // EDITION
+    wxMenu* m_menu52;
+	m_menu52 = new wxMenu();
+	m_menu52->Append( new wxMenuItem( m_menu52, MENU_EDITION_START, _("Start Edition"), wxEmptyString, wxITEM_NORMAL ));
+	m_menu52->Append( new wxMenuItem( m_menu52, MENU_EDITION_STOP, _("Stop Edition"), wxEmptyString, wxITEM_NORMAL ));
+	m_menubar1->Append( m_menu52, _("Edition") );
 
 	// VIEW
 	wxMenu* m_menu6;
@@ -436,6 +445,22 @@ void Frame::OnLayerMemoryAdd(wxCommandEvent & event){
 	m_vrLayerManager->Add(myLayer);
 	m_vrViewerLayerManager->Add(-1, myLayer);
 	m_vrViewerLayerManager->FreezeEnd();
+}
+
+
+void Frame::OnEditionStart (wxCommandEvent & event){
+    vrRenderer * mySelectedRenderer =  m_vrViewerLayerManager->GetRenderer(m_vrTOC->GetSelection());
+    if (mySelectedRenderer == NULL) {
+        return;
+    }
+    m_vrViewerLayerManager->StopEdition();
+    m_vrViewerLayerManager->StartEdition(mySelectedRenderer);
+}
+
+
+
+void Frame::OnEditionStop (wxCommandEvent & event){
+    m_vrViewerLayerManager->StopEdition();
 }
 
 

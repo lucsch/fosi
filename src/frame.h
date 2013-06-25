@@ -33,6 +33,8 @@ const int WINDOW_DATA_MANAGER = wxID_HIGHEST + 6;
 const int MENU_DATA_ADD = wxID_HIGHEST + 7;
 const int MENU_DATA_REMOVE = wxID_HIGHEST + 8;
 const int MENU_DATA_MEMORY_ADD = wxID_HIGHEST + 9;
+const int MENU_EDITION_START = wxID_HIGHEST + 10;
+const int MENU_EDITION_STOP = wxID_HIGHEST + 11;
 const int MENU_CHECK_UPDATE = wxID_HIGHEST + 23;
 const int MENU_WEBSITE = wxID_HIGHEST + 24;
 const int MENU_FRAME_CLEAR_SELECTION = wxID_HIGHEST + 26;
@@ -95,6 +97,9 @@ private:
 	void OnLayerAdd(wxCommandEvent & event);
     void OnLayerRemove(wxCommandEvent & event);
     void OnLayerMemoryAdd(wxCommandEvent & event);
+    
+    void OnEditionStart (wxCommandEvent & event);
+    void OnEditionStop (wxCommandEvent & event);
 
 	void OnUpdateIdle(wxIdleEvent & event);
 	void OnClose(wxCloseEvent & event);
