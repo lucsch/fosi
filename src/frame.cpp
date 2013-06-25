@@ -14,6 +14,7 @@
 #include "vrrender.h"
 #include "vrlabel.h"
 #include "vrlayerraster.h"
+#include "vrlayervector.h"
 #include "vrprogress.h"
 #include "vroomgis_bmp.h"
 #include "accelerators.h"
@@ -31,6 +32,7 @@ BEGIN_EVENT_TABLE( Frame, wxFrame )
     EVT_MENU( MENU_CHECK_UPDATE, Frame::OnCheckUpdates)
 	EVT_MENU( MENU_WINDOW_LOG, 	Frame::OnLogWindow)
 	EVT_MENU( MENU_DATA_ADD, Frame::OnLayerAdd)
+    EVT_MENU(MENU_DATA_MEMORY_ADD, Frame::OnLayerMemoryAdd)
 	EVT_MENU( MENU_DATA_REMOVE, Frame::OnLayerRemove)
 	EVT_IDLE( Frame::OnUpdateIdle)
 	EVT_CLOSE( Frame::OnClose)
@@ -46,6 +48,7 @@ BEGIN_EVENT_TABLE( Frame, wxFrame )
 	EVT_KEY_DOWN(Frame::OnKeyDown)
 	EVT_KEY_UP(Frame::OnKeyUp)
     EVT_UPDATE_UI(MENU_FRAME_CLEAR_SELECTION, Frame::OnUpdateUIToolClearSelection)
+    EVT_UPDATE_UI(MENU_DATA_REMOVE, Frame::OnUpdateUIRemoveLayer)
 END_EVENT_TABLE()
 
 
@@ -125,6 +128,8 @@ void Frame::_CreateMenus() {
 	// DATA
 	wxMenu* m_menu5 = new wxMenu();
 	m_menu5->Append( new wxMenuItem( m_menu5, MENU_DATA_ADD,_("Add layer..."), wxEmptyString, wxITEM_NORMAL ) );
+    m_menu5->Append( new wxMenuItem( m_menu5, MENU_DATA_MEMORY_ADD, _("Add memory layer...")));
+    m_menu5->AppendSeparator();
 	m_menu5->Append(  new wxMenuItem( m_menu5, MENU_DATA_REMOVE, _("Remove layer...") , wxEmptyString, wxITEM_NORMAL ) );
 	m_menubar1->Append( m_menu5, _("Data") );
 
@@ -407,6 +412,52 @@ void Frame::OnLayerAdd(wxCommandEvent & event) {
 
 
 
+void Frame::OnLayerMemoryAdd(wxCommandEvent & event){
+    // ask for spatial types
+    const wxString myNames [] = {_("Points"), _("Lines"), _("Polygons")};
+    wxSingleChoiceDialog myTypDlg(this, _("Select layer spatial type"), _("Memory layer"), sizeof(myNames) / sizeof(wxString), &myNames[0]);
+    if (myTypDlg.ShowModal() != wxID_OK) {
+        return;
+    }
+    
+    // ask for layer name
+    wxString myName = _GetMemoryLayerNameFromUser(myNames[myTypDlg.GetSelection()]);
+    if (myName == wxEmptyString) {
+        return;
+    }
+    wxFileName myMemoryLayerName ("", myName, "memory");
+    
+    m_vrViewerLayerManager->FreezeBegin();
+	vrLayerVectorOGR * myLayer = new vrLayerVectorOGR();
+    int mySpatialTypes [] = {wkbPoint, wkbLineString, wkbPolygon};
+	if(myLayer->Create(myMemoryLayerName, mySpatialTypes[myTypDlg.GetSelection()])==false){
+		wxFAIL;
+	}
+	m_vrLayerManager->Add(myLayer);
+	m_vrViewerLayerManager->Add(-1, myLayer);
+	m_vrViewerLayerManager->FreezeEnd();
+}
+
+
+
+wxString Frame::_GetMemoryLayerNameFromUser(const wxString & name){
+    wxTextEntryDialog myNameDlg(this, _("Layer Names"));
+    myNameDlg.SetValue(name);
+    if (myNameDlg.ShowModal() != wxID_OK) {
+        return wxEmptyString;
+    }
+    
+    wxFileName myFileName ("", myNameDlg.GetValue(), "memory");
+    if( m_vrLayerManager->GetLayer(myFileName) != NULL){
+        wxLogError(_("Name '%s' allready exists, please choose another name!"), myNameDlg.GetValue());
+        return _GetMemoryLayerNameFromUser(name);
+    }
+    
+    return myNameDlg.GetValue();
+}
+
+
+
 bool Frame::AddLayers (const wxArrayString & names){
 	m_vrViewerLayerManager->FreezeBegin();
 	for (unsigned int i = 0; i< names.GetCount(); i++) {
@@ -633,6 +684,15 @@ void Frame::OnUpdateUIToolClearSelection(wxUpdateUIEvent & event) {
     event.Enable(false);
 }
 
+
+
+void Frame::OnUpdateUIRemoveLayer (wxUpdateUIEvent & event){
+    if (m_vrViewerLayerManager && m_vrViewerLayerManager->GetCount() > 0) {
+        event.Enable(true);
+        return;
+    }
+    event.Enable(false);
+}
 
 
 Frame::Frame(const wxString & title) :

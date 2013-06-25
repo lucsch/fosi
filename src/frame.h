@@ -32,6 +32,7 @@ const int MENU_WINDOW_DATA_MANAGER = wxID_HIGHEST + 5;
 const int WINDOW_DATA_MANAGER = wxID_HIGHEST + 6;
 const int MENU_DATA_ADD = wxID_HIGHEST + 7;
 const int MENU_DATA_REMOVE = wxID_HIGHEST + 8;
+const int MENU_DATA_MEMORY_ADD = wxID_HIGHEST + 9;
 const int MENU_CHECK_UPDATE = wxID_HIGHEST + 23;
 const int MENU_WEBSITE = wxID_HIGHEST + 24;
 const int MENU_FRAME_CLEAR_SELECTION = wxID_HIGHEST + 26;
@@ -77,7 +78,7 @@ private:
     void _CreateMenus();
     void _CreateToolbar();
 	void _CreateAccelerators();
-	bool _ProjectQuestion(const wxString & text);
+    wxString _GetMemoryLayerNameFromUser(const wxString & name);
     
 	void _SetSelectedFeature();
     bool _RemoveLayer(long position);
@@ -93,6 +94,8 @@ private:
 	void OnLogWindow(wxCommandEvent & event);
 	void OnLayerAdd(wxCommandEvent & event);
     void OnLayerRemove(wxCommandEvent & event);
+    void OnLayerMemoryAdd(wxCommandEvent & event);
+
 	void OnUpdateIdle(wxIdleEvent & event);
 	void OnClose(wxCloseEvent & event);
 	void OnKeyDown(wxKeyEvent & event);
@@ -109,6 +112,7 @@ private:
     
     // Update UI functions
     void OnUpdateUIToolClearSelection(wxUpdateUIEvent & event);
+    void OnUpdateUIRemoveLayer (wxUpdateUIEvent & event);
 	
 	DECLARE_EVENT_TABLE();
 };
