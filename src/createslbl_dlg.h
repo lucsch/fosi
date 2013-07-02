@@ -17,12 +17,12 @@
 #include <wx/spinctrl.h>
 #include "core/demutilopts.h"
 
-
+class vrViewerLayerManager;
 class CreateSLBL_DLG : public wxDialog
 {	
 public:
     
-    CreateSLBL_DLG( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Create SLBL Raster"),
+    CreateSLBL_DLG( wxWindow* parent, vrViewerLayerManager * viewermanager, wxWindowID id = wxID_ANY, const wxString& title = _("Create SLBL Raster"),
                    const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
     ~CreateSLBL_DLG();
     
@@ -30,6 +30,11 @@ public:
     virtual bool TransferDataFromWindow();
     
 private:
+    void OnInputBrowseBtn( wxCommandEvent& event );
+    void OnUseMaskCheck( wxCommandEvent& event );
+    void OnMaskBrowseBtn( wxCommandEvent& event );
+
+    
     wxComboBox* m_InputListCtrl;
     wxButton* m_InputBrowseBtnCtrl;
     wxCheckBox* m_MaskUseCtrl;
@@ -38,6 +43,7 @@ private:
     wxSpinCtrl* m_OptMaxIterCtrl;
     wxSpinCtrlDouble* m_OptMinDiffCtrl;
     ParFit m_Params;
+    
     
     void _CreateControls();
 };

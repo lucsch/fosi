@@ -693,7 +693,7 @@ void Frame::OnKeyUp(wxKeyEvent & event) {
 
 
 void Frame::OnCreateSLBL (wxCommandEvent & event){
-    CreateSLBL_DLG myDlg (this);
+    CreateSLBL_DLG myDlg (this, m_vrViewerLayerManager);
     myDlg.ShowModal();
 }
 
