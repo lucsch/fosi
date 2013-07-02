@@ -18,6 +18,7 @@
 #include "core/demutilopts.h"
 
 class vrViewerLayerManager;
+class vrLayerRaster;
 class CreateSLBL_DLG : public wxDialog
 {	
 public:
@@ -28,6 +29,11 @@ public:
     
     virtual bool TransferDataToWindow();
     virtual bool TransferDataFromWindow();
+    
+    vrLayerRaster * GetInputRaster ();
+    vrLayerRaster * GetMaskRaster ();
+    wxString GetOutputRasterName ();
+    ParFit GetParameters ();
     
 private:
     void OnInputBrowseBtn( wxCommandEvent& event );

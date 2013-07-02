@@ -8,6 +8,7 @@
 #include "createslbl_dlg.h"
 #include "vroomgis.h"
 #include "vrlayervector.h"
+#include "vrlayerraster.h"
 
 
 CreateSLBL_DLG::CreateSLBL_DLG( wxWindow* parent, vrViewerLayerManager * viewermanager, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) :
@@ -61,6 +62,31 @@ bool CreateSLBL_DLG::TransferDataToWindow(){
 
 bool CreateSLBL_DLG::TransferDataFromWindow(){
     return true;
+}
+
+
+
+
+vrLayerRaster *  CreateSLBL_DLG::GetInputRaster (){
+    
+}
+
+
+
+vrLayerRaster * CreateSLBL_DLG::GetMaskRaster (){
+    
+}
+
+
+
+wxString CreateSLBL_DLG::GetOutputRasterName (){
+    return m_OutputCtrl->GetPath();
+}
+
+
+
+ParFit CreateSLBL_DLG::GetParameters (){
+    return m_Params;
 }
 
 
