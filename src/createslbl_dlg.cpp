@@ -9,10 +9,13 @@
 #include "vroomgis.h"
 #include "vrlayervector.h"
 #include "vrlayerraster.h"
+#include "gdal_alg.h"
 
 
-CreateSLBL_DLG::CreateSLBL_DLG( wxWindow* parent, vrViewerLayerManager * viewermanager, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) :
+CreateSLBL_DLG::CreateSLBL_DLG( wxWindow* parent, vrViewerLayerManager * viewermanager, vrLayerManager *layermanager, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) :
 wxDialog( parent, id, title, pos, size, style ){
+    m_LayerManager = layermanager;
+    
     _CreateControls();
     
     wxASSERT(viewermanager);
@@ -68,19 +71,108 @@ bool CreateSLBL_DLG::TransferDataFromWindow(){
 
 
 vrLayerRaster *  CreateSLBL_DLG::GetInputRaster (){
+    wxFileName myLayerName (m_InputListCtrl->GetStringSelection());
+    if (myLayerName.Exists() == false) {
+        wxLogError(_("File: %s didn't exists!"), myLayerName.GetFullName());
+        return NULL;
+    }
     
+    vrLayer * myLayer = m_LayerManager->GetLayer(myLayerName);
+    if (myLayer == NULL) {
+        m_LayerManager->Open(myLayerName);
+        myLayer = m_LayerManager->GetLayer(myLayerName);
+    }
+    
+    return static_cast<vrLayerRaster*>(myLayer);
 }
 
 
 
 vrLayerRaster * CreateSLBL_DLG::GetMaskRaster (){
+    if (m_MaskUseCtrl->IsChecked() == false || m_MaskListCtrl->GetStringSelection() == wxEmptyString) {
+        return NULL;
+    }
     
+    wxFileName myLayerName (m_InputListCtrl->GetStringSelection());
+    if (myLayerName.GetExt() == wxEmptyString) {
+        myLayerName.SetExt(_T("memory"));
+    }
+    else if (myLayerName.Exists() == false) {
+        wxLogError(_("File: %s didn't exists!"), myLayerName.GetFullName());
+        return NULL;
+    }
+
+    vrLayer * myLayer = m_LayerManager->GetLayer(myLayerName);
+    if (myLayer == NULL) {
+        m_LayerManager->Open(myLayerName);
+        myLayer = m_LayerManager->GetLayer(myLayerName);
+    }
+    
+    if (myLayer == NULL) {
+        return NULL;
+    }
+    vrLayerVector * myLayerVector = static_cast<vrLayerVector*>(myLayer);
+    OGRLayerH myLayerVectorLayerRef = static_cast<OGRLayerH>(myLayerVector->GetLayerRef());
+    
+    vrLayerRaster * myInputRaster = GetInputRaster();
+    wxASSERT(myInputRaster);
+    wxSize myInputRasterSize = myInputRaster->GetPixelSize();
+    wxArrayDouble myGeoTransformArray;
+    myInputRaster->GetGeoTransform(myGeoTransformArray);
+    double myGeoTransform[6];
+    for (unsigned int i = 0; i< myGeoTransformArray.GetCount(); i++) {
+        myGeoTransform[i] = myGeoTransformArray.Item(i);
+    }
+    
+    // convert vector to temporary raster.
+    wxFileName myTempRasterName (wxFileName::CreateTempFileName(""));
+    myTempRasterName.SetExt(_T("tif"));
+    wxLogMessage(_("Temporary mask file: %s"), myTempRasterName.GetFullPath());
+    
+    GDALDriver *myDriver = GetGDALDriverManager()->GetDriverByName("GTiff");
+    GDALDataset * myDataSetMask = myDriver->Create( myTempRasterName.GetFullPath().mb_str(wxConvUTF8), myInputRasterSize.GetWidth(), myInputRasterSize.GetHeight(), 1, GDT_Byte, NULL );
+    myDataSetMask->SetGeoTransform( myGeoTransform );
+	myDataSetMask->GetRasterBand(1)->Fill(255);
+    int bandlist[] = {1};
+    double burnvalue = 0;
+    CPLErr res = GDALRasterizeLayers( myDataSetMask, 1, bandlist, 1,
+                                     &myLayerVectorLayerRef, NULL, NULL,
+                                     &burnvalue, NULL, NULL, NULL );
+    if (res != CE_None) {
+        wxLogError(_("Converting: %s to raster failed!"), myLayerVector->GetDisplayName().GetFullName());
+    }
+    GDALClose( myDataSetMask );
+
+    m_LayerManager->Open(myTempRasterName);
+    return static_cast<vrLayerRaster*>(m_LayerManager->GetLayer(myTempRasterName));
 }
 
 
 
-wxString CreateSLBL_DLG::GetOutputRasterName (){
-    return m_OutputCtrl->GetPath();
+vrLayerRaster * CreateSLBL_DLG::GetOutputRaster(){
+    vrLayerRaster * myInputRaster = GetInputRaster();
+    if (myInputRaster == NULL){
+        return NULL;
+    }
+    wxSize myInputRasterSize = myInputRaster->GetPixelSize();
+    wxArrayDouble myGeoTransformArray;
+    myInputRaster->GetGeoTransform(myGeoTransformArray);
+    double myGeoTransform[6];
+    for (unsigned int i = 0; i< myGeoTransformArray.GetCount(); i++) {
+        myGeoTransform[i] = myGeoTransformArray.Item(i);
+    }
+    wxFileName myOutputName (m_OutputCtrl->GetPath());
+    
+    vrDrivers myvrDriver;
+    vrDRIVERS_TYPE myType = myvrDriver.GetType(myOutputName.GetExt());
+    GDALDriver *myDriver = GetGDALDriverManager()->GetDriverByName(vrDRIVERS_GDAL_NAMES[myType].mb_str(wxConvUTF8));
+    
+    GDALDataset * myDataSet = myDriver->Create( myOutputName.GetFullPath().mb_str(wxConvUTF8), myInputRasterSize.GetWidth(), myInputRasterSize.GetHeight(), 1, GDT_Float32, NULL );
+    myDataSet->SetGeoTransform( myGeoTransform );
+    GDALClose( myDataSet );
+    
+    m_LayerManager->Open(myOutputName);
+    return static_cast<vrLayerRaster*>(m_LayerManager->GetLayer(myOutputName));
 }
 
 

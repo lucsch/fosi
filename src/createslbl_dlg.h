@@ -19,11 +19,12 @@
 
 class vrViewerLayerManager;
 class vrLayerRaster;
+class vrLayerManager;
 class CreateSLBL_DLG : public wxDialog
 {	
 public:
     
-    CreateSLBL_DLG( wxWindow* parent, vrViewerLayerManager * viewermanager, wxWindowID id = wxID_ANY, const wxString& title = _("Create SLBL Raster"),
+    CreateSLBL_DLG( wxWindow* parent, vrViewerLayerManager * viewermanager, vrLayerManager *layermanager, wxWindowID id = wxID_ANY, const wxString& title = _("Create SLBL Raster"),
                    const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
     ~CreateSLBL_DLG();
     
@@ -32,7 +33,7 @@ public:
     
     vrLayerRaster * GetInputRaster ();
     vrLayerRaster * GetMaskRaster ();
-    wxString GetOutputRasterName ();
+    vrLayerRaster * GetOutputRaster ();
     ParFit GetParameters ();
     
 private:
@@ -50,7 +51,8 @@ private:
     wxSpinCtrlDouble* m_OptMinDiffCtrl;
     wxButton* m_OKBtnCtrl;
     wxFilePickerCtrl* m_OutputCtrl;
-
+    
+    vrLayerManager * m_LayerManager;
     ParFit m_Params;
     
     void _CreateControls();

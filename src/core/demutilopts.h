@@ -1,5 +1,8 @@
-//#include <boost/program_options.hpp>
-//namespace po = boost::program_options;
+
+
+#ifndef _DEMUTILOPTS_H_
+#define _DEMUTILOPTS_H_
+
 
 using namespace std;
 
@@ -60,3 +63,5 @@ private:
 
 //int demutilrun( po::variables_map& vm, ParFit& param );
 int demTest();
+
+#endif

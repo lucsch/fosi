@@ -23,6 +23,7 @@
 #include "wxhgversion_core.h"
 #include "general_bmp.h"
 #include "createslbl_dlg.h"
+#include "core/demutil.h"
 
 
 BEGIN_EVENT_TABLE( Frame, wxFrame )
@@ -693,8 +694,38 @@ void Frame::OnKeyUp(wxKeyEvent & event) {
 
 
 void Frame::OnCreateSLBL (wxCommandEvent & event){
-    CreateSLBL_DLG myDlg (this, m_vrViewerLayerManager);
-    myDlg.ShowModal();
+    CreateSLBL_DLG myDlg (this, m_vrViewerLayerManager, m_vrLayerManager);
+    if(myDlg.ShowModal() != wxID_OK) {
+        return;
+    }
+    
+    vrLayerRaster * myRasterInp = myDlg.GetInputRaster();
+    if (myRasterInp == NULL) {
+        wxLogError(_("Getting Input raster failed!"));
+        return;
+    }
+    
+    vrLayerRaster * myRasterMask = myDlg.GetMaskRaster();
+    
+    vrLayerRaster * myRasterOut = myDlg.GetOutputRaster();
+    if (myRasterOut == NULL) {
+        wxLogError(_("Getting Output raster failed!"));
+        return;
+    }
+    
+    ParFit myParam = myDlg.GetParameters();
+    wxArrayDouble myGeoTransformArray;
+    myRasterInp->GetGeoTransform(myGeoTransformArray);
+    int myRetVal = demFit ( SLBL,
+                           myRasterOut->GetDatasetRef()->GetRasterBand(1),
+                           myRasterInp->GetDatasetRef()->GetRasterBand(1),
+                           myRasterMask ? myRasterMask->GetDatasetRef()->GetRasterBand(1) : NULL,
+                           myGeoTransformArray.Item(1),
+                           myGeoTransformArray.Item(5),
+                           myParam,
+                           NULL, // DEM BL
+                           NULL); // DEM DIFF
+    
 }
 
 
