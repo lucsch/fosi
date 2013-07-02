@@ -33,8 +33,8 @@ private:
     void OnInputBrowseBtn( wxCommandEvent& event );
     void OnUseMaskCheck( wxCommandEvent& event );
     void OnMaskBrowseBtn( wxCommandEvent& event );
+    void OnUpdateUIOK( wxUpdateUIEvent& event );
 
-    
     wxComboBox* m_InputListCtrl;
     wxButton* m_InputBrowseBtnCtrl;
     wxCheckBox* m_MaskUseCtrl;
@@ -42,8 +42,10 @@ private:
     wxButton* m_MaskBrowseBtnCtrl;
     wxSpinCtrl* m_OptMaxIterCtrl;
     wxSpinCtrlDouble* m_OptMinDiffCtrl;
+    wxButton* m_OKBtnCtrl;
+    wxFilePickerCtrl* m_OutputCtrl;
+
     ParFit m_Params;
-    
     
     void _CreateControls();
 };

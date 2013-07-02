@@ -36,6 +36,8 @@ wxDialog( parent, id, title, pos, size, style ){
     m_InputBrowseBtnCtrl->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CreateSLBL_DLG::OnInputBrowseBtn ), NULL, this );
 	m_MaskUseCtrl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( CreateSLBL_DLG::OnUseMaskCheck ), NULL, this );
 	m_MaskBrowseBtnCtrl->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CreateSLBL_DLG::OnMaskBrowseBtn ), NULL, this );
+    m_OKBtnCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( CreateSLBL_DLG::OnUpdateUIOK ), NULL, this );
+
 }
 
 
@@ -44,6 +46,7 @@ CreateSLBL_DLG::~CreateSLBL_DLG(){
     m_InputBrowseBtnCtrl->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CreateSLBL_DLG::OnInputBrowseBtn ), NULL, this );
 	m_MaskUseCtrl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( CreateSLBL_DLG::OnUseMaskCheck ), NULL, this );
 	m_MaskBrowseBtnCtrl->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CreateSLBL_DLG::OnMaskBrowseBtn ), NULL, this );
+    m_OKBtnCtrl->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( CreateSLBL_DLG::OnUpdateUIOK ), NULL, this );
 }
 
 
@@ -89,6 +92,27 @@ void CreateSLBL_DLG::OnMaskBrowseBtn( wxCommandEvent& event ) {
     }
     
     m_MaskListCtrl->SetValue(myDlg.GetPath());
+}
+
+
+
+void CreateSLBL_DLG::OnUpdateUIOK( wxUpdateUIEvent& event ) {
+    if (m_InputListCtrl->GetStringSelection() == wxEmptyString) {
+        event.Enable(false);
+        return;
+    }
+    
+    if (m_MaskUseCtrl->IsChecked() && m_MaskListCtrl->GetStringSelection() == wxEmptyString) {
+        event.Enable(false);
+        return;
+    }
+    
+    if (m_OutputCtrl->GetPath() == wxEmptyString) {
+        event.Enable(false);
+        return;
+    }
+    event.Enable(true);
+    return;
 }
 
 
@@ -185,19 +209,17 @@ void CreateSLBL_DLG::_CreateControls(){
 	sbSizer4->Add( m_staticText5, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
     vrDrivers myDriver;
-	wxFilePickerCtrl* m_filePicker2;
-	m_filePicker2 = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, _("Save Result"), myDriver.GetWildcardsRaster(), wxDefaultPosition, wxDefaultSize, wxFLP_SAVE | wxFLP_OVERWRITE_PROMPT | wxFLP_USE_TEXTCTRL );
-	sbSizer4->Add( m_filePicker2, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_OutputCtrl = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, _("Save Result"), myDriver.GetWildcardsRaster(), wxDefaultPosition, wxDefaultSize, wxFLP_SAVE | wxFLP_OVERWRITE_PROMPT | wxFLP_USE_TEXTCTRL );
+	sbSizer4->Add( m_OutputCtrl, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
 	bSizer1->Add( sbSizer4, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStdDialogButtonSizer* m_sdbSizer1;
-	wxButton* m_sdbSizer1OK;
 	wxButton* m_sdbSizer1Cancel;
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1OK = new wxButton( this, wxID_OK );
-	m_sdbSizer1->AddButton( m_sdbSizer1OK );
+	m_OKBtnCtrl = new wxButton( this, wxID_OK );
+	m_sdbSizer1->AddButton( m_OKBtnCtrl );
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
