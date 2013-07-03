@@ -1,4 +1,5 @@
 #include "demutil.h"
+#include "tmpercent.h"
 #include <ogrsf_frmts.h>
 
 //#include <boost/format.hpp>
@@ -140,6 +141,8 @@ int demFit( enumMethod method, GDALRasterBand *resZ, GDALRasterBand *oriZ, GDALR
 	DynArray<MEMARRAYTYPE> dvBorder( nY, nX );
 	dvBorder.copy( dvResZ );
 	int k = 1, c = 0;
+    
+    tmPercent myPercent (param.maxiter);
 	while( k > 0 && c < param.maxiter ) {
 		k = 0;
 		c++;
@@ -211,10 +214,23 @@ int demFit( enumMethod method, GDALRasterBand *resZ, GDALRasterBand *oriZ, GDALR
 				} break;
 				}
 		dvResZ.copy( dvBorder );
-		if( param.reportProgress && !(c % param.reportInterval ) )
+		
+        // update optional wxProgressDialog
+        if (param.reportProgressDlg != NULL){
+            if (param.reportProgressDlg->WasCancelled() == true) {
+                return c;
+            }
+            
+            myPercent.SetValue(c);
+            if (myPercent.IsNewStep() == true) {
+                param.reportProgressDlg->Update(myPercent.GetPercent(), wxString::Format(_("Please wait (Iteration: %d)"), c));
+            }
+        }
+        
+        /*if( param.reportProgress && !(c % param.reportInterval ) )
 			if( !param.reportProgress(wxString::Format(_T("Iteration: %d"), c).c_str(), param.reportObject)){
 				throw demexception( "Execution Canceled" );
-            }
+            }*/
 	}
 
 	if( resZ )
@@ -234,7 +250,6 @@ int demFit( enumMethod method, GDALRasterBand *resZ, GDALRasterBand *oriZ, GDALR
 		param.volume = -param.volume;
 
 	saveResDiffs( nX, nY, dvResZ, dvOriZ, dvFixed, resDiffs, offsetX, offsetY, resDO );
-
 	return c;
 }
 

@@ -64,6 +64,8 @@ bool CreateSLBL_DLG::TransferDataToWindow(){
 
 
 bool CreateSLBL_DLG::TransferDataFromWindow(){
+    m_Params.maxiter = m_OptMaxIterCtrl->GetValue();
+    m_Params.mindiff = m_OptMinDiffCtrl->GetValue();
     return true;
 }
 
@@ -171,7 +173,7 @@ vrLayerRaster * CreateSLBL_DLG::GetOutputRaster(){
     myDataSet->SetGeoTransform( myGeoTransform );
     GDALClose( myDataSet );
     
-    m_LayerManager->Open(myOutputName);
+    m_LayerManager->Open(myOutputName, true);
     return static_cast<vrLayerRaster*>(m_LayerManager->GetLayer(myOutputName));
 }
 

@@ -1,7 +1,11 @@
-
-
 #ifndef _DEMUTILOPTS_H_
 #define _DEMUTILOPTS_H_
+
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+#include <wx/wx.h>
+#endif
+#include <wx/progdlg.h>
 
 
 using namespace std;
@@ -18,8 +22,10 @@ public:
     bool returnAsDiff;
 	double pixR;
 	bool (*reportProgress)(const char*, void *reportObject);
+    wxProgressDialog * reportProgressDlg;
 	int reportInterval;
 	void *reportObject;
+    
 	double volume;
 	bool increasing;
 	ParFit(){
@@ -35,6 +41,7 @@ public:
         reportInterval = 100;
         reportObject = NULL;
         reportProgress = NULL;
+        reportProgressDlg = NULL;
         volume = 0.0;
         increasing = false;
     };

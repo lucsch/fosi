@@ -140,10 +140,11 @@ void Frame::_CreateMenus() {
 	m_menubar1 = new wxMenuBar( 0 );
 
 	// PROJECT
+#ifndef __WXMAC__
 	wxMenu* m_menu1 = new wxMenu();
     m_menu1->Append( new wxMenuItem( m_menu1, wxID_EXIT));
-    m_menu1->Append(new wxMenuItem(m_menu1, MENU_FRAME_CREATE_SLBL, _("Create SLBL...\tCtrl+N")));
 	m_menubar1->Append( m_menu1, _("Project") );
+#endif
 
 	// DATA
 	wxMenu* m_menu5 = new wxMenu();
@@ -190,12 +191,21 @@ void Frame::_CreateMenus() {
 	m_menu6->Append( new wxMenuItem( m_menu6, wxID_ZOOM_FIT,_("Zoom to Fit\tCtrl+0"), wxEmptyString, wxITEM_NORMAL ) );
 	m_menubar1->Append( m_menu6, _("View") );
 
+    // STRUCTURAL ANALYSIS
+    wxMenu * myStructMenu = new wxMenu();
+    wxMenu * mySlblMenu = new wxMenu();
+    
+    mySlblMenu->Append(new wxMenuItem(mySlblMenu, MENU_FRAME_CREATE_SLBL, _("Create SLBL...\tCtrl+N")));
+    myStructMenu->AppendSubMenu(mySlblMenu, _("SLBL"));
+    m_menubar1->Append(myStructMenu, _("Structural Analysis"));
+    
+    
 	// WINDOW
 	wxMenu* m_menu2 = new wxMenu();
 	m_menu2->Append(new wxMenuItem( m_menu2, MENU_WINDOW_LOG, _("Log window...\tCtrl+L"), wxEmptyString, wxITEM_NORMAL ) );
 
 	// Bug #42, append preference into the Window menu, except for Mac where it goes into Application menu
-	m_menu2->Append(new wxMenuItem(m_menu1, wxID_PREFERENCES));
+	m_menu2->Append(new wxMenuItem(m_menu2, wxID_PREFERENCES));
 	m_menubar1->Append( m_menu2, _("Window") );
 
 	// HELP
@@ -706,7 +716,6 @@ void Frame::OnCreateSLBL (wxCommandEvent & event){
     }
     
     vrLayerRaster * myRasterMask = myDlg.GetMaskRaster();
-    
     vrLayerRaster * myRasterOut = myDlg.GetOutputRaster();
     if (myRasterOut == NULL) {
         wxLogError(_("Getting Output raster failed!"));
@@ -714,6 +723,8 @@ void Frame::OnCreateSLBL (wxCommandEvent & event){
     }
     
     ParFit myParam = myDlg.GetParameters();
+    wxProgressDialog myProgressDlg (_("Creating SLBL"), _("Please wait"), 100, this, wxPD_APP_MODAL | wxPD_AUTO_HIDE | wxPD_CAN_ABORT);
+    myParam.reportProgressDlg = &myProgressDlg;
     wxArrayDouble myGeoTransformArray;
     myRasterInp->GetGeoTransform(myGeoTransformArray);
     int myRetVal = demFit ( SLBL,
@@ -725,6 +736,9 @@ void Frame::OnCreateSLBL (wxCommandEvent & event){
                            myParam,
                            NULL, // DEM BL
                            NULL); // DEM DIFF
+    wxLogMessage(_("Creating SLBL, returns: %d"), myRetVal);
+    
+    
     
 }
 
