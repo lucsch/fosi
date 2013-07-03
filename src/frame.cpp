@@ -148,12 +148,12 @@ void Frame::_CreateMenus() {
 
 	// DATA
 	wxMenu* m_menu5 = new wxMenu();
-	m_menu5->Append( new wxMenuItem( m_menu5, MENU_DATA_ADD,_("Add layer..."), wxEmptyString, wxITEM_NORMAL ) );
+	m_menu5->Append( new wxMenuItem( m_menu5, MENU_DATA_ADD,_("Add layer...\tCtrl+O"), wxEmptyString, wxITEM_NORMAL ) );
     m_menu5->Append( new wxMenuItem( m_menu5, MENU_DATA_MEMORY_ADD, _("Add memory layer...")));
     m_menu5->AppendSeparator();
     m_menu5->Append(new wxMenuItem(m_menu5, MENU_DATA_SAVE_SELECTED, _("Save selected layer..."), wxEmptyString, wxITEM_NORMAL));
     m_menu5->AppendSeparator();
-    m_menu5->Append(  new wxMenuItem( m_menu5, MENU_DATA_REMOVE, _("Remove layer...") , wxEmptyString, wxITEM_NORMAL ) );
+    m_menu5->Append(  new wxMenuItem( m_menu5, MENU_DATA_REMOVE, _("Remove layer...\tCtrl+W") , wxEmptyString, wxITEM_NORMAL ) );
     
     
 	m_menubar1->Append( m_menu5, _("Data") );
