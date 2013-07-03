@@ -95,7 +95,7 @@ vrLayerRaster * CreateSLBL_DLG::GetMaskRaster (){
         return NULL;
     }
     
-    wxFileName myLayerName (m_InputListCtrl->GetStringSelection());
+    wxFileName myLayerName (m_MaskListCtrl->GetStringSelection());
     if (myLayerName.GetExt() == wxEmptyString) {
         myLayerName.SetExt(_T("memory"));
     }
@@ -175,6 +175,12 @@ vrLayerRaster * CreateSLBL_DLG::GetOutputRaster(){
     
     m_LayerManager->Open(myOutputName, true);
     return static_cast<vrLayerRaster*>(m_LayerManager->GetLayer(myOutputName));
+}
+
+
+
+bool CreateSLBL_DLG::DoAddResultToDisplay(){
+    return m_AppendResultCtrl->IsChecked();
 }
 
 
@@ -320,18 +326,27 @@ void CreateSLBL_DLG::_CreateControls(){
 	
 	bSizer1->Add( sbSizer3, 0, wxEXPAND|wxALL, 5 );
 	
-	wxStaticBoxSizer* sbSizer4;
-	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Results") ), wxHORIZONTAL );
+	
+    wxStaticBoxSizer* sbSizer4;
+	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Results") ), wxVERTICAL );
+	
+	wxBoxSizer* bSizer3;
+	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxStaticText* m_staticText5;
 	m_staticText5 = new wxStaticText( this, wxID_ANY, _("Result DEM:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->Wrap( -1 );
-	sbSizer4->Add( m_staticText5, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer3->Add( m_staticText5, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
     vrDrivers myDriver;
 	m_OutputCtrl = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, _("Save Result"), myDriver.GetWildcardsRaster(), wxDefaultPosition, wxDefaultSize, wxFLP_SAVE | wxFLP_OVERWRITE_PROMPT | wxFLP_USE_TEXTCTRL );
-	sbSizer4->Add( m_OutputCtrl, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer3->Add( m_OutputCtrl, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
+	sbSizer4->Add( bSizer3, 1, wxEXPAND, 5 );
+	
+	m_AppendResultCtrl = new wxCheckBox( this, wxID_ANY, _("Add Result to Display"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_AppendResultCtrl->SetValue(true);
+	sbSizer4->Add( m_AppendResultCtrl, 0, wxALL, 5 );
 	
 	bSizer1->Add( sbSizer4, 0, wxALL|wxEXPAND, 5 );
 	

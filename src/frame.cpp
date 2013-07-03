@@ -723,8 +723,8 @@ void Frame::OnCreateSLBL (wxCommandEvent & event){
     }
     
     ParFit myParam = myDlg.GetParameters();
-    wxProgressDialog myProgressDlg (_("Creating SLBL"), _("Please wait"), 100, this, wxPD_APP_MODAL | wxPD_AUTO_HIDE | wxPD_CAN_ABORT);
-    myParam.reportProgressDlg = &myProgressDlg;
+    wxProgressDialog * myProgressDlg = new wxProgressDialog(_("Creating SLBL"), _("Please wait"), 100, this, wxPD_APP_MODAL | wxPD_AUTO_HIDE | wxPD_CAN_ABORT);
+    myParam.reportProgressDlg = myProgressDlg;
     wxArrayDouble myGeoTransformArray;
     myRasterInp->GetGeoTransform(myGeoTransformArray);
     int myRetVal = demFit ( SLBL,
@@ -737,9 +737,23 @@ void Frame::OnCreateSLBL (wxCommandEvent & event){
                            NULL, // DEM BL
                            NULL); // DEM DIFF
     wxLogMessage(_("Creating SLBL, returns: %d"), myRetVal);
+    wxDELETE(myProgressDlg);
     
+    // remove temporary maks raster if needed
+    if (myRasterMask != NULL) {
+        wxFileName myRasterMaskName (myRasterMask->GetFileName());
+        m_vrLayerManager->Close(myRasterMask);
+        m_vrLayerManager->Erase(myRasterMaskName);
+        
+        myRasterMaskName.SetExt(_T(""));
+        if (myRasterMaskName.Exists()) {
+            wxRemoveFile(myRasterMaskName.GetFullPath());
+        }
+    }
     
-    
+    if (myDlg.DoAddResultToDisplay() == true) {
+        AddLayer(myRasterOut->GetFileName());
+    }
 }
 
 

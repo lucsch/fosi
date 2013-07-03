@@ -34,6 +34,7 @@ public:
     vrLayerRaster * GetInputRaster ();
     vrLayerRaster * GetMaskRaster ();
     vrLayerRaster * GetOutputRaster ();
+    bool DoAddResultToDisplay();
     ParFit GetParameters ();
     
 private:
@@ -51,6 +52,7 @@ private:
     wxSpinCtrlDouble* m_OptMinDiffCtrl;
     wxButton* m_OKBtnCtrl;
     wxFilePickerCtrl* m_OutputCtrl;
+    wxCheckBox* m_AppendResultCtrl;
     
     vrLayerManager * m_LayerManager;
     ParFit m_Params;
