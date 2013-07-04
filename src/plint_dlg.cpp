@@ -9,6 +9,8 @@
 #include "vroomgis.h"
 #include "vrlayervector.h"
 #include "vrlayerraster.h"
+#include "plintvieweroverlay.h"
+#include "plinttool.h"
 
 PlInt_DLG::PlInt_DLG( wxWindow* parent, vrViewerLayerManager * viewermanager, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString & name ) : wxFrame( parent, id, title, pos, size, style, name )
 {
@@ -39,6 +41,9 @@ PlInt_DLG::~PlInt_DLG()
 
 
 void PlInt_DLG::OnClose( wxCloseEvent& event ) {
+    m_ViewerLayerManager->GetDisplay()->ClearOverlayArray();
+    m_ViewerLayerManager->GetDisplay()->Refresh();
+    m_ViewerLayerManager->GetDisplay()->Update();
     Destroy();
 }
 
@@ -55,6 +60,27 @@ void PlInt_DLG::OnEditPoints( wxCommandEvent& event ) {
     m_VectorListCtrl->Enable(!event.IsChecked());
     m_3PointsCtrl->Enable(!event.IsChecked());
     m_2PointsCtrl->Enable(!event.IsChecked());
+    
+    vrViewerDisplay * myDisplay = m_ViewerLayerManager->GetDisplay();
+    PlIntViewerOverlay * myOverlay = static_cast<PlIntViewerOverlay*>(myDisplay->GetOverlayByName(PLINT_OVERLAY_NAME));
+    wxASSERT(myDisplay);
+    if (event.IsChecked() == true) { // start edition
+        // create overlay if not existing
+        if (myOverlay == NULL) {
+            myOverlay = new PlIntViewerOverlay (myDisplay);
+            myDisplay->GetOverlayArrayRef()->Add(myOverlay);
+        }        
+        myOverlay->SetVisible(true);
+        myOverlay->ClearPoints();
+        myDisplay->SetTool(new PlIntToolEdit(myDisplay, myOverlay));
+    }
+    else {
+        wxASSERT(myOverlay);
+        myOverlay->SetVisible(false);
+        myDisplay->SetToolDefault();
+    }
+    myDisplay->Refresh();
+    myDisplay->Update();
 }
 
 
