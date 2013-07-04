@@ -114,7 +114,7 @@
             <property name="window_name"></property>
             <property name="window_style">wxTAB_TRAVERSAL</property>
             <property name="xrc_skip_sizer">1</property>
-            <event name="OnActivate"></event>
+            <event name="OnActivate">OnActivate</event>
             <event name="OnActivateApp"></event>
             <event name="OnAuiFindManager"></event>
             <event name="OnAuiPaneButton"></event>
@@ -146,7 +146,7 @@
             <event name="OnRightDClick"></event>
             <event name="OnRightDown"></event>
             <event name="OnRightUp"></event>
-            <event name="OnSetFocus"></event>
+            <event name="OnSetFocus">OnWindowFocus</event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
             <object class="wxBoxSizer" expanded="1">

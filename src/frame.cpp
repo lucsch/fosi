@@ -774,7 +774,7 @@ void Frame::OnPlaneIntersectionDialog (wxCommandEvent & event){
         return;
     }
     
-    myDlg = new PlInt_DLG(this);
+    myDlg = new PlInt_DLG(this, m_vrViewerLayerManager);
     myDlg->Show();
 }
 

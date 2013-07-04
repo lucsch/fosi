@@ -6,14 +6,21 @@
  ***************************************************************************/
 
 #include "plint_dlg.h"
+#include "vroomgis.h"
+#include "vrlayervector.h"
+#include "vrlayerraster.h"
 
-
-PlInt_DLG::PlInt_DLG( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString & name ) : wxFrame( parent, id, title, pos, size, style, name )
+PlInt_DLG::PlInt_DLG( wxWindow* parent, vrViewerLayerManager * viewermanager, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString & name ) : wxFrame( parent, id, title, pos, size, style, name )
 {
+    m_ViewerLayerManager = viewermanager;
+    m_DemListCtrlSelectedText = wxEmptyString;
+    m_VectorListCtrlSelectedText = wxEmptyString;
+    
     _CreateControls();
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( PlInt_DLG::OnClose ) );
+    this->Connect( wxEVT_ACTIVATE, wxActivateEventHandler( PlInt_DLG::OnWindowFocus ) );
 	m_DipCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PlInt_DLG::OnUpdateDipCtrl ), NULL, this );
 	m_EditPtsBtn->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( PlInt_DLG::OnEditPoints ), NULL, this );
 	m_EditPtsBtn->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PlInt_DLG::OnUpdateUIEditPoints ), NULL, this );
@@ -23,6 +30,7 @@ PlInt_DLG::~PlInt_DLG()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( PlInt_DLG::OnClose ) );
+    this->Disconnect( wxEVT_ACTIVATE, wxActivateEventHandler( PlInt_DLG::OnWindowFocus ) );
 	m_DipCtrl->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PlInt_DLG::OnUpdateDipCtrl ), NULL, this );
 	m_EditPtsBtn->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( PlInt_DLG::OnEditPoints ), NULL, this );
     m_EditPtsBtn->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PlInt_DLG::OnUpdateUIEditPoints ), NULL, this );
@@ -43,24 +51,65 @@ void PlInt_DLG::OnUpdateDipCtrl( wxUpdateUIEvent& event ) {
 
 
 void PlInt_DLG::OnEditPoints( wxCommandEvent& event ) {
-
+    m_DemListCtrl->Enable(!event.IsChecked());
+    m_VectorListCtrl->Enable(!event.IsChecked());
+    m_3PointsCtrl->Enable(!event.IsChecked());
+    m_2PointsCtrl->Enable(!event.IsChecked());
 }
 
 
 
 void PlInt_DLG::OnUpdateUIEditPoints( wxUpdateUIEvent& event ) {
-    if (m_DemListCtrl->GetStringSelection().IsEmpty()) {
+    if (m_DemListCtrl->GetStringSelection() == wxEmptyString) {
         event.Enable(false);
         return;
     }
     
-    if (m_VectorListCtrl->GetStringSelection().IsEmpty()) {
+    if (m_VectorListCtrl->GetStringSelection() == wxEmptyString) {
         event.Enable(false);
         return;
     }
     
     event.Enable(true);
 }
+
+
+void PlInt_DLG::OnWindowFocus( wxActivateEvent& event ) {
+    if (event.GetActive() == false) {
+        return;
+    }
+    
+    if (m_VectorListCtrl->IsEnabled() && m_DemListCtrl->IsEnabled()) {
+        m_DemListCtrlSelectedText = m_DemListCtrl->GetStringSelection();
+        m_VectorListCtrlSelectedText = m_VectorListCtrl->GetStringSelection();
+        
+        m_DemListCtrl->Clear();
+        m_VectorListCtrl->Clear();
+        
+        // load layername into controls
+        wxASSERT(m_ViewerLayerManager);
+        for (unsigned int i = 0; i< m_ViewerLayerManager->GetCount(); i++) {
+            vrLayer * myLayer =  m_ViewerLayerManager->GetRenderer(i)->GetLayer();
+            wxASSERT(myLayer);
+            
+            if (myLayer->GetType() > vrDRIVER_UNKNOWN  && myLayer->GetType() <= vrDRIVER_VECTOR_MEMORY) {
+                // add polygon mask
+                vrLayerVector * myLayerVector = static_cast<vrLayerVector*>(myLayer);
+                if (wkbFlatten(myLayerVector->GetGeometryType()) == wkbLineString) {
+                    m_VectorListCtrl->Append(myLayerVector->GetDisplayName().GetFullPath());
+                }
+            }
+            
+            else if (myLayer->GetType() > vrDRIVER_VECTOR_MEMORY && myLayer->GetType() <= vrDRIVER_RASTER_SGRD7){
+                m_DemListCtrl->Append(myLayer->GetDisplayName().GetFullPath());
+            }
+        }
+        
+        m_DemListCtrl->SetSelection(m_DemListCtrl->FindString(m_DemListCtrlSelectedText));
+        m_VectorListCtrl->SetSelection(m_VectorListCtrl->FindString(m_VectorListCtrlSelectedText));
+    }
+}
+
 
 
 

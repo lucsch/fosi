@@ -16,13 +16,14 @@
 #include <wx/spinctrl.h>
 #include <wx/tglbtn.h>
 
+class vrViewerLayerManager;
 
 const wxString PLINT_DIALOG_NAME = _T("PLINT_DLG");
 class PlInt_DLG : public wxFrame
 {
 public:
     
-    PlInt_DLG( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plane Intersection"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxFRAME_TOOL_WINDOW | wxFRAME_FLOAT_ON_PARENT | wxCLOSE_BOX | wxTINY_CAPTION , const wxString & name = PLINT_DIALOG_NAME);
+    PlInt_DLG( wxWindow* parent, vrViewerLayerManager * viewermanager, wxWindowID id = wxID_ANY, const wxString& title = _("Plane Intersection"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxFRAME_TOOL_WINDOW | wxFRAME_FLOAT_ON_PARENT | wxCLOSE_BOX | wxTINY_CAPTION , const wxString & name = PLINT_DIALOG_NAME);
     ~PlInt_DLG();
     
 private:
@@ -37,12 +38,19 @@ private:
     wxStaticText* m_DipTxtCtrl;
     wxStaticText* m_PtsTxtCtrl;
     
+    vrViewerLayerManager * m_ViewerLayerManager;
+    
+    wxString m_DemListCtrlSelectedText;
+    wxString m_VectorListCtrlSelectedText;
+    
     void _CreateControls();
     
     void OnClose( wxCloseEvent& event );
     void OnUpdateDipCtrl( wxUpdateUIEvent& event ) ;
     void OnEditPoints( wxCommandEvent& event ) ;
     void OnUpdateUIEditPoints( wxUpdateUIEvent& event ) ;
+    void OnWindowFocus( wxActivateEvent& event ) ;
+
 };
 
 
