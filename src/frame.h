@@ -44,6 +44,7 @@ const int MENU_CHECK_UPDATE = wxID_HIGHEST + 23;
 const int MENU_WEBSITE = wxID_HIGHEST + 24;
 const int MENU_FRAME_CLEAR_SELECTION = wxID_HIGHEST + 26;
 const int MENU_FRAME_CREATE_SLBL = wxID_HIGHEST + 27;
+const int MENU_FRAME_PLINT_DIALOG = wxID_HIGHEST + 28;
 
 const wxString g_ProgName = "Fosi";
 
@@ -115,6 +116,7 @@ private:
 	void OnKeyDown(wxKeyEvent & event);
     void OnKeyUp(wxKeyEvent & event);
     void OnCreateSLBL (wxCommandEvent & event);
+    void OnPlaneIntersectionDialog (wxCommandEvent & event);
 	
 	void OnToolZoomToFit(wxCommandEvent & event);
     void OnToolSelect(wxCommandEvent & event);
@@ -138,6 +140,7 @@ private:
     void OnUpdateEditionPossible (wxUpdateUIEvent & event);
     void OnUpdateDeletePossible (wxUpdateUIEvent & event);
     void OnUpdateUISaveSelectedLayer (wxUpdateUIEvent & event);
+    void OnUpdateUIPlaneIntersection (wxUpdateUIEvent & event);
 	DECLARE_EVENT_TABLE();
 };
 

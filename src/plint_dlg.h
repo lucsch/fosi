@@ -16,11 +16,13 @@
 #include <wx/spinctrl.h>
 #include <wx/tglbtn.h>
 
+
+const wxString PLINT_DIALOG_NAME = _T("PLINT_DLG");
 class PlInt_DLG : public wxDialog
 {
 public:
     
-    PlInt_DLG( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plane Intersection"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+    PlInt_DLG( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plane Intersection"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE, const wxString & name = PLINT_DIALOG_NAME);
     ~PlInt_DLG();
     
 private:

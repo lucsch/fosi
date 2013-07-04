@@ -23,11 +23,13 @@
 #include "wxhgversion_core.h"
 #include "general_bmp.h"
 #include "createslbl_dlg.h"
+#include "plint_dlg.h"
 #include "core/demutil.h"
 
 
 BEGIN_EVENT_TABLE( Frame, wxFrame )
     EVT_MENU(MENU_FRAME_CREATE_SLBL, Frame::OnCreateSLBL)
+    EVT_MENU (MENU_FRAME_PLINT_DIALOG, Frame::OnPlaneIntersectionDialog)
 	EVT_MENU( wxID_EXIT, Frame::OnQuit )
 	EVT_MENU( wxID_PREFERENCES, Frame::OnPreferences)
     EVT_MENU( wxID_HELP, Frame::OnUserManual)
@@ -70,6 +72,7 @@ BEGIN_EVENT_TABLE( Frame, wxFrame )
     EVT_UPDATE_UI(MENU_TOOL_MODFIY, Frame::OnUpdateEditionPossible)
     EVT_UPDATE_UI(MENU_FEATURE_DELETE, Frame::OnUpdateDeletePossible)
     EVT_UPDATE_UI(MENU_DATA_SAVE_SELECTED, Frame::OnUpdateUISaveSelectedLayer)
+    EVT_UPDATE_UI(MENU_FRAME_PLINT_DIALOG, Frame::OnUpdateUIPlaneIntersection)
 END_EVENT_TABLE()
 
 
@@ -193,12 +196,18 @@ void Frame::_CreateMenus() {
 
     // STRUCTURAL ANALYSIS
     wxMenu * myStructMenu = new wxMenu();
-    wxMenu * mySlblMenu = new wxMenu();
     
+    wxMenu * mySlblMenu = new wxMenu();
     mySlblMenu->Append(new wxMenuItem(mySlblMenu, MENU_FRAME_CREATE_SLBL, _("Create SLBL...\tCtrl+N")));
     myStructMenu->AppendSubMenu(mySlblMenu, _("SLBL"));
-    m_menubar1->Append(myStructMenu, _("Structural Analysis"));
+
+    wxMenu * myPlintMenu = new wxMenu();
+    myPlintMenu->Append(MENU_FRAME_PLINT_DIALOG, _("Plane Intersection Dialog...\tCtrl+P"), wxEmptyString, true);
+    myStructMenu->AppendSubMenu(myPlintMenu, _("Plane Intersection"));
     
+    
+    m_menubar1->Append(myStructMenu, _("Structural Analysis"));
+
     
 	// WINDOW
 	wxMenu* m_menu2 = new wxMenu();
@@ -758,6 +767,19 @@ void Frame::OnCreateSLBL (wxCommandEvent & event){
 
 
 
+void Frame::OnPlaneIntersectionDialog (wxCommandEvent & event){
+    PlInt_DLG * myDlg = static_cast<PlInt_DLG*>(FindWindowByName(PLINT_DIALOG_NAME));
+    if (myDlg != NULL) {
+        myDlg->Raise();
+        return;
+    }
+    
+    myDlg = new PlInt_DLG(this);
+    myDlg->Show();
+}
+
+
+
 void Frame::OnToolZoomToFit(wxCommandEvent & event) {
 	m_vrViewerLayerManager->ZoomToFit(true);
 	m_vrViewerLayerManager->Reload();
@@ -1113,6 +1135,17 @@ void Frame::OnUpdateUISaveSelectedLayer (wxUpdateUIEvent & event){
     event.Enable(false);
     return;
 }
+
+
+
+void Frame::OnUpdateUIPlaneIntersection (wxUpdateUIEvent & event){
+    bool bCheck = false;
+    if( FindWindowByName( PLINT_DIALOG_NAME ) != NULL){
+        bCheck = true;
+    }
+    event.Check(bCheck);
+}
+
 
 
 Frame::Frame(const wxString & title) :
