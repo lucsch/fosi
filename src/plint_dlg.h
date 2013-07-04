@@ -18,11 +18,11 @@
 
 
 const wxString PLINT_DIALOG_NAME = _T("PLINT_DLG");
-class PlInt_DLG : public wxDialog
+class PlInt_DLG : public wxFrame
 {
 public:
     
-    PlInt_DLG( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plane Intersection"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTINY_CAPTION | wxCLOSE_BOX | wxSTAY_ON_TOP, const wxString & name = PLINT_DIALOG_NAME);
+    PlInt_DLG( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plane Intersection"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxFRAME_TOOL_WINDOW | wxFRAME_FLOAT_ON_PARENT | wxCLOSE_BOX | wxTINY_CAPTION , const wxString & name = PLINT_DIALOG_NAME);
     ~PlInt_DLG();
     
 private:
