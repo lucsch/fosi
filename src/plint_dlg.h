@@ -22,7 +22,7 @@ class PlInt_DLG : public wxDialog
 {
 public:
     
-    PlInt_DLG( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plane Intersection"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE, const wxString & name = PLINT_DIALOG_NAME);
+    PlInt_DLG( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plane Intersection"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTINY_CAPTION | wxCLOSE_BOX | wxSTAY_ON_TOP, const wxString & name = PLINT_DIALOG_NAME);
     ~PlInt_DLG();
     
 private:
@@ -42,6 +42,7 @@ private:
     void OnClose( wxCloseEvent& event );
     void OnUpdateDipCtrl( wxUpdateUIEvent& event ) ;
     void OnEditPoints( wxCommandEvent& event ) ;
+    void OnUpdateUIEditPoints( wxUpdateUIEvent& event ) ;
 };
 
 

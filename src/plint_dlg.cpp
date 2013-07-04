@@ -16,6 +16,7 @@ PlInt_DLG::PlInt_DLG( wxWindow* parent, wxWindowID id, const wxString& title, co
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( PlInt_DLG::OnClose ) );
 	m_DipCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PlInt_DLG::OnUpdateDipCtrl ), NULL, this );
 	m_EditPtsBtn->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( PlInt_DLG::OnEditPoints ), NULL, this );
+	m_EditPtsBtn->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PlInt_DLG::OnUpdateUIEditPoints ), NULL, this );
 }
 
 PlInt_DLG::~PlInt_DLG()
@@ -24,7 +25,7 @@ PlInt_DLG::~PlInt_DLG()
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( PlInt_DLG::OnClose ) );
 	m_DipCtrl->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PlInt_DLG::OnUpdateDipCtrl ), NULL, this );
 	m_EditPtsBtn->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( PlInt_DLG::OnEditPoints ), NULL, this );
-	
+    m_EditPtsBtn->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PlInt_DLG::OnUpdateUIEditPoints ), NULL, this );
 }
 
 
@@ -47,6 +48,22 @@ void PlInt_DLG::OnEditPoints( wxCommandEvent& event ) {
 
 
 
+void PlInt_DLG::OnUpdateUIEditPoints( wxUpdateUIEvent& event ) {
+    if (m_DemListCtrl->GetStringSelection().IsEmpty()) {
+        event.Enable(false);
+        return;
+    }
+    
+    if (m_VectorListCtrl->GetStringSelection().IsEmpty()) {
+        event.Enable(false);
+        return;
+    }
+    
+    event.Enable(true);
+}
+
+
+
 void PlInt_DLG::_CreateControls(){
     this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -61,7 +78,7 @@ void PlInt_DLG::_CreateControls(){
 	m_staticText1->Wrap( -1 );
 	sbSizer1->Add( m_staticText1, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_DemListCtrl = new wxComboBox( this, wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_DemListCtrl = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	m_DemListCtrl->SetMinSize( wxSize( 250,-1 ) );
 	
 	sbSizer1->Add( m_DemListCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
@@ -155,5 +172,5 @@ void PlInt_DLG::_CreateControls(){
 	this->Layout();
 	bSizer1->Fit( this );
 	
-	this->Centre( wxBOTH );
+	//this->Centre( wxBOTH );
 }
