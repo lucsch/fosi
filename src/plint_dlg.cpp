@@ -65,39 +65,44 @@ void PlInt_DLG::OnUpdateUIEditPoints( wxUpdateUIEvent& event ) {
 
 
 void PlInt_DLG::_CreateControls(){
-    this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxVERTICAL );
+	
+	wxPanel* m_panel1;
+	m_panel1 = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbSizer1;
-	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Input") ), wxHORIZONTAL );
+	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( m_panel1, wxID_ANY, _("Input") ), wxHORIZONTAL );
 	
 	wxStaticText* m_staticText1;
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Input DEM:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1 = new wxStaticText( m_panel1, wxID_ANY, _("Input DEM:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
 	sbSizer1->Add( m_staticText1, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_DemListCtrl = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_DemListCtrl = new wxComboBox( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	m_DemListCtrl->SetMinSize( wxSize( 250,-1 ) );
 	
-	sbSizer1->Add( m_DemListCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	sbSizer1->Add( m_DemListCtrl, 1, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	
 	bSizer1->Add( sbSizer1, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer2;
-	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Output") ), wxVERTICAL );
+	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_panel1, wxID_ANY, _("Output") ), wxVERTICAL );
 	
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxStaticText* m_staticText2;
-	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Line Output"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2 = new wxStaticText( m_panel1, wxID_ANY, _("Line Output"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
 	bSizer2->Add( m_staticText2, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_VectorListCtrl = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_VectorListCtrl = new wxComboBox( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	bSizer2->Add( m_VectorListCtrl, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
@@ -107,19 +112,19 @@ void PlInt_DLG::_CreateControls(){
 	bSizer1->Add( sbSizer2, 0, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* sbSizer4;
-	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
+	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( m_panel1, wxID_ANY, _("Options") ), wxVERTICAL );
 	
-	m_3PointsCtrl = new wxRadioButton( this, wxID_ANY, _("Use 3 points"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_3PointsCtrl = new wxRadioButton( m_panel1, wxID_ANY, _("Use 3 points"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	m_3PointsCtrl->SetValue( true );
 	sbSizer4->Add( m_3PointsCtrl, 0, wxALL, 5 );
 	
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_2PointsCtrl = new wxRadioButton( this, wxID_ANY, _("Use 2 points and a dip"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_2PointsCtrl = new wxRadioButton( m_panel1, wxID_ANY, _("Use 2 points and a dip"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer9->Add( m_2PointsCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_DipCtrl = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
+	m_DipCtrl = new wxSpinCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
 	bSizer9->Add( m_DipCtrl, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
@@ -129,38 +134,38 @@ void PlInt_DLG::_CreateControls(){
 	bSizer1->Add( sbSizer4, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer9;
-	sbSizer9 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Operations") ), wxHORIZONTAL );
+	sbSizer9 = new wxStaticBoxSizer( new wxStaticBox( m_panel1, wxID_ANY, _("Operations") ), wxHORIZONTAL );
 	
-	m_LivePreviewCtrl = new wxCheckBox( this, wxID_ANY, _("Live preview"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LivePreviewCtrl = new wxCheckBox( m_panel1, wxID_ANY, _("Live preview"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer9->Add( m_LivePreviewCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
 	sbSizer9->Add( 0, 0, 1, wxEXPAND, 5 );
 	
-	m_EditPtsBtn = new wxToggleButton( this, wxID_ANY, _("Edit Points"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_EditPtsBtn = new wxToggleButton( m_panel1, wxID_ANY, _("Edit Points"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer9->Add( m_EditPtsBtn, 0, wxALL, 5 );
 	
 	
 	bSizer1->Add( sbSizer9, 0, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* sbSizer10;
-	sbSizer10 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Information") ), wxHORIZONTAL );
+	sbSizer10 = new wxStaticBoxSizer( new wxStaticBox( m_panel1, wxID_ANY, _("Information") ), wxHORIZONTAL );
 	
-	m_DirTxtCtrl = new wxStaticText( this, wxID_ANY, _("Direction:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DirTxtCtrl = new wxStaticText( m_panel1, wxID_ANY, _("Direction:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DirTxtCtrl->Wrap( -1 );
 	sbSizer10->Add( m_DirTxtCtrl, 0, wxALL, 5 );
 	
 	
 	sbSizer10->Add( 0, 0, 1, wxEXPAND, 5 );
 	
-	m_DipTxtCtrl = new wxStaticText( this, wxID_ANY, _("Dip:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DipTxtCtrl = new wxStaticText( m_panel1, wxID_ANY, _("Dip:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DipTxtCtrl->Wrap( -1 );
 	sbSizer10->Add( m_DipTxtCtrl, 0, wxALL, 5 );
 	
 	
 	sbSizer10->Add( 0, 0, 1, wxEXPAND, 5 );
 	
-	m_PtsTxtCtrl = new wxStaticText( this, wxID_ANY, _("Points:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PtsTxtCtrl = new wxStaticText( m_panel1, wxID_ANY, _("Points:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PtsTxtCtrl->Wrap( -1 );
 	sbSizer10->Add( m_PtsTxtCtrl, 0, wxALL, 5 );
 	
@@ -168,9 +173,13 @@ void PlInt_DLG::_CreateControls(){
 	bSizer1->Add( sbSizer10, 0, wxEXPAND|wxALL, 5 );
 	
 	
-	this->SetSizer( bSizer1 );
-	this->Layout();
-	bSizer1->Fit( this );
+	m_panel1->SetSizer( bSizer1 );
+	m_panel1->Layout();
+	bSizer1->Fit( m_panel1 );
+	bSizer4->Add( m_panel1, 1, wxALL|wxEXPAND, 5 );
 	
-	//this->Centre( wxBOTH );
+	
+	this->SetSizer( bSizer4 );
+	this->Layout();
+	bSizer4->Fit( this );
 }
