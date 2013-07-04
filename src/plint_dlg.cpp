@@ -176,7 +176,7 @@ void PlInt_DLG::_CreateControls(){
 	m_panel1->SetSizer( bSizer1 );
 	m_panel1->Layout();
 	bSizer1->Fit( m_panel1 );
-	bSizer4->Add( m_panel1, 1, wxALL|wxEXPAND, 5 );
+	bSizer4->Add( m_panel1, 1, wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bSizer4 );
