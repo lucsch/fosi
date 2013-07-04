@@ -27,8 +27,8 @@ public:
     virtual ~PlIntViewerOverlay();
     
     wxPoint GetPixelPoint (int index);
-    bool AddPixelPoint (wxPoint pxpoint);
-    void ClearPoints ();
+    bool AddPixelPoint (wxPoint pxpoint, bool refresh = false);
+    void ClearPoints (bool refresh = false);
     
     virtual bool DrawOverlay(wxPaintDC * dc);
 };

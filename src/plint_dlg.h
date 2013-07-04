@@ -17,8 +17,11 @@
 #include <wx/tglbtn.h>
 
 class vrViewerLayerManager;
+class PlIntViewerOverlay;
 
 const wxString PLINT_DIALOG_NAME = _T("PLINT_DLG");
+const wxString PLINT_DIALOG_TOOL_NAME = _T("PLING_TOOL_DLG");
+
 class PlInt_DLG : public wxFrame
 {
 public:
@@ -31,12 +34,7 @@ private:
     wxComboBox* m_VectorListCtrl;
     wxRadioButton* m_3PointsCtrl;
     wxRadioButton* m_2PointsCtrl;
-    wxSpinCtrl* m_DipCtrl;
-    wxCheckBox* m_LivePreviewCtrl;
-    wxToggleButton* m_EditPtsBtn;
-    wxStaticText* m_DirTxtCtrl;
-    wxStaticText* m_DipTxtCtrl;
-    wxStaticText* m_PtsTxtCtrl;
+    wxButton* m_EditPtsBtn;
     
     vrViewerLayerManager * m_ViewerLayerManager;
     
@@ -46,12 +44,50 @@ private:
     void _CreateControls();
     
     void OnClose( wxCloseEvent& event );
-    void OnUpdateDipCtrl( wxUpdateUIEvent& event ) ;
-    void OnEditPoints( wxCommandEvent& event ) ;
-    void OnUpdateUIEditPoints( wxUpdateUIEvent& event ) ;
     void OnWindowFocus( wxActivateEvent& event ) ;
-
+    void OnCreatePlaneIntersection( wxCommandEvent& event );
+    void OnUpdateUICreateIntersection( wxUpdateUIEvent& event ) ;
+    
+    friend class PlInt_Tool_DLG;
 };
+
+
+
+
+
+
+
+
+class PlInt_Tool_DLG : public wxFrame
+{
+public:
+    
+    PlInt_Tool_DLG( PlInt_DLG * parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plane Intersection Tools"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxFRAME_FLOAT_ON_PARENT|wxFRAME_TOOL_WINDOW|wxTAB_TRAVERSAL, const wxString & name = PLINT_DIALOG_TOOL_NAME);
+    ~PlInt_Tool_DLG();
+    
+private:
+    wxStaticText* m_DirTxtCtrl;
+    wxSpinCtrl* m_DipCtrl;
+    wxStaticText* m_PtsTxtCtrl;
+    wxCheckBox* m_LivePreviewCtrl;
+    wxButton* m_EditPtsBtn;
+    wxButton* m_ClearPtsBtn;
+    
+    PlInt_DLG * m_ParentDlg;
+    PlIntViewerOverlay * m_Overlay;
+
+    
+    
+    void _CreateControls ();
+    
+    void OnClose( wxCloseEvent& event ) ;
+    void OnIdleProcess( wxIdleEvent& event ) ;
+    void OnEditPoints( wxCommandEvent& event ) ;
+    void OnClearPoints( wxCommandEvent& event ) ;
+	
+};
+
+
 
 
 #endif

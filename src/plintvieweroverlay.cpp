@@ -38,7 +38,7 @@ wxPoint PlIntViewerOverlay::GetPixelPoint (int index){
 
 
 
-bool PlIntViewerOverlay::AddPixelPoint (wxPoint pxpoint){
+bool PlIntViewerOverlay::AddPixelPoint (wxPoint pxpoint, bool refresh){
     if (m_Pts.GetCount() >= 2) {
         return false;
     }
@@ -47,14 +47,25 @@ bool PlIntViewerOverlay::AddPixelPoint (wxPoint pxpoint){
     wxASSERT(m_Display);
     m_Display->GetCoordinate()->ConvertFromPixels(pxpoint, myRealPt);
     m_Pts.push_back(new wxPoint2DDouble(myRealPt));
+    
+    if (refresh == true){
+        m_Display->Refresh();
+        m_Display->Update();
+    }
+    
     return true;
 }
 
 
 
-void PlIntViewerOverlay::ClearPoints (){
+void PlIntViewerOverlay::ClearPoints (bool refresh){
     m_Pts.DeleteContents(true);
     m_Pts.clear();
+    
+    if (refresh == true) {
+        m_Display->Refresh();
+        m_Display->Update();
+    }
 }
 
 

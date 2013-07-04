@@ -28,9 +28,7 @@ PlIntToolEdit::~PlIntToolEdit() {
 
 bool PlIntToolEdit::MouseUp(const wxMouseEvent & event) {
     wxASSERT(m_Overlay);
-    m_Overlay->AddPixelPoint(event.GetPosition());
-    GetDisplay()->Refresh();
-    GetDisplay()->Update();
+    m_Overlay->AddPixelPoint(event.GetPosition(), true);
     return true;
 }
 
