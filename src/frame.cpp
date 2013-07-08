@@ -24,12 +24,14 @@
 #include "general_bmp.h"
 #include "createslbl_dlg.h"
 #include "plint_dlg.h"
+#include "profile_dlg.h"
 #include "core/demutil.h"
 
 
 BEGIN_EVENT_TABLE( Frame, wxFrame )
     EVT_MENU(MENU_FRAME_CREATE_SLBL, Frame::OnCreateSLBL)
     EVT_MENU (MENU_FRAME_PLINT_DIALOG, Frame::OnPlaneIntersectionDialog)
+    EVT_MENU(MENU_FRAME_PROFILE_DIALOG, Frame::OnProfileDialog)
 	EVT_MENU( wxID_EXIT, Frame::OnQuit )
 	EVT_MENU( wxID_PREFERENCES, Frame::OnPreferences)
     EVT_MENU( wxID_HELP, Frame::OnUserManual)
@@ -202,9 +204,12 @@ void Frame::_CreateMenus() {
     myStructMenu->AppendSubMenu(mySlblMenu, _("SLBL"));
 
     wxMenu * myPlintMenu = new wxMenu();
-    myPlintMenu->Append(MENU_FRAME_PLINT_DIALOG, _("Plane Intersection Dialog...\tCtrl+P"), wxEmptyString, true);
+    myPlintMenu->Append(MENU_FRAME_PLINT_DIALOG, _("Plane Intersection Dialog...\tCtrl+I"), wxEmptyString, true);
     myStructMenu->AppendSubMenu(myPlintMenu, _("Plane Intersection"));
     
+    wxMenu * myProfileMenu = new wxMenu();
+    myProfileMenu->Append(MENU_FRAME_PROFILE_DIALOG, _("Profile Dialog...\tCtrl+P"), wxEmptyString);
+    myStructMenu->AppendSubMenu(myProfileMenu, _("Profile"));
     
     m_menubar1->Append(myStructMenu, _("Structural Analysis"));
 
@@ -778,6 +783,19 @@ void Frame::OnPlaneIntersectionDialog (wxCommandEvent & event){
     myDlg->Show();
 }
 
+
+
+void Frame::OnProfileDialog (wxCommandEvent & event){
+    Profile_DLG myDlg (this, m_vrViewerLayerManager);
+    if (myDlg.ShowModal() != wxID_OK) {
+        return;
+    }
+    
+    ProfileParams param = myDlg.GetParams();
+    
+    
+    
+}
 
 
 void Frame::OnToolZoomToFit(wxCommandEvent & event) {
