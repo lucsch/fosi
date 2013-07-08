@@ -808,6 +808,21 @@ void Frame::OnProfileDialog (wxCommandEvent & event){
     }
     vrLayerRasterGDAL * myLayerRaster = static_cast<vrLayerRasterGDAL*>(myRasterRenderer->GetLayer());
     
+    
+    // open files
+    wxFile myTextFile;
+    if (param.m_ExportTypeFormat == ProfileParams::PROFILE_EXPORT_TEXT &&
+        param.m_ExportTypeTextFormat == ProfileParams::PROFILE_TEXT_FILE) {
+        myTextFile.Create(param.m_FileOutputText.GetFullPath(), true);
+        myTextFile.Open(param.m_FileOutputText.GetFullPath(), wxFile::write);
+        if (myTextFile.IsOpened() == false) {
+            wxLogError(_("Unable to open: '%s'"), param.m_FileOutputText.GetFullName());
+            return;
+        }
+        myTextFile.Write(wxString::Format(_("File Written by FOSI on: %s\n"), wxDateTime::Now().FormatISOCombined()));
+    }
+    
+    long myTotalData = 0;
     bool bRestart = true;
     wxString myClipboardData = wxEmptyString;
     for (unsigned int i = 0; i< myLayer->GetFeatureCount(); i++) {
@@ -831,6 +846,7 @@ void Frame::OnProfileDialog (wxCommandEvent & event){
             wxLogWarning (_("No results when profiling: '%s', feature: %ld"), param.m_FileInputVector.GetFullName(), myFeat->GetFID());
             continue;
         }
+        myTotalData += myProfiler.GetResultRef()->GetCount();
         
         // export text
         if (param.m_ExportTypeFormat == ProfileParams::PROFILE_EXPORT_TEXT) {
@@ -848,10 +864,30 @@ void Frame::OnProfileDialog (wxCommandEvent & event){
                                                                 wxString::FromDouble(myP1.getY()),
                                                                 wxString::FromDouble(myP1.getZ())));
                     }
+                    myClipboardData.Append(_T("\n"));
                 }
             }
-            else {
-                
+            else { // export to text file
+                wxASSERT(myTextFile.IsOpened()==true);
+                wxString myHeader = _("DISTANCE\tHEIGHT\n");
+                if (param.m_ExportTypeText == ProfileParams::PROFILE_TEXT_XYZ) {
+                    myHeader = _("X\tY\tZ\n");
+                }
+                myTextFile.Write(myHeader);
+                for (unsigned l = 0; l< myProfiler.GetResultRef()->GetCount(); l++) {
+                    if (param.m_ExportTypeText == ProfileParams::PROFILE_TEXT_DISTANCE_HEIGHT) {
+                        myTextFile.Write(wxString::FromDouble(l * myDistance) + _T("\t") + wxString::FromDouble(myProfiler.GetResultRef()->Item(l)) + _T("\n"));
+                    }
+                    else {
+                        OGRPoint myP1;
+                        myProfiler.GetResultPoint(l, &myP1);
+                        myTextFile.Write(wxString::Format(_T("%s\t%s\t%s\n"),
+                                                                wxString::FromDouble(myP1.getX()),
+                                                                wxString::FromDouble(myP1.getY()),
+                                                                wxString::FromDouble(myP1.getZ())));
+                    }
+                    myClipboardData.Append(_T("\n"));
+                }
             }
             
         }
@@ -869,7 +905,7 @@ void Frame::OnProfileDialog (wxCommandEvent & event){
         }
     }
     
-    
+    wxMessageBox(wxString::Format(_("%ld Data processed!"), myTotalData));
 }
 
 

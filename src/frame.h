@@ -14,6 +14,8 @@
 #include <wx/infobar.h>
 #include <wx/dnd.h>
 #include <wx/clipbrd.h>
+#include <wx/ffile.h>
+
 
 #include "vroomgis.h"
 #include "update.h"
