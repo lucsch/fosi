@@ -21,6 +21,7 @@ class vrViewerLayerManager;
 
 class ProfileParams {
 public:
+    wxFileName m_FileInputDEM;
     wxFileName m_FileInputVector;
     wxFileName m_FileOutputText;
     wxFileName m_FileOutputVector;
@@ -49,7 +50,7 @@ public:
     Profile_DLG( wxWindow* parent, vrViewerLayerManager * viewermanager, wxWindowID id = wxID_ANY, const wxString& title = _("Profile"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
     ~Profile_DLG();
     
-    virtual bool TransferDataFromDialog();
+    virtual bool TransferDataFromWindow();
     ProfileParams GetParams () {return m_Params;}
 
     

@@ -78,7 +78,8 @@ void Profile_DLG::OnUpdateUITBtnOk( wxUpdateUIEvent& event ){
 
 
 
-bool Profile_DLG::TransferDataFromDialog(){
+bool Profile_DLG::TransferDataFromWindow(){
+    m_Params.m_FileInputDEM = m_InputDEMCtrl->GetStringSelection();
     m_Params.m_FileInputVector = m_InputLineCtrl->GetStringSelection();
     if (m_Params.m_FileInputVector.GetExt() == wxEmptyString) {
         m_Params.m_FileInputVector.SetExt (_T("memory"));

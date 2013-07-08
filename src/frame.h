@@ -13,6 +13,7 @@
 #endif
 #include <wx/infobar.h>
 #include <wx/dnd.h>
+#include <wx/clipbrd.h>
 
 #include "vroomgis.h"
 #include "update.h"
