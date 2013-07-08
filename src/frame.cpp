@@ -26,7 +26,6 @@
 #include "plint_dlg.h"
 #include "profile_dlg.h"
 #include "core/demutil.h"
-#include "vroperationvectorprofiler.h"
 
 
 BEGIN_EVENT_TABLE( Frame, wxFrame )
@@ -793,120 +792,10 @@ void Frame::OnProfileDialog (wxCommandEvent & event){
     }
     ProfileParams param = myDlg.GetParams();
     
-    // Get layers
-    vrRenderer * myRenderer = m_vrViewerLayerManager->GetRenderer(param.m_FileInputVector.GetFullPath());
-    if (myRenderer == NULL) {
-        wxLogError(_("Unable to find layer: '%s'"), param.m_FileInputVector.GetFullPath());
-        return;
-    }
-    vrLayerVectorOGR * myLayer = static_cast<vrLayerVectorOGR*>(myRenderer->GetLayer());
-    
-    vrRenderer * myRasterRenderer = m_vrViewerLayerManager->GetRenderer(param.m_FileInputDEM.GetFullPath());
-    if (myRasterRenderer == NULL) {
-        wxLogError(_("Unable to find layer: '%s'"), param.m_FileInputDEM.GetFullPath());
-        return;
-    }
-    vrLayerRasterGDAL * myLayerRaster = static_cast<vrLayerRasterGDAL*>(myRasterRenderer->GetLayer());
-    
-    
-    // open files
-    wxFile myTextFile;
-    if (param.m_ExportTypeFormat == ProfileParams::PROFILE_EXPORT_TEXT &&
-        param.m_ExportTypeTextFormat == ProfileParams::PROFILE_TEXT_FILE) {
-        myTextFile.Create(param.m_FileOutputText.GetFullPath(), true);
-        myTextFile.Open(param.m_FileOutputText.GetFullPath(), wxFile::write);
-        if (myTextFile.IsOpened() == false) {
-            wxLogError(_("Unable to open: '%s'"), param.m_FileOutputText.GetFullName());
-            return;
-        }
-        myTextFile.Write(wxString::Format(_("File Written by FOSI on: %s\n"), wxDateTime::Now().FormatISOCombined()));
-    }
-    
-    long myTotalData = 0;
-    bool bRestart = true;
-    wxString myClipboardData = wxEmptyString;
-    for (unsigned int i = 0; i< myLayer->GetFeatureCount(); i++) {
-        OGRFeature * myFeat = myLayer->GetNextFeature(bRestart);
-        bRestart = false;
-        if (myFeat == NULL || myFeat->GetGeometryRef() == NULL) {
-            continue;
-        }
-        
-        if (param.m_AllValues == false && myLayer->IsFeatureSelected(myFeat->GetFID()) == false ) {
-            OGRFeature::DestroyFeature(myFeat);
-            continue;
-        }
-        
-        vrOperationVectorProfiler myProfiler (myFeat->GetGeometryRef(), myLayerRaster);
-        if (myProfiler.IsOk() == false) {
-            continue;
-        }
-        myProfiler.DoProfile();
-        if (myProfiler.GetResultRef()->GetCount() == 0) {
-            wxLogWarning (_("No results when profiling: '%s', feature: %ld"), param.m_FileInputVector.GetFullName(), myFeat->GetFID());
-            continue;
-        }
-        myTotalData += myProfiler.GetResultRef()->GetCount();
-        
-        // export text
-        if (param.m_ExportTypeFormat == ProfileParams::PROFILE_EXPORT_TEXT) {
-            double myDistance = myProfiler.GetIncrementDistance();
-            if (param.m_ExportTypeTextFormat == ProfileParams::PROFILE_TEXT_CLIPBOARD) {
-                for (unsigned l = 0; l< myProfiler.GetResultRef()->GetCount(); l++) {
-                    if (param.m_ExportTypeText == ProfileParams::PROFILE_TEXT_DISTANCE_HEIGHT) {
-                        myClipboardData.Append(wxString::FromDouble(l * myDistance) + _T("\t") + wxString::FromDouble(myProfiler.GetResultRef()->Item(l)) + _T("\n"));
-                    }
-                    else {
-                        OGRPoint myP1;
-                        myProfiler.GetResultPoint(l, &myP1);
-                        myClipboardData.Append(wxString::Format(_T("%s\t%s\t%s\n"),
-                                                                wxString::FromDouble(myP1.getX()),
-                                                                wxString::FromDouble(myP1.getY()),
-                                                                wxString::FromDouble(myP1.getZ())));
-                    }
-                    myClipboardData.Append(_T("\n"));
-                }
-            }
-            else { // export to text file
-                wxASSERT(myTextFile.IsOpened()==true);
-                wxString myHeader = _("DISTANCE\tHEIGHT\n");
-                if (param.m_ExportTypeText == ProfileParams::PROFILE_TEXT_XYZ) {
-                    myHeader = _("X\tY\tZ\n");
-                }
-                myTextFile.Write(myHeader);
-                for (unsigned l = 0; l< myProfiler.GetResultRef()->GetCount(); l++) {
-                    if (param.m_ExportTypeText == ProfileParams::PROFILE_TEXT_DISTANCE_HEIGHT) {
-                        myTextFile.Write(wxString::FromDouble(l * myDistance) + _T("\t") + wxString::FromDouble(myProfiler.GetResultRef()->Item(l)) + _T("\n"));
-                    }
-                    else {
-                        OGRPoint myP1;
-                        myProfiler.GetResultPoint(l, &myP1);
-                        myTextFile.Write(wxString::Format(_T("%s\t%s\t%s\n"),
-                                                                wxString::FromDouble(myP1.getX()),
-                                                                wxString::FromDouble(myP1.getY()),
-                                                                wxString::FromDouble(myP1.getZ())));
-                    }
-                    myClipboardData.Append(_T("\n"));
-                }
-            }
-            
-        }
-        else { // export vector
-            
-        }
-       OGRFeature::DestroyFeature(myFeat);        
-    }
-    
-    if (param.m_ExportTypeFormat == ProfileParams::PROFILE_EXPORT_TEXT &&
-        param.m_ExportTypeTextFormat == ProfileParams::PROFILE_TEXT_CLIPBOARD) {
-        if (wxTheClipboard->Open()){
-            wxTheClipboard->SetData( new wxTextDataObject(myClipboardData) );
-            wxTheClipboard->Close();
-        }
-    }
-    
-    wxMessageBox(wxString::Format(_("%ld Data processed!"), myTotalData));
+	ProfileOperation myProfileOp (param, m_vrViewerLayerManager, m_vrLayerManager, this);
+    myProfileOp.DoExport();
 }
+
 
 
 void Frame::OnToolZoomToFit(wxCommandEvent & event) {

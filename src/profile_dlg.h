@@ -15,8 +15,14 @@
 #endif
 #include <wx/filepicker.h>
 #include <wx/notebook.h>
+#include <wx/clipbrd.h>
+
 
 class vrViewerLayerManager;
+class vrLayerManager;
+class vrLayerVectorOGR;
+class vrLayerRasterGDAL;
+
 
 
 class ProfileParams {
@@ -80,5 +86,34 @@ private:
     void OnUpdateUITBtnOk( wxUpdateUIEvent& event );
 	
 };
+
+
+
+
+class ProfileOperation {
+public:
+    ProfileOperation (ProfileParams param, vrViewerLayerManager * viewermanager, vrLayerManager * layermanager, wxWindow * window);
+    ~ProfileOperation ();
+    bool IsOK() {return bCorrectlyInited;}
+    bool DoExport();
+    
+private:
+    ProfileParams m_Param;
+    vrViewerLayerManager * m_ViewerManager;
+    vrLayerManager * m_LayerManager;
+    wxWindow * m_Parent;
+    bool bCorrectlyInited;
+    
+    vrLayerVectorOGR * m_LayerVector;
+    vrLayerRasterGDAL * m_LayerRaster;
+    wxFile * m_TextFile;
+    vrLayerVectorOGR * m_LayerVectorOutput;
+    
+    
+    
+};
+
+
+
 
 #endif

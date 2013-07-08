@@ -13,7 +13,6 @@
 #endif
 #include <wx/infobar.h>
 #include <wx/dnd.h>
-#include <wx/clipbrd.h>
 #include <wx/ffile.h>
 
 
