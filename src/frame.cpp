@@ -25,6 +25,7 @@
 #include "createslbl_dlg.h"
 #include "plint_dlg.h"
 #include "profile_dlg.h"
+#include "profileview_dlg.h"
 #include "core/demutil.h"
 
 
@@ -32,6 +33,7 @@ BEGIN_EVENT_TABLE( Frame, wxFrame )
     EVT_MENU(MENU_FRAME_CREATE_SLBL, Frame::OnCreateSLBL)
     EVT_MENU (MENU_FRAME_PLINT_DIALOG, Frame::OnPlaneIntersectionDialog)
     EVT_MENU(MENU_FRAME_PROFILE_DIALOG, Frame::OnProfileDialog)
+    EVT_MENU(MENU_FRAME_PROFILE_VIEW, Frame::OnProfileView)
 	EVT_MENU( wxID_EXIT, Frame::OnQuit )
 	EVT_MENU( wxID_PREFERENCES, Frame::OnPreferences)
     EVT_MENU( wxID_HELP, Frame::OnUserManual)
@@ -209,6 +211,7 @@ void Frame::_CreateMenus() {
     
     wxMenu * myProfileMenu = new wxMenu();
     myProfileMenu->Append(MENU_FRAME_PROFILE_DIALOG, _("Profile Dialog...\tCtrl+P"), wxEmptyString);
+    myProfileMenu->Append(MENU_FRAME_PROFILE_VIEW, _("View profile...\tCtrl+V"), wxEmptyString);
     myStructMenu->AppendSubMenu(myProfileMenu, _("Profile"));
     
     m_menubar1->Append(myStructMenu, _("Structural Analysis"));
@@ -794,6 +797,13 @@ void Frame::OnProfileDialog (wxCommandEvent & event){
     
 	ProfileOperation myProfileOp (param, m_vrViewerLayerManager, m_vrLayerManager, this);
     myProfileOp.DoExport();
+}
+
+
+
+void Frame::OnProfileView (wxCommandEvent & event){
+    ProfileView_DLG * myDlg = new ProfileView_DLG (this, m_vrLayerManager);
+    myDlg->Show();
 }
 
 

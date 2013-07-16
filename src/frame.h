@@ -48,6 +48,7 @@ const int MENU_FRAME_CLEAR_SELECTION = wxID_HIGHEST + 26;
 const int MENU_FRAME_CREATE_SLBL = wxID_HIGHEST + 27;
 const int MENU_FRAME_PLINT_DIALOG = wxID_HIGHEST + 28;
 const int MENU_FRAME_PROFILE_DIALOG = wxID_HIGHEST + 31;
+const int MENU_FRAME_PROFILE_VIEW = wxWindow::NewControlId();
 
 const wxString g_ProgName = "Fosi";
 
@@ -121,6 +122,8 @@ private:
     void OnCreateSLBL (wxCommandEvent & event);
     void OnPlaneIntersectionDialog (wxCommandEvent & event);
     void OnProfileDialog (wxCommandEvent & event);
+    void OnProfileView (wxCommandEvent & event);
+    
 	
 	void OnToolZoomToFit(wxCommandEvent & event);
     void OnToolSelect(wxCommandEvent & event);
