@@ -802,7 +802,57 @@ void Frame::OnProfileDialog (wxCommandEvent & event){
 
 
 void Frame::OnProfileView (wxCommandEvent & event){
-    ProfileView_DLG * myDlg = new ProfileView_DLG (this, m_vrLayerManager);
+    wxArrayString myPaths;
+    wxArrayString myNames;
+    wxArrayString myDisplayNames;
+    
+    for (unsigned int i = 0; i< m_vrViewerLayerManager->GetCount(); i++) {
+        vrLayer * myLayer =  m_vrViewerLayerManager->GetRenderer(i)->GetLayer();
+        wxASSERT(myLayer);
+        
+        if (myLayer->GetType() > vrDRIVER_VECTOR_MEMORY && myLayer->GetType() <= vrDRIVER_RASTER_SGRD7){
+            myDisplayNames.Add(myLayer->GetDisplayName().GetFullName());
+            myNames.Add(myLayer->GetFileName().GetFullName());
+            myPaths.Add(myLayer->GetFileName().GetPath());
+        }
+    }
+    
+    if (myDisplayNames.GetCount() == 0) {
+        wxLogWarning(_("No Data, making profile not possible"));
+        return;
+    }
+    
+    int mySelLayer = m_vrTOC->GetSelection();
+    if (mySelLayer == wxNOT_FOUND) {
+        wxLogWarning(_("No layer Selected! Select a layer!"));
+        return;
+    }
+    vrRenderer * myRenderer = m_vrViewerLayerManager->GetRenderer(mySelLayer);
+    if (myRenderer == NULL || myRenderer->GetLayer()->GetType() > vrDRIVER_VECTOR_MEMORY) {
+        wxLogWarning(_("Incorrect layer type selected! Select a vector layer"));
+        return;
+    }
+    
+    vrLayerVectorOGR * myLayer = static_cast<vrLayerVectorOGR*>(myRenderer->GetLayer());
+    wxMultiChoiceDialog myChoiceDlg(this, _("Select Raster layer"), _("Profile data"), myDisplayNames);
+    if (myChoiceDlg.ShowModal() != wxID_OK) {
+        return;
+    }
+    wxArrayInt mySelectedRasterIndex = myChoiceDlg.GetSelections();
+    if (mySelectedRasterIndex.GetCount() == 0) {
+        return;
+    }
+    
+    vrArrayLayer myRasterLayers;
+    for (unsigned int i = 0; i< mySelectedRasterIndex.GetCount(); i++) {
+        int index = mySelectedRasterIndex.Item(i);
+        wxFileName myFileName (myPaths.Item(index), myNames.Item(index));
+        vrLayer * myLayer = m_vrViewerLayerManager->GetRenderer(myFileName.GetFullPath())->GetLayer();
+        wxASSERT(myLayer);
+        myRasterLayers.Add(myLayer);
+    }
+
+    ProfileView_DLG * myDlg = new ProfileView_DLG (this, m_vrLayerManager, myLayer, myRasterLayers);
     myDlg->Show();
 }
 

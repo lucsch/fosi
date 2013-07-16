@@ -9,7 +9,7 @@
 
 
 
-ProfileView_DLG::ProfileView_DLG( wxWindow* parent, vrLayerManager * layermanager, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style ){
+ProfileView_DLG::ProfileView_DLG( wxWindow* parent, vrLayerManager * layermanager, vrLayer * profile, const vrArrayLayer & raster, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style ){
     m_LayerManagerRef = layermanager;
     m_Display = NULL;
     

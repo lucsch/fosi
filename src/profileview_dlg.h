@@ -14,11 +14,24 @@
 #endif
 
 #include "vroomgis.h"
+#include "vrlayervector.h"
+
+
+class ProfileViewData {
+public:
+    vrLayerVectorOGR * m_ProfileSource;
+    vrArrayLayer m_RasterLayers;
+    
+    ProfileViewData() {
+        m_ProfileSource = NULL;
+    }
+};
+
 
 class ProfileView_DLG : public wxFrame
 {
 public:
-    ProfileView_DLG( wxWindow* parent, vrLayerManager * layermanager, wxWindowID id = wxID_ANY, const wxString& title = _("Profile View"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+    ProfileView_DLG( wxWindow* parent, vrLayerManager * layermanager, vrLayer * profile, const vrArrayLayer & raster, wxWindowID id = wxID_ANY, const wxString& title = _("Profile View"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
     ~ProfileView_DLG();
     
 private:
