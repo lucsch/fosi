@@ -12,6 +12,8 @@
 #ifndef WX_PRECOMP
 #include <wx/wx.h>
 #endif
+#include <wx/gdicmn.h>
+
 
 #include "vroomgis.h"
 #include "vrlayervector.h"
@@ -40,8 +42,14 @@ private:
     vrViewerDisplay * m_Display;
     
     void _CreateControls();
+    void _CreateMenu();
     
     void OnClose( wxCloseEvent& event ) ;
+    void OnZoomToFit( wxCommandEvent& event ) ;
+    void OnCloseMenu( wxCommandEvent& event ) ;
+    
+    DECLARE_EVENT_TABLE();
+
 };
 
 

@@ -834,6 +834,15 @@ void Frame::OnProfileView (wxCommandEvent & event){
     }
     
     vrLayerVectorOGR * myLayer = static_cast<vrLayerVectorOGR*>(myRenderer->GetLayer());
+    if (myLayer->GetSelectedIDs()->GetCount() != 1) {
+        wxLogWarning(_("Select one feature to create profile on it!"));
+        return;
+    }
+    if (wkbFlatten( myLayer->GetGeometryType() ) != wkbLineString) {
+        wxLogWarning(_("Incorrect geometry: profile is only working with line layers!"));
+        return;
+    }
+    
     wxMultiChoiceDialog myChoiceDlg(this, _("Select Raster layer"), _("Profile data"), myDisplayNames);
     if (myChoiceDlg.ShowModal() != wxID_OK) {
         return;
