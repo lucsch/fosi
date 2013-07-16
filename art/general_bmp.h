@@ -11,14 +11,12 @@ extern void initialize_images(void);
 extern void uninitialize_images(void);
 
 extern wxBitmap *_img_app_sml;
-extern wxBitmap *_img_toolbar_pan;
-extern wxBitmap *_img_toolbar_select;
-extern wxBitmap *_img_toolbar_zoom;
-extern wxBitmap *_img_toolbar_zoom_fit;
-extern wxBitmap *_img_generic_export;
-extern wxBitmap *_img_generic_quit;
 extern wxBitmap *_img_toolbar_edit;
 extern wxBitmap *_img_toolbar_modify;
+extern wxBitmap *_img_toolbar_pan;
+extern wxBitmap *_img_toolbar_select;
 extern wxBitmap *_img_toolbar_start;
+extern wxBitmap *_img_toolbar_zoom;
+extern wxBitmap *_img_toolbar_zoom_fit;
 
 #endif /* _COLTOP_BMP_H_ */
