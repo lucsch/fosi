@@ -74,6 +74,7 @@ ProfileView_DLG::ProfileView_DLG( wxWindow* parent, vrLayerManager * layermanage
             wxLogError(_("Unable to create profile: '%s'"), myProfilName.GetName());
             continue;
         }
+        m_CreatedProfileName.Add(myProfilName.GetFullPath());
         
         OGRLineString myLine;
         double myIncrementDist = myProfiler.GetIncrementDistance();
@@ -95,20 +96,43 @@ ProfileView_DLG::ProfileView_DLG( wxWindow* parent, vrLayerManager * layermanage
         myProfilName = wxFileName(wxString::Format(myProfilFormat, loop));
     }
     
-
+    // add legend
+    wxFont myFont (*wxNORMAL_FONT);
+    wxClientDC myDC (this);
+    myDC.SetFont(myFont);
+    wxSize myFontSize = myDC.GetTextExtent(_T("lp"));
+    int myVIncrement = myFontSize.GetHeight() + 2;
     
+    for (unsigned int i = 0; i< raster.GetCount(); i++) {
+        wxString myRasterName = raster.Item(i)->GetDisplayName().GetFullName();
+        vrViewerOverlayText * myOverlay = new vrViewerOverlayText(myRasterName, myRasterName);
+        int myColorIndex = i % 10;
+        wxASSERT(myColorIndex >= 0 && myColorIndex < (sizeof(myColours) / sizeof(wxString)));
+        myOverlay->SetTextColour(wxTheColourDatabase->Find(myColours[myColorIndex]));
+        myOverlay->SetFont(myFont);
+        
+        myOverlay->SetPosition(wxPoint(5, i * myVIncrement + 5));
+        m_Display->GetOverlayArrayRef()->Add(myOverlay);
+    }
 }
 
 
 
 ProfileView_DLG::~ProfileView_DLG(){
-	
+    for (unsigned int i = 0; i< m_CreatedProfileName.GetCount(); i++) {
+        vrRenderer * myRenderer = m_ViewerLayerManager->GetRenderer(m_CreatedProfileName.Item(i));
+        wxASSERT(myRenderer);
+        vrLayer * myLayer = myRenderer->GetLayer();
+        m_ViewerLayerManager->Remove(myRenderer);
+        m_LayerManagerRef->Close(myLayer);
+    }
+    m_Display->ClearOverlayArray();
+    m_LayerManagerRef->RemoveViewerLayerManager(m_ViewerLayerManager);
 }
 
 
 
 void ProfileView_DLG::OnClose( wxCloseEvent& event ) {
-    m_LayerManagerRef->RemoveViewerLayerManager(m_ViewerLayerManager);
     Destroy();
 }
 

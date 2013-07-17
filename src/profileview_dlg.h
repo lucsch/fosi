@@ -41,6 +41,8 @@ private:
     vrViewerLayerManager * m_ViewerLayerManager;
     vrViewerDisplay * m_Display;
     
+    wxArrayString m_CreatedProfileName;
+    
     void _CreateControls();
     void _CreateMenu();
     
