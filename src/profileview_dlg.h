@@ -46,6 +46,12 @@ private:
     
     void OnClose( wxCloseEvent& event ) ;
     void OnZoomToFit( wxCommandEvent& event ) ;
+    void OnToolZoom ( wxCommandEvent & event );
+    void OnToolPan ( wxCommandEvent & event );
+    
+    void OnToolZoomAction ( wxCommandEvent & event );
+    void OnToolPanAction ( wxCommandEvent & event );
+    
     void OnCloseMenu( wxCommandEvent& event ) ;
     
     DECLARE_EVENT_TABLE();

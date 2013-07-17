@@ -15,6 +15,13 @@ BEGIN_EVENT_TABLE( ProfileView_DLG, wxFrame )
 EVT_CLOSE( ProfileView_DLG::OnClose )
 EVT_MENU( wxID_ZOOM_FIT, ProfileView_DLG::OnZoomToFit )
 EVT_MENU( wxID_EXIT, ProfileView_DLG::OnCloseMenu )
+
+EVT_MENU(wxID_ZOOM_IN, ProfileView_DLG::OnToolZoom)
+EVT_MENU(wxID_MORE, ProfileView_DLG::OnToolPan)
+
+EVT_COMMAND( wxID_ANY, vrEVT_TOOL_ZOOM, ProfileView_DLG::OnToolZoomAction)
+EVT_COMMAND( wxID_ANY, vrEVT_TOOL_ZOOMOUT, ProfileView_DLG::OnToolZoomAction)
+EVT_COMMAND( wxID_ANY, vrEVT_TOOL_PAN, ProfileView_DLG::OnToolPanAction)
 END_EVENT_TABLE()
 
 
@@ -113,6 +120,73 @@ void ProfileView_DLG::OnZoomToFit( wxCommandEvent& event ) {
 }
 
 
+
+void ProfileView_DLG::OnToolZoom(wxCommandEvent & event) {
+	m_Display->SetToolZoom();
+}
+
+
+
+void ProfileView_DLG::OnToolZoomAction(wxCommandEvent & event) {
+	vrDisplayToolMessage * myMsg = (vrDisplayToolMessage*)event.GetClientData();
+	wxASSERT(myMsg);
+	// getting rectangle
+	vrCoordinate * myCoord = m_Display->GetCoordinate();
+	wxASSERT(myCoord);
+    
+	// get real rectangle
+	vrRealRect myRealRect;
+	bool bSuccess = myCoord->ConvertFromPixels(myMsg->m_Rect, myRealRect);
+	wxASSERT(bSuccess == true);
+    
+	// get fitted rectangle
+	vrRealRect myFittedRect =myCoord->GetRectFitted(myRealRect);
+	wxASSERT(myFittedRect.IsOk());
+    
+	// zoom out
+	if (myMsg->m_EvtType == vrEVT_TOOL_ZOOM) {
+		m_ViewerLayerManager->Zoom(myFittedRect);
+	}
+	else {
+		m_ViewerLayerManager->ZoomOut(myFittedRect);
+	}
+	wxDELETE(myMsg);
+}
+
+
+
+void ProfileView_DLG::OnToolPan(wxCommandEvent & event) {
+	m_Display->SetToolPan();
+}
+
+
+
+void ProfileView_DLG::OnToolPanAction(wxCommandEvent & event) {
+	vrDisplayToolMessage * myMsg = (vrDisplayToolMessage*)event.GetClientData();
+	wxASSERT(myMsg);
+    
+	vrCoordinate * myCoord = m_Display->GetCoordinate();
+	wxASSERT(myCoord);
+    
+	wxPoint myMovedPos = myMsg->m_Position;
+	wxPoint2DDouble myMovedRealPt;
+	if (myCoord->ConvertFromPixels(myMovedPos, myMovedRealPt)==false){
+		wxLogError("Error converting point : %d, %d to real coordinate",
+				   myMovedPos.x, myMovedPos.y);
+		wxDELETE(myMsg);
+		return;
+	}
+    
+	vrRealRect myActExtent = myCoord->GetExtent();
+	myActExtent.MoveLeftTopTo(myMovedRealPt);
+	myCoord->SetExtent(myActExtent);
+	m_ViewerLayerManager->Reload();
+	wxDELETE(myMsg);
+}
+
+
+
+
 void ProfileView_DLG::OnCloseMenu( wxCommandEvent& event ) {
     Close();
 }
@@ -156,6 +230,9 @@ void ProfileView_DLG::_CreateMenu(){
 	m_menuItem1 = new wxMenuItem( m_menu1, wxID_ZOOM_FIT, wxString( _("Zoom to fit\tCtrl+0") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu1->Append( m_menuItem1 );
 	
+    m_menu1->Append(wxID_ZOOM_IN, _("Zoom\tZ"));
+    m_menu1->Append(wxID_MORE, _("Pan\tH"));
+    
 	wxMenuItem* m_menuItem2;
 	m_menuItem2 = new wxMenuItem( m_menu1, wxID_EXIT, wxString( _("Exit\tCtrl+W") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu1->Append( m_menuItem2 );
