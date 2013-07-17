@@ -46,6 +46,7 @@ private:
     
     void _CreateControls();
     void _CreateMenu();
+    void _CreateToolBar();
     
     void OnClose( wxCloseEvent& event ) ;
     void OnZoomToFit( wxCommandEvent& event ) ;

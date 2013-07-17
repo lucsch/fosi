@@ -8,6 +8,7 @@
 #include "profileview_dlg.h"
 #include "vrlayerraster.h"
 #include "vroperationvectorprofiler.h"
+#include "general_bmp.h"
 
 
 
@@ -34,6 +35,7 @@ ProfileView_DLG::ProfileView_DLG( wxWindow* parent, vrLayerManager * layermanage
     
     _CreateControls();
     _CreateMenu();
+    _CreateToolBar();
     
     m_ViewerLayerManager = new vrViewerLayerManager(m_LayerManagerRef, this, m_Display, NULL);
     
@@ -316,5 +318,27 @@ void ProfileView_DLG::_CreateMenu(){
 	
 	this->SetMenuBar( m_menubar1 );
 }
+
+
+
+void ProfileView_DLG::_CreateToolBar(){
+    long myStyle = wxTB_FLAT | wxTB_HORIZONTAL;
+    // conditionnal compilation for better look under win32
+#ifndef __WXMSW__
+    myStyle += wxTB_TEXT;
+#endif
+    
+    wxToolBar* m_toolBar1;
+    m_toolBar1 = this->CreateToolBar( myStyle, wxID_ANY );
+    m_toolBar1->SetToolBitmapSize( wxSize( 32,32 ) );
+    wxString myZoomName = _("Zoom to fit");
+    m_toolBar1->AddTool( wxID_ZOOM_FIT, myZoomName, wxBitmap(*_img_toolbar_zoom_fit), wxNullBitmap, wxITEM_NORMAL,myZoomName, wxEmptyString );
+    wxString myZoom2Name = _("Zoom");
+    m_toolBar1->AddTool( wxID_ZOOM_IN, myZoom2Name , wxBitmap(*_img_toolbar_zoom), wxNullBitmap, wxITEM_NORMAL, myZoom2Name, wxEmptyString );
+    wxString myPanName = _("Pan");
+    m_toolBar1->AddTool( wxID_MORE, myPanName, wxBitmap(*_img_toolbar_pan), wxNullBitmap, wxITEM_NORMAL, myPanName, wxEmptyString );
+    m_toolBar1->Realize();
+}
+
 
 
