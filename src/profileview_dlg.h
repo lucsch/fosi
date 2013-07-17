@@ -40,6 +40,7 @@ private:
     vrLayerManager * m_LayerManagerRef;
     vrViewerLayerManager * m_ViewerLayerManager;
     vrViewerDisplay * m_Display;
+    wxKeyboardState m_KeyBoardState;
     
     wxArrayString m_CreatedProfileName;
     
@@ -53,6 +54,9 @@ private:
     
     void OnToolZoomAction ( wxCommandEvent & event );
     void OnToolPanAction ( wxCommandEvent & event );
+    
+    void OnKeyDown(wxKeyEvent & event);
+    void OnKeyUp(wxKeyEvent & event) ;
     
     void OnCloseMenu( wxCommandEvent& event ) ;
     

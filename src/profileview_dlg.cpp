@@ -19,6 +19,9 @@ EVT_MENU( wxID_EXIT, ProfileView_DLG::OnCloseMenu )
 EVT_MENU(wxID_ZOOM_IN, ProfileView_DLG::OnToolZoom)
 EVT_MENU(wxID_MORE, ProfileView_DLG::OnToolPan)
 
+EVT_KEY_DOWN(ProfileView_DLG::OnKeyDown)
+EVT_KEY_UP(ProfileView_DLG::OnKeyUp)
+
 EVT_COMMAND( wxID_ANY, vrEVT_TOOL_ZOOM, ProfileView_DLG::OnToolZoomAction)
 EVT_COMMAND( wxID_ANY, vrEVT_TOOL_ZOOMOUT, ProfileView_DLG::OnToolZoomAction)
 EVT_COMMAND( wxID_ANY, vrEVT_TOOL_PAN, ProfileView_DLG::OnToolPanAction)
@@ -114,11 +117,22 @@ ProfileView_DLG::ProfileView_DLG( wxWindow* parent, vrLayerManager * layermanage
         myOverlay->SetPosition(wxPoint(5, i * myVIncrement + 5));
         m_Display->GetOverlayArrayRef()->Add(myOverlay);
     }
+    
+    // connect key event
+    m_Display->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(ProfileView_DLG::OnKeyDown),NULL, this);
+	m_Display->Connect(wxEVT_KEY_UP, wxKeyEventHandler(ProfileView_DLG::OnKeyUp),NULL, this);
+
 }
 
 
 
 ProfileView_DLG::~ProfileView_DLG(){
+    
+}
+
+
+
+void ProfileView_DLG::OnClose( wxCloseEvent& event ) {
     for (unsigned int i = 0; i< m_CreatedProfileName.GetCount(); i++) {
         vrRenderer * myRenderer = m_ViewerLayerManager->GetRenderer(m_CreatedProfileName.Item(i));
         wxASSERT(myRenderer);
@@ -128,11 +142,6 @@ ProfileView_DLG::~ProfileView_DLG(){
     }
     m_Display->ClearOverlayArray();
     m_LayerManagerRef->RemoveViewerLayerManager(m_ViewerLayerManager);
-}
-
-
-
-void ProfileView_DLG::OnClose( wxCloseEvent& event ) {
     Destroy();
 }
 
@@ -208,6 +217,48 @@ void ProfileView_DLG::OnToolPanAction(wxCommandEvent & event) {
 	wxDELETE(myMsg);
 }
 
+
+void ProfileView_DLG::OnKeyDown(wxKeyEvent & event) {
+	m_KeyBoardState = wxKeyboardState(event.ControlDown(),
+									  event.ShiftDown(),
+									  event.AltDown(),
+									  event.MetaDown());
+	if (m_KeyBoardState.GetModifiers() != wxMOD_CMD) {
+		event.Skip();
+		return;
+	}
+    
+	const vrDisplayTool * myTool = m_Display->GetTool();
+	if (myTool == NULL) {
+		event.Skip();
+		return;
+	}
+    
+	if (myTool->GetID() == wxID_ZOOM_IN) {
+		m_Display->SetToolZoomOut();
+	}
+	event.Skip();
+}
+
+
+
+void ProfileView_DLG::OnKeyUp(wxKeyEvent & event) {
+	if (m_KeyBoardState.GetModifiers() != wxMOD_CMD) {
+		event.Skip();
+		return;
+	}
+    
+	const vrDisplayTool * myTool = m_Display->GetTool();
+	if (myTool == NULL) {
+		event.Skip();
+		return;
+	}
+    
+	if (myTool->GetID() == wxID_ZOOM_OUT || myTool->GetID() == wxID_ZOOM_IN) {
+		m_Display->SetToolZoom();
+	}
+	event.Skip();
+}
 
 
 
