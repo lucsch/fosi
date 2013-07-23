@@ -61,6 +61,12 @@ IF( APPLE )
 ENDIF (APPLE)
 
 
+# UNIT TESTING 
+IF ( CXXTEST_INCLUDE_DIR )
+  ADD_SUBDIRECTORY("../test/build" "${PROJECT_BINARY_DIR}/test")
+ENDIF ( CXXTEST_INCLUDE_DIR )
+
+
 IF (WIN32)
   INCLUDE ("../plugins/vroomgis/vroomgis/build/cmake/Use_visualstudioMT.cmake")
 ENDIF (WIN32)
