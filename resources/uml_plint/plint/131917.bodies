@@ -1,0 +1,90 @@
+class WebUpdateThread
+!!!147917.cpp!!!	Entry() : ExitCode
+    wxMilliSleep(1000);
+    
+    CURLcode myError = curl_easy_perform(m_CurlHandle);
+    if (myError != CURLE_OK) {
+        if (m_msgNoInternet) {
+            wxThreadEvent myEvent (wxEVT_COMMAND_THREAD, THREAD_MESSAGE_NO_INTERNET);
+            wxQueueEvent(m_Parent, myEvent.Clone()); 
+        }
+        return (wxThread::ExitCode)0;
+    }
+    
+    wxString mydata = m_Buffer.GetString();
+    
+    wxStringTokenizer tokenizer(mydata, "\n");
+    wxArrayString myValues;
+    while (tokenizer.HasMoreTokens() ){
+        myValues.Add(tokenizer.GetNextToken());
+    }
+    
+    if (myValues.GetCount() != 2) {
+        wxLogMessage("Error parsing new version informations, file corrupted ?");
+        return (wxThread::ExitCode)0;
+    }
+    
+    
+    long myInternetVersion = wxNOT_FOUND;
+    myValues.Item(1).ToLong(&myInternetVersion);
+    wxThreadEvent myEvent (wxEVT_COMMAND_THREAD, THREAD_MESSAGE_NEW_VERSION);
+    myEvent.SetInt((int) myInternetVersion);
+    myEvent.SetString(myValues.Item(0));
+
+    if (myInternetVersion > m_ActualVersion && m_msgNewVersion == true) {
+        myEvent.SetId(THREAD_MESSAGE_NEW_VERSION);
+        wxQueueEvent(m_Parent, myEvent.Clone());
+        return (wxThread::ExitCode)0;
+    }
+    
+    if (m_msgNoNewVersion == true) {
+        myEvent.SetId (THREAD_MESSAGE_NONEW_VERSION);
+        wxQueueEvent(m_Parent, myEvent.Clone());
+    }
+    return (wxThread::ExitCode)0;
+!!!148045.cpp!!!	WebUpdateThread(inout parent : wxWindow, in proxy : wxString = wxEmptyString)
+    m_Parent = parent;    
+    CURLcode myCurlError = curl_global_init(CURL_GLOBAL_ALL);
+    wxASSERT(myCurlError == CURLE_OK);
+	m_CurlHandle = curl_easy_init();
+    
+    m_msgNewVersion = true;
+    m_msgNoNewVersion = true;
+    m_msgNoInternet = true;
+    m_ActualVersion = wxNOT_FOUND;
+    
+    
+    // Prepare connection
+    wxString myServerInfo = WEBUPDATE_SERVER_UPDATE + "?t=" + wxDateTime::Now().FormatISOCombined('-');
+	myCurlError = curl_easy_setopt(m_CurlHandle,
+                                               CURLOPT_URL,
+                                               (const char *)myServerInfo.mb_str(wxConvUTF8));
+	wxASSERT(myCurlError == CURLE_OK);
+    
+	myCurlError = curl_easy_setopt(m_CurlHandle, CURLOPT_TIMEOUT_MS, WEBUPDATE_CONNECTION_TIMEOUT);
+	wxASSERT(myCurlError == CURLE_OK);
+    
+    // prepare proxy if needed
+    if (proxy.IsEmpty() == false) {
+        myCurlError = curl_easy_setopt(m_CurlHandle, CURLOPT_PROXY,
+                                         (const char*)proxy.mb_str(wxConvUTF8));
+        wxASSERT(myCurlError == CURLE_OK);
+    }
+    
+    // prepare reception of data
+    myCurlError = curl_easy_setopt(m_CurlHandle, CURLOPT_WRITEFUNCTION, wxcurl_str_write);
+    wxASSERT(myCurlError == CURLE_OK);
+    
+    myCurlError = curl_easy_setopt(m_CurlHandle, CURLOPT_WRITEDATA,(void*)& m_Buffer);
+    wxASSERT(myCurlError == CURLE_OK);
+!!!148173.cpp!!!	~WebUpdateThread()
+    curl_easy_cleanup(m_CurlHandle);
+!!!148301.cpp!!!	CheckNewVersion(in actualversion : long, in msgNewVersion : bool = true, in msgNoNewVersion : bool = true, in msgNoInternet : bool = true) : bool
+    m_msgNewVersion = msgNewVersion;
+    m_msgNoNewVersion = msgNoNewVersion;
+    m_msgNoInternet = msgNoInternet;
+    m_ActualVersion = actualversion;
+    
+    Create();
+    Run();
+    return true;

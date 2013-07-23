@@ -1,0 +1,164 @@
+class ProfileView_DLG
+!!!145357.cpp!!!	~ProfileView_DLG()
+    
+!!!145485.cpp!!!	_CreateControls() : void
+    this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	
+	wxBoxSizer* bSizer1;
+	bSizer1 = new wxBoxSizer( wxVERTICAL );
+	
+	wxPanel* m_panel1;
+	m_panel1 = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer2;
+	bSizer2 = new wxBoxSizer( wxVERTICAL );
+	
+	m_Display = new vrViewerDisplay( m_panel1);
+	bSizer2->Add( m_Display, 1, wxEXPAND, 5 );
+	
+	m_panel1->SetSizer( bSizer2 );
+	m_panel1->Layout();
+	bSizer2->Fit( m_panel1 );
+	bSizer1->Add( m_panel1, 1, wxEXPAND, 5 );
+	
+	this->SetSizer( bSizer1 );
+	this->Layout();
+	wxStatusBar* m_statusBar1 = this->CreateStatusBar( 1, wxST_SIZEGRIP, wxID_ANY );
+    m_Display->SetStatusCoordinates(m_statusBar1, 0, _("No coordinates"));
+    m_Display->SetNoDataText(_("No Profile Data"));
+!!!145613.cpp!!!	_CreateMenu() : void
+    wxMenuBar* m_menubar1;
+	m_menubar1 = new wxMenuBar( 0 );
+	wxMenu* m_menu1;
+	m_menu1 = new wxMenu();
+	wxMenuItem* m_menuItem1;
+	m_menuItem1 = new wxMenuItem( m_menu1, wxID_ZOOM_FIT, wxString( _("Zoom to fit\tCtrl+0") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu1->Append( m_menuItem1 );
+	
+    m_menu1->Append(wxID_ZOOM_IN, _("Zoom\tZ"));
+    m_menu1->Append(wxID_MORE, _("Pan\tH"));
+    
+	wxMenuItem* m_menuItem2;
+	m_menuItem2 = new wxMenuItem( m_menu1, wxID_EXIT, wxString( _("Exit\tCtrl+W") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu1->Append( m_menuItem2 );
+	
+	m_menubar1->Append( m_menu1, _("Actions") );
+	
+	this->SetMenuBar( m_menubar1 );
+!!!145741.cpp!!!	_CreateToolBar() : void
+    long myStyle = wxTB_FLAT | wxTB_HORIZONTAL;
+    // conditionnal compilation for better look under win32
+#ifndef __WXMSW__
+    myStyle += wxTB_TEXT;
+#endif
+    
+    wxToolBar* m_toolBar1;
+    m_toolBar1 = this->CreateToolBar( myStyle, wxID_ANY );
+    m_toolBar1->SetToolBitmapSize( wxSize( 32,32 ) );
+    wxString myZoomName = _("Zoom to fit");
+    m_toolBar1->AddTool( wxID_ZOOM_FIT, myZoomName, wxBitmap(*_img_toolbar_zoom_fit), wxNullBitmap, wxITEM_NORMAL,myZoomName, wxEmptyString );
+    wxString myZoom2Name = _("Zoom");
+    m_toolBar1->AddTool( wxID_ZOOM_IN, myZoom2Name , wxBitmap(*_img_toolbar_zoom), wxNullBitmap, wxITEM_NORMAL, myZoom2Name, wxEmptyString );
+    wxString myPanName = _("Pan");
+    m_toolBar1->AddTool( wxID_MORE, myPanName, wxBitmap(*_img_toolbar_pan), wxNullBitmap, wxITEM_NORMAL, myPanName, wxEmptyString );
+    m_toolBar1->Realize();
+!!!145869.cpp!!!	OnClose(inout event : wxCloseEvent) : void
+    for (unsigned int i = 0; i< m_CreatedProfileName.GetCount(); i++) {
+        vrRenderer * myRenderer = m_ViewerLayerManager->GetRenderer(m_CreatedProfileName.Item(i));
+        wxASSERT(myRenderer);
+        vrLayer * myLayer = myRenderer->GetLayer();
+        m_ViewerLayerManager->Remove(myRenderer);
+        m_LayerManagerRef->Close(myLayer);
+    }
+    m_Display->ClearOverlayArray();
+    m_LayerManagerRef->RemoveViewerLayerManager(m_ViewerLayerManager);
+    Destroy();
+!!!145997.cpp!!!	OnZoomToFit(inout event : wxCommandEvent) : void
+    m_ViewerLayerManager->ZoomToFit(true);
+    m_ViewerLayerManager->Reload();
+!!!146125.cpp!!!	OnToolZoom(inout event : wxCommandEvent) : void
+	m_Display->SetToolZoom();
+!!!146253.cpp!!!	OnToolPan(inout event : wxCommandEvent) : void
+	m_Display->SetToolPan();
+!!!146381.cpp!!!	OnToolZoomAction(inout event : wxCommandEvent) : void
+	vrDisplayToolMessage * myMsg = (vrDisplayToolMessage*)event.GetClientData();
+	wxASSERT(myMsg);
+	// getting rectangle
+	vrCoordinate * myCoord = m_Display->GetCoordinate();
+	wxASSERT(myCoord);
+    
+	// get real rectangle
+	vrRealRect myRealRect;
+	bool bSuccess = myCoord->ConvertFromPixels(myMsg->m_Rect, myRealRect);
+	wxASSERT(bSuccess == true);
+    
+	// get fitted rectangle
+	vrRealRect myFittedRect =myCoord->GetRectFitted(myRealRect);
+	wxASSERT(myFittedRect.IsOk());
+    
+	// zoom out
+	if (myMsg->m_EvtType == vrEVT_TOOL_ZOOM) {
+		m_ViewerLayerManager->Zoom(myFittedRect);
+	}
+	else {
+		m_ViewerLayerManager->ZoomOut(myFittedRect);
+	}
+	wxDELETE(myMsg);
+!!!146509.cpp!!!	OnToolPanAction(inout event : wxCommandEvent) : void
+	vrDisplayToolMessage * myMsg = (vrDisplayToolMessage*)event.GetClientData();
+	wxASSERT(myMsg);
+    
+	vrCoordinate * myCoord = m_Display->GetCoordinate();
+	wxASSERT(myCoord);
+    
+	wxPoint myMovedPos = myMsg->m_Position;
+	wxPoint2DDouble myMovedRealPt;
+	if (myCoord->ConvertFromPixels(myMovedPos, myMovedRealPt)==false){
+		wxLogError("Error converting point : %d, %d to real coordinate",
+				   myMovedPos.x, myMovedPos.y);
+		wxDELETE(myMsg);
+		return;
+	}
+    
+	vrRealRect myActExtent = myCoord->GetExtent();
+	myActExtent.MoveLeftTopTo(myMovedRealPt);
+	myCoord->SetExtent(myActExtent);
+	m_ViewerLayerManager->Reload();
+	wxDELETE(myMsg);
+!!!146637.cpp!!!	OnKeyDown(inout event : wxKeyEvent) : void
+	m_KeyBoardState = wxKeyboardState(event.ControlDown(),
+									  event.ShiftDown(),
+									  event.AltDown(),
+									  event.MetaDown());
+	if (m_KeyBoardState.GetModifiers() != wxMOD_CMD) {
+		event.Skip();
+		return;
+	}
+    
+	const vrDisplayTool * myTool = m_Display->GetTool();
+	if (myTool == NULL) {
+		event.Skip();
+		return;
+	}
+    
+	if (myTool->GetID() == wxID_ZOOM_IN) {
+		m_Display->SetToolZoomOut();
+	}
+	event.Skip();
+!!!146765.cpp!!!	OnKeyUp(inout event : wxKeyEvent) : void
+	if (m_KeyBoardState.GetModifiers() != wxMOD_CMD) {
+		event.Skip();
+		return;
+	}
+    
+	const vrDisplayTool * myTool = m_Display->GetTool();
+	if (myTool == NULL) {
+		event.Skip();
+		return;
+	}
+    
+	if (myTool->GetID() == wxID_ZOOM_OUT || myTool->GetID() == wxID_ZOOM_IN) {
+		m_Display->SetToolZoom();
+	}
+	event.Skip();
+!!!146893.cpp!!!	OnCloseMenu(inout event : wxCommandEvent) : void
+    Close();

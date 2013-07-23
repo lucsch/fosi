@@ -1,0 +1,8 @@
+class ctDropFiles
+!!!130381.cpp!!!	OnDropFiles(in x : wxCoord, in y : wxCoord, in filenames : wxArrayString) : bool
+	if (filenames.GetCount() == 0) {
+		return false;
+	}
+
+	m_Frame->AddLayers(filenames);
+	return true;

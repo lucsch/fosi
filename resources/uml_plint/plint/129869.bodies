@@ -1,30 +1,9 @@
-/***************************************************************************
- plintvieweroverlay
- -------------------
- copyright            : (C) 2013 CREALP Lucien Schreiber
- email                : lucien.schreiber at gmail dot com
- ***************************************************************************/
-
-#include "plintvieweroverlay.h"
-#include "vrviewerdisplay.h"
-#include "vrcoordinate.h"
-
-#include <wx/listimpl.cpp>
-WX_DEFINE_LIST(wxRealPointList);
-
-
-PlIntViewerOverlay::PlIntViewerOverlay(vrViewerDisplay * viewer, const wxString & name) : vrViewerOverlay(name) {
+class PlIntViewerOverlay
+!!!140749.cpp!!!	PlIntViewerOverlay(inout viewer : vrViewerDisplay, in name : wxString = PLINT_OVERLAY_NAME)
     m_Display = viewer;
-}
-
-
-
-PlIntViewerOverlay::~PlIntViewerOverlay() {
+!!!140877.cpp!!!	~PlIntViewerOverlay()
     ClearPoints();
-}
-
-
-wxPoint PlIntViewerOverlay::GetPixelPoint (int index){
+!!!141005.cpp!!!	GetPixelPoint(in index : int) : wxPoint
     wxPoint myReturnPxPt = wxDefaultPosition;
     if (index < 0 || index  >= m_Pts.GetCount() ) {
         wxLogError(_("Index out of bounds!"));
@@ -34,11 +13,7 @@ wxPoint PlIntViewerOverlay::GetPixelPoint (int index){
     wxASSERT(m_Display);
     m_Display->GetCoordinate()->ConvertToPixels(*m_Pts[index], myReturnPxPt);
     return myReturnPxPt;
-}
-
-
-
-bool PlIntViewerOverlay::AddPixelPoint (wxPoint pxpoint, bool refresh){
+!!!141133.cpp!!!	AddPixelPoint(in pxpoint : wxPoint, in refresh : bool = false) : bool
     if (m_Pts.GetCount() >= 3) {
         return false;
     }
@@ -54,11 +29,7 @@ bool PlIntViewerOverlay::AddPixelPoint (wxPoint pxpoint, bool refresh){
     }
     
     return true;
-}
-
-
-
-void PlIntViewerOverlay::ClearPoints (bool refresh){
+!!!141261.cpp!!!	ClearPoints(in refresh : bool = false) : void
     m_Pts.DeleteContents(true);
     m_Pts.clear();
     
@@ -66,11 +37,7 @@ void PlIntViewerOverlay::ClearPoints (bool refresh){
         m_Display->Refresh();
         m_Display->Update();
     }
-}
-
-
-
-bool PlIntViewerOverlay::DrawOverlay(wxPaintDC * dc) {
+!!!141389.cpp!!!	DrawOverlay(inout dc : wxPaintDC) : bool
     wxASSERT(dc);
     wxPen myPen (PLINT_OVERLAY_COLOR, PLINT_OVERLAY_SIZE);
     dc->SetPen(myPen);
@@ -92,5 +59,3 @@ bool PlIntViewerOverlay::DrawOverlay(wxPaintDC * dc) {
 #endif
     }
     return true;
-}
-

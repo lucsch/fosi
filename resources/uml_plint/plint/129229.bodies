@@ -1,0 +1,22 @@
+class WebUpdateInformationBar
+!!!147149.cpp!!!	OnCommandDownload(inout event : wxCommandEvent) : void
+    wxLaunchDefaultBrowser(WEBUPDATE_SERVER_DOWNLOAD);
+!!!147277.cpp!!!	OnInternetFailed(inout event : wxThreadEvent) : void
+    _ClearBar();
+    // TODO: wxWidgets Bug with image !
+    ShowMessage(_T("Checking for update failed! Internet isn't available."), wxICON_NONE);
+!!!147405.cpp!!!	OnNewVersion(inout event : wxThreadEvent) : void
+    _ClearBar();
+    AddButton(INFOBAR_DOWNLOAD_BUTTON, _("Download"));
+    wxString myMessage = wxString::Format(_("New version of %s is available: %s (%d)"),
+                                          g_ProgName,
+                                          event.GetString(),
+                                          event.GetInt());
+    ShowMessage(myMessage);
+!!!147533.cpp!!!	OnNoNewVersion(inout event : wxThreadEvent) : void
+    _ClearBar();
+    wxString myMessage = wxString::Format(_("No new version of %s is available!"),
+                                          g_ProgName); 
+	ShowMessage(myMessage);
+!!!147661.cpp!!!	WebUpdateInformationBar(inout parent : Frame)
+    m_Parent = parent;

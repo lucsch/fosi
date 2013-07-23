@@ -1,0 +1,8 @@
+class PreferencePanel
+!!!142029.cpp!!!	PreferencePanel(inout parent : wxWindow)
+	m_Parent = parent;
+	
+!!!142285.cpp!!!	SaveSettings() : bool
+	return false;
+!!!142413.cpp!!!	GetPanelParent() : wxWindow
+	return m_Parent;

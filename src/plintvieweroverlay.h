@@ -12,6 +12,7 @@
 
 const wxString PLINT_OVERLAY_NAME = _T("PLINT_OVERLAY");
 const wxColour PLINT_OVERLAY_COLOR = *wxGREEN;
+const wxColour PLING_OVERLAY_COLOR2 = *wxBLUE;
 const int PLINT_OVERLAY_SIZE = 6;
 
 WX_DECLARE_LIST(wxPoint2DDouble, wxRealPointList);

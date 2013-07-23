@@ -18,6 +18,7 @@
 
 class vrViewerLayerManager;
 class PlIntViewerOverlay;
+class PlIntOperation;
 
 const wxString PLINT_DIALOG_NAME = _T("PLINT_DLG");
 const wxString PLINT_DIALOG_TOOL_NAME = _T("PLING_TOOL_DLG");
@@ -75,7 +76,7 @@ private:
     
     PlInt_DLG * m_ParentDlg;
     PlIntViewerOverlay * m_Overlay;
-
+    PlIntOperation * m_Operation;
     
     
     void _CreateControls ();

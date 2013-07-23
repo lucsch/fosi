@@ -11,6 +11,8 @@
 #include "vrlayerraster.h"
 #include "plintvieweroverlay.h"
 #include "plinttool.h"
+#include "plintoperation.h"
+
 
 PlInt_DLG::PlInt_DLG( wxWindow* parent, vrViewerLayerManager * viewermanager, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString & name ) : wxFrame( parent, id, title, pos, size, style, name )
 {
@@ -207,11 +209,21 @@ void PlInt_DLG::_CreateControls(){
 
 
 
+
+
+
+
 PlInt_Tool_DLG::PlInt_Tool_DLG( PlInt_DLG * parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString & name ) : wxFrame( parent, id, title, pos, size, style, name ){
     m_ParentDlg = parent;
+    m_Operation = NULL;
     m_Overlay = static_cast<PlIntViewerOverlay*>(m_ParentDlg->m_ViewerLayerManager->GetDisplay()->GetOverlayByName(PLINT_OVERLAY_NAME));
     wxASSERT(m_Overlay);
     _CreateControls();
+    
+    vrRenderer * myRenderer = m_ParentDlg->m_ViewerLayerManager->GetRenderer(m_ParentDlg->m_DemListCtrl->GetStringSelection());
+    wxASSERT(myRenderer);
+    vrLayerRasterGDAL * myLayer = static_cast<vrLayerRasterGDAL* >(myRenderer->GetLayer());
+    m_Operation = new PlIntOperation(myLayer, 0);
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( PlInt_Tool_DLG::OnClose ) );
@@ -224,6 +236,8 @@ PlInt_Tool_DLG::PlInt_Tool_DLG( PlInt_DLG * parent, wxWindowID id, const wxStrin
 
 PlInt_Tool_DLG::~PlInt_Tool_DLG()
 {
+    wxDELETE(m_Operation);
+    
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( PlInt_Tool_DLG::OnClose ) );
 	this->Disconnect( wxEVT_IDLE, wxIdleEventHandler( PlInt_Tool_DLG::OnIdleProcess ) );
@@ -241,7 +255,18 @@ void PlInt_Tool_DLG::OnClose( wxCloseEvent& event ) {
 
 
 void PlInt_Tool_DLG::OnIdleProcess( wxIdleEvent& event ) {
-
+    if (m_Operation == NULL) {
+        return;
+    }
+    
+    double dip  = 0;
+    double azimut = 0;
+    if(m_Operation->GetPlaneInfo(dip, azimut) == false){
+        return;
+    }
+    
+    
+    
 
 }
 

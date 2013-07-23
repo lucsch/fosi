@@ -1,0 +1,17 @@
+class PreferenceDlg
+!!!141517.cpp!!!	PreferenceDlg(inout parent : wxWindow)
+	// generic panel
+	wxBookCtrlBase * notebook = GetBookCtrl();
+	wxASSERT(notebook);
+	PreferencePanelMain * myGeneralPanel = new PreferencePanelMain(notebook);
+	notebook->AddPage(myGeneralPanel, _("General"), true);
+    
+    PreferencePanelInternet * myInternetPanel = new PreferencePanelInternet(notebook);
+    notebook->AddPage(myInternetPanel, _("Updates"));
+	
+    /*wxStaticText* m_staticText6;
+	m_staticText6 = new wxStaticText( this, wxID_ANY, _("Some settings need a restart to take effect. "), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText6->Wrap( -1 );
+	GetInnerSizer()->Add( m_staticText6, 0, wxLEFT | wxRIGHT, 5 );*/
+	CreateButtons();
+	LayoutDialog();

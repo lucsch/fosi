@@ -1,0 +1,15 @@
+window_sizes 1575 918 393 1176 725 136
+diagrams
+  active  classdiagram_ref 128077 // plint
+    1172 705 100 4 0 0
+end
+show_stereotypes
+selected attribute_ref 143437 // m_MNT
+open
+  class_ref 129869 // PlIntViewerOverlay
+  attribute_ref 143437 // m_MNT
+  attribute_ref 143565 // m_MNTBand
+  attribute_ref 143693 // m_Points
+  deploymentview_ref 128333 // plint
+end
+end
