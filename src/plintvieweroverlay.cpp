@@ -15,6 +15,7 @@ WX_DEFINE_LIST(wxRealPointList);
 
 PlIntViewerOverlay::PlIntViewerOverlay(vrViewerDisplay * viewer, const wxString & name) : vrViewerOverlay(name) {
     m_Display = viewer;
+    m_AddedPoints = 0;
 }
 
 
@@ -49,6 +50,7 @@ bool PlIntViewerOverlay::AddPixelPoint (wxPoint pxpoint, bool refresh){
     wxASSERT(m_Display);
     m_Display->GetCoordinate()->ConvertFromPixels(pxpoint, myRealPt);
 
+    ++ m_AddedPoints;
     if (m_Pts.GetCount() >= 2) {
         *m_Pts[2] = myRealPt;
     }
@@ -68,6 +70,9 @@ bool PlIntViewerOverlay::AddPixelPoint (wxPoint pxpoint, bool refresh){
 bool PlIntViewerOverlay::UpdatePixelPoint (wxPoint pxpoint, int index){
     wxPoint2DDouble myRealPt = wxDefaultPosition;
     wxASSERT(m_Display);
+    if (m_Display->GetCoordinate() == NULL) {
+        return false;
+    }
     m_Display->GetCoordinate()->ConvertFromPixels(pxpoint, myRealPt);
     
     if (index == GetPointCount()) {
@@ -83,6 +88,7 @@ bool PlIntViewerOverlay::UpdatePixelPoint (wxPoint pxpoint, int index){
 void PlIntViewerOverlay::ClearPoints (bool refresh){
     m_Pts.DeleteContents(true);
     m_Pts.clear();
+    m_AddedPoints = 0;
     
     if (refresh == true) {
         m_Display->Refresh();

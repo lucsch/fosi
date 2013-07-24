@@ -33,7 +33,7 @@ bool PlIntToolEdit::MouseUp(const wxMouseEvent & event) {
     m_Overlay->AddPixelPoint(event.GetPosition(), true);
     
     if (m_Dialog) {
-        m_Dialog->UpdateControls();
+        m_Dialog->UpdateControls(true);
     }
     return true;
 }
@@ -47,7 +47,7 @@ bool PlIntToolEdit::MouseMove(const wxMouseEvent & event){
     
     m_Overlay->UpdatePixelPoint(event.GetPosition(), 2);
     if (m_Dialog) {
-        m_Dialog->UpdateControls();
+        m_Dialog->UpdateControls(false);
     }
     return true;
 }

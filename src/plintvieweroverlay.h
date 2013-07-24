@@ -22,6 +22,7 @@ class PlIntViewerOverlay : public vrViewerOverlay {
 private:
     wxRealPointList m_Pts;
     vrViewerDisplay * m_Display;
+    long m_AddedPoints;
     
 public:
     PlIntViewerOverlay(vrViewerDisplay * viewer, const wxString & name = PLINT_OVERLAY_NAME);
@@ -33,6 +34,7 @@ public:
     bool UpdatePixelPoint (wxPoint pxpoint, int index);
     void ClearPoints (bool refresh = false);
     long GetPointCount () {return m_Pts.GetCount();}
+    long GetPointAdded () {return m_AddedPoints;}
     
     virtual bool DrawOverlay(wxPaintDC * dc);
 };

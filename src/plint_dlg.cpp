@@ -247,12 +247,17 @@ PlInt_Tool_DLG::~PlInt_Tool_DLG()
 
 void PlInt_Tool_DLG::OnClose( wxCloseEvent& event ) {
     GetParent()->Show();
+    m_ParentDlg->m_ViewerLayerManager->GetDisplay()->SetToolDefault();
     Destroy();
 }
 
 
-void PlInt_Tool_DLG::UpdateControls (){
+void PlInt_Tool_DLG::UpdateControls (bool liveupdate){
     if (m_Operation == NULL) {
+        return;
+    }
+    
+    if (m_Overlay->GetPointAdded() >= 3 && liveupdate == false) {
         return;
     }
     
@@ -292,7 +297,7 @@ void PlInt_Tool_DLG::OnEditPoints( wxCommandEvent& event ) {
 void PlInt_Tool_DLG::OnClearPoints( wxCommandEvent& event ) {
     m_Overlay->ClearPoints(true);
     m_Operation->ClearPoints();
-    UpdateControls();
+    UpdateControls(true);
 }
 
 
@@ -329,7 +334,7 @@ void PlInt_Tool_DLG::_CreateControls(){
 	m_DipTxtCtrl->Wrap( -1 );
 	fgSizer1->Add( m_DipTxtCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_DipCtrl = new wxSpinCtrlDouble( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 200,-1 ), wxSP_ARROW_KEYS, 0, 10, 0 );
+	m_DipCtrl = new wxSpinCtrlDouble( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 200,-1 ), wxSP_ARROW_KEYS, 0, 100, 0, 0.1 );
 	fgSizer1->Add( m_DipCtrl, 1, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
     m_DipCtrl->Enable(m_ParentDlg->m_2PointsCtrl->GetValue());
 	
