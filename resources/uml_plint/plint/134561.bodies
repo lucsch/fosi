@@ -1,7 +1,7 @@
 class App
-!!!128077.cpp!!!	App()
+!!!134561.cpp!!!	App()
     wxHandleFatalExceptions();
-!!!128205.cpp!!!	OnInit() : bool
+!!!134689.cpp!!!	OnInit() : bool
 	if ( !wxApp::OnInit() ){
         return false;
     }
@@ -20,7 +20,7 @@ class App
 	m_Frame->SetSize(50, 50, 800, 600);
 	m_Frame->Show(true);
     return true;
-!!!128333.cpp!!!	OnFatalException() : void
+!!!134817.cpp!!!	OnFatalException() : void
     lsCrashReport myCrashReport (g_ProgName);
     if(myCrashReport.PrepareReport(wxDebugReport::Context_Exception)==false){
         return;

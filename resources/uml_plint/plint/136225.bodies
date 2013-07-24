@@ -1,0 +1,156 @@
+class PlInt_Tool_DLG
+!!!145697.cpp!!!	PlInt_Tool_DLG(inout parent : PlInt_DLG, in id : wxWindowID = wxID_ANY, in title : wxString = _("Plane Intersection Tools"), in pos : wxPoint = wxDefaultPosition, in size : wxSize = wxSize( -1,-1 ), in style : long = wxCAPTION|wxCLOSE_BOX|wxFRAME_FLOAT_ON_PARENT|wxFRAME_TOOL_WINDOW|wxTAB_TRAVERSAL, in name : wxString = PLINT_DIALOG_TOOL_NAME)
+    m_ParentDlg = parent;
+    m_Operation = NULL;
+    m_Overlay = static_cast<PlIntViewerOverlay*>(m_ParentDlg->m_ViewerLayerManager->GetDisplay()->GetOverlayByName(PLINT_OVERLAY_NAME));
+    wxASSERT(m_Overlay);
+    _CreateControls();
+    
+    vrRenderer * myRenderer = m_ParentDlg->m_ViewerLayerManager->GetRenderer(m_ParentDlg->m_DemListCtrl->GetStringSelection());
+    wxASSERT(myRenderer);
+    vrLayerRasterGDAL * myLayer = static_cast<vrLayerRasterGDAL* >(myRenderer->GetLayer());
+    m_Operation = new PlIntOperation(myLayer, 0);
+	
+	// Connect Events
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( PlInt_Tool_DLG::OnClose ) );
+	this->Connect( wxEVT_IDLE, wxIdleEventHandler( PlInt_Tool_DLG::OnIdleProcess ) );
+	m_EditPtsBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PlInt_Tool_DLG::OnEditPoints ), NULL, this );
+	m_ClearPtsBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PlInt_Tool_DLG::OnClearPoints ), NULL, this );
+!!!145825.cpp!!!	~PlInt_Tool_DLG()
+    wxDELETE(m_Operation);
+    
+	// Disconnect Events
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( PlInt_Tool_DLG::OnClose ) );
+	this->Disconnect( wxEVT_IDLE, wxIdleEventHandler( PlInt_Tool_DLG::OnIdleProcess ) );
+	m_EditPtsBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PlInt_Tool_DLG::OnEditPoints ), NULL, this );
+	m_ClearPtsBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PlInt_Tool_DLG::OnClearPoints ), NULL, this );
+	
+!!!145953.cpp!!!	_CreateControls() : void
+ 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	
+	wxBoxSizer* bSizer5;
+	bSizer5 = new wxBoxSizer( wxVERTICAL );
+	
+	wxPanel* m_panel2;
+	m_panel2 = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer6;
+	bSizer6 = new wxBoxSizer( wxVERTICAL );
+	
+	wxStaticBoxSizer* sbSizer10;
+	sbSizer10 = new wxStaticBoxSizer( new wxStaticBox( m_panel2, wxID_ANY, _("Information") ), wxVERTICAL );
+	
+	wxFlexGridSizer* fgSizer1;
+	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer1->SetFlexibleDirection( wxBOTH );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	wxStaticText* m_staticText7;
+	m_staticText7 = new wxStaticText( m_panel2, wxID_ANY, _("Direction:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText7->Wrap( -1 );
+	fgSizer1->Add( m_staticText7, 0, wxALL, 5 );
+	
+	m_DirTxtCtrl = new wxStaticText( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_DirTxtCtrl->Wrap( -1 );
+	fgSizer1->Add( m_DirTxtCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	
+	wxStaticText* m_DipTxtCtrl;
+	m_DipTxtCtrl = new wxStaticText( m_panel2, wxID_ANY, _("Dip:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DipTxtCtrl->Wrap( -1 );
+	fgSizer1->Add( m_DipTxtCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_DipCtrl = new wxSpinCtrlDouble( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 200,-1 ), wxSP_ARROW_KEYS, 0, 10, 0 );
+	fgSizer1->Add( m_DipCtrl, 1, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+    m_DipCtrl->Enable(m_ParentDlg->m_2PointsCtrl->GetValue());
+	
+	wxStaticText* m_staticText8;
+	m_staticText8 = new wxStaticText( m_panel2, wxID_ANY, _("Points:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText8->Wrap( -1 );
+	fgSizer1->Add( m_staticText8, 0, wxALL, 5 );
+	
+	m_PtsTxtCtrl = new wxStaticText( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_PtsTxtCtrl->Wrap( -1 );
+	fgSizer1->Add( m_PtsTxtCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	
+	
+	sbSizer10->Add( fgSizer1, 1, wxEXPAND, 5 );
+	
+	
+	bSizer6->Add( sbSizer10, 0, wxEXPAND|wxALL, 5 );
+	
+	m_LivePreviewCtrl = new wxCheckBox( m_panel2, wxID_ANY, _("Live preview"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer6->Add( m_LivePreviewCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	wxBoxSizer* bSizer7;
+	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_EditPtsBtn = new wxButton( m_panel2, wxID_ANY, _("Edit Points"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer7->Add( m_EditPtsBtn, 0, wxALL, 5 );
+	
+	
+	bSizer7->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_ClearPtsBtn = new wxButton( m_panel2, wxID_ANY, _("Clear Points"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer7->Add( m_ClearPtsBtn, 0, wxALL, 5 );
+	
+	
+	bSizer6->Add( bSizer7, 0, wxEXPAND, 5 );
+	
+	
+	m_panel2->SetSizer( bSizer6 );
+	m_panel2->Layout();
+	bSizer6->Fit( m_panel2 );
+	bSizer5->Add( m_panel2, 1, wxEXPAND, 5 );
+	
+	
+	this->SetSizer( bSizer5 );
+	this->Layout();
+	bSizer5->Fit( this );
+!!!146081.cpp!!!	_UpdateDipDirPoints(in nbpoint : int, in dip : double = wxNOT_FOUND, in dir : double = wxNOT_FOUND) : void
+    m_PtsTxtCtrl->SetLabel(wxString::Format(_T("%d"), nbpoint));
+    if (dip == wxNOT_FOUND) {
+        m_DipCtrl->SetValue("");
+    }
+    else {
+        m_DipCtrl->SetValue(dip);
+    }
+    if (dir == wxNOT_FOUND) {
+        m_DirTxtCtrl->SetLabel("");
+    }
+    else {
+        m_DirTxtCtrl->SetLabel(wxString::FromDouble(dir));
+    }
+!!!146209.cpp!!!	OnClose(inout event : wxCloseEvent) : void
+    GetParent()->Show();
+    Destroy();
+!!!146337.cpp!!!	OnIdleProcess(inout event : wxIdleEvent) : void
+    if (m_Operation == NULL) {
+        return;
+    }
+    
+    _UpdateDipDirPoints(m_Overlay->GetPointCount());
+    
+    if (m_Overlay->GetPointCount() != 3) {
+        return;
+    }
+    
+    for (unsigned int i = 0; i< m_Overlay->GetPointCount(); i++) {
+        wxPoint2DDouble myPt = m_Overlay->GetRealPoint(i);
+        m_Operation->ComputeAndAddPoint(myPt.m_x, myPt.m_y, i);
+    }
+    
+    double dip  = 0;
+    double azimut = 0;
+    if(m_Operation->GetPlaneInfo(dip, azimut) == false){
+        return;
+    }
+    
+    _UpdateDipDirPoints(m_Overlay->GetPointCount(), dip, azimut);
+
+!!!146465.cpp!!!	OnEditPoints(inout event : wxCommandEvent) : void
+    vrViewerDisplay * myDisplay = m_ParentDlg->m_ViewerLayerManager->GetDisplay();
+    wxASSERT(myDisplay);
+    PlIntToolEdit * myEditTool  = new PlIntToolEdit (myDisplay, m_Overlay);
+    myDisplay->SetTool(myEditTool);
+!!!146593.cpp!!!	OnClearPoints(inout event : wxCommandEvent) : void
+    m_Overlay->ClearPoints(true);
+    m_Operation->ClearPoints();

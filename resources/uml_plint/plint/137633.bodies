@@ -1,5 +1,5 @@
 class PreferencePanelInternet
-!!!143053.cpp!!!	_LoadSettings() : void
+!!!151073.cpp!!!	_LoadSettings() : void
 	wxConfigBase * myConfig = wxConfigBase::Get(false);
 	wxASSERT(myConfig);
 	myConfig->SetPath("INTERNET");
@@ -11,7 +11,7 @@ class PreferencePanelInternet
     m_ProxyInfo->SetValue(myProxyInfo);    
 	myConfig->SetPath("..");
 	
-!!!143181.cpp!!!	PreferencePanelInternet(inout parent : wxWindow)
+!!!151201.cpp!!!	PreferencePanelInternet(inout parent : wxWindow)
     wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
 	
@@ -41,7 +41,7 @@ class PreferencePanelInternet
 	
 	_LoadSettings();
 	
-!!!143437.cpp!!!	SaveSettings() : bool
+!!!151457.cpp!!!	SaveSettings() : bool
 	wxConfigBase * myConfig = wxConfigBase::Get(false);
 	if (myConfig == NULL) {
 		return false;

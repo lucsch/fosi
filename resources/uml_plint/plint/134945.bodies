@@ -1,5 +1,5 @@
 class CreateSLBL_DLG
-!!!128461.cpp!!!	CreateSLBL_DLG(inout parent : wxWindow, inout viewermanager : vrViewerLayerManager, inout layermanager : vrLayerManager, in id : wxWindowID = wxID_ANY, in title : wxString = _("Create SLBL Raster"), in pos : wxPoint = wxDefaultPosition, in size : wxSize = wxDefaultSize, in style : long = wxDEFAULT_DIALOG_STYLE)
+!!!134945.cpp!!!	CreateSLBL_DLG(inout parent : wxWindow, inout viewermanager : vrViewerLayerManager, inout layermanager : vrLayerManager, in id : wxWindowID = wxID_ANY, in title : wxString = _("Create SLBL Raster"), in pos : wxPoint = wxDefaultPosition, in size : wxSize = wxDefaultSize, in style : long = wxDEFAULT_DIALOG_STYLE)
     m_LayerManager = layermanager;
     
     _CreateControls();
@@ -28,20 +28,20 @@ class CreateSLBL_DLG
 	m_MaskBrowseBtnCtrl->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CreateSLBL_DLG::OnMaskBrowseBtn ), NULL, this );
     m_OKBtnCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( CreateSLBL_DLG::OnUpdateUIOK ), NULL, this );
 
-!!!128589.cpp!!!	~CreateSLBL_DLG()
+!!!135073.cpp!!!	~CreateSLBL_DLG()
     m_InputBrowseBtnCtrl->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CreateSLBL_DLG::OnInputBrowseBtn ), NULL, this );
 	m_MaskUseCtrl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( CreateSLBL_DLG::OnUseMaskCheck ), NULL, this );
 	m_MaskBrowseBtnCtrl->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CreateSLBL_DLG::OnMaskBrowseBtn ), NULL, this );
     m_OKBtnCtrl->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( CreateSLBL_DLG::OnUpdateUIOK ), NULL, this );
-!!!128717.cpp!!!	TransferDataToWindow() : bool
+!!!135201.cpp!!!	TransferDataToWindow() : bool
     m_OptMinDiffCtrl->SetValue(m_Params.mindiff);
     m_OptMaxIterCtrl->SetValue(m_Params.maxiter);
     return true;
-!!!128845.cpp!!!	TransferDataFromWindow() : bool
+!!!135329.cpp!!!	TransferDataFromWindow() : bool
     m_Params.maxiter = m_OptMaxIterCtrl->GetValue();
     m_Params.mindiff = m_OptMinDiffCtrl->GetValue();
     return true;
-!!!128973.cpp!!!	GetInputRaster() : vrLayerRaster
+!!!135457.cpp!!!	GetInputRaster() : vrLayerRaster
     wxFileName myLayerName (m_InputListCtrl->GetStringSelection());
     if (myLayerName.Exists() == false) {
         wxLogError(_("File: %s didn't exists!"), myLayerName.GetFullName());
@@ -55,7 +55,7 @@ class CreateSLBL_DLG
     }
     
     return static_cast<vrLayerRaster*>(myLayer);
-!!!129101.cpp!!!	GetMaskRaster() : vrLayerRaster
+!!!135585.cpp!!!	GetMaskRaster() : vrLayerRaster
     if (m_MaskUseCtrl->IsChecked() == false || m_MaskListCtrl->GetStringSelection() == wxEmptyString) {
         return NULL;
     }
@@ -112,7 +112,7 @@ class CreateSLBL_DLG
 
     m_LayerManager->Open(myTempRasterName);
     return static_cast<vrLayerRaster*>(m_LayerManager->GetLayer(myTempRasterName));
-!!!129229.cpp!!!	GetOutputRaster() : vrLayerRaster
+!!!135713.cpp!!!	GetOutputRaster() : vrLayerRaster
     vrLayerRaster * myInputRaster = GetInputRaster();
     if (myInputRaster == NULL){
         return NULL;
@@ -136,11 +136,11 @@ class CreateSLBL_DLG
     
     m_LayerManager->Open(myOutputName, true);
     return static_cast<vrLayerRaster*>(m_LayerManager->GetLayer(myOutputName));
-!!!129357.cpp!!!	DoAddResultToDisplay() : bool
+!!!135841.cpp!!!	DoAddResultToDisplay() : bool
     return m_AppendResultCtrl->IsChecked();
-!!!129485.cpp!!!	GetParameters() : ParFit
+!!!135969.cpp!!!	GetParameters() : ParFit
     return m_Params;
-!!!129613.cpp!!!	OnInputBrowseBtn(inout event : wxCommandEvent) : void
+!!!136097.cpp!!!	OnInputBrowseBtn(inout event : wxCommandEvent) : void
     vrDrivers myDriver;
     wxString myWildCard = myDriver.GetWildcardsRaster();
     wxFileDialog myDlg(this, _("Open Input DEM"), wxEmptyString, wxEmptyString, myWildCard);
@@ -149,10 +149,10 @@ class CreateSLBL_DLG
     }
     
     m_InputListCtrl->SetValue(myDlg.GetPath());
-!!!129741.cpp!!!	OnUseMaskCheck(inout event : wxCommandEvent) : void
+!!!136225.cpp!!!	OnUseMaskCheck(inout event : wxCommandEvent) : void
     m_MaskListCtrl->Enable(event.IsChecked());
     m_MaskBrowseBtnCtrl->Enable(event.IsChecked());
-!!!129869.cpp!!!	OnMaskBrowseBtn(inout event : wxCommandEvent) : void
+!!!136353.cpp!!!	OnMaskBrowseBtn(inout event : wxCommandEvent) : void
     vrDrivers myDriver;
     wxString myWildCard = myDriver.GetWildcardsVector();
     wxFileDialog myDlg(this, _("Open Mask Vector"), wxEmptyString, wxEmptyString, myWildCard);
@@ -161,7 +161,7 @@ class CreateSLBL_DLG
     }
     
     m_MaskListCtrl->SetValue(myDlg.GetPath());
-!!!129997.cpp!!!	OnUpdateUIOK(inout event : wxUpdateUIEvent) : void
+!!!136481.cpp!!!	OnUpdateUIOK(inout event : wxUpdateUIEvent) : void
     if (m_InputListCtrl->GetStringSelection() == wxEmptyString) {
         event.Enable(false);
         return;
@@ -178,7 +178,7 @@ class CreateSLBL_DLG
     }
     event.Enable(true);
     return;
-!!!130125.cpp!!!	_CreateControls() : void
+!!!136609.cpp!!!	_CreateControls() : void
     this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
 	wxBoxSizer* bSizer1;

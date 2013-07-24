@@ -1,7 +1,7 @@
 format 75
 "core" // src::core
   revision 1
-  modified_by 77 "lucien"
+  modified_by 33 "lucien"
   // class settings
   //class diagram settings
   draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
@@ -26,9 +26,9 @@ format 75
   package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
   show_infonote default drawing_language default show_stereotype_properties default
   
-  cpp_h_dir "/Users/lucien/Documents/PROGRAMMATION/fosi/trunk_fosi/src/core/"
-  cpp_src_dir "/Users/lucien/Documents/PROGRAMMATION/fosi/trunk_fosi/src/core/"
-  classview 128205 "core"
+  cpp_h_dir "/Users/lucien/DATA/PROGRAMATION/fosi/trunk_fosi/src/core/"
+  cpp_src_dir "/Users/lucien/DATA/PROGRAMATION/fosi/trunk_fosi/src/core/"
+  classview 134689 "core"
     //class diagram settings
     draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
     //collaboration diagram settings
@@ -44,7 +44,7 @@ format 75
     //activity diagram settings
     package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
     show_infonote default drawing_language default show_stereotype_properties default
-    class 128717 "ParFit"
+    class 135201 "ParFit"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -56,7 +56,7 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      attribute 139853 "maxiter"
+      attribute 146721 "maxiter"
 	public explicit_type "int"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -66,7 +66,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 139981 "tolerance"
+      attribute 146849 "tolerance"
 	public explicit_type "double"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -76,7 +76,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 140109 "maxThickness"
+      attribute 146977 "maxThickness"
 	public explicit_type "double"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -86,7 +86,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 140237 "bSlopeLimit"
+      attribute 147105 "bSlopeLimit"
 	public explicit_type "bool"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -96,7 +96,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 140365 "dSlopeLimit"
+      attribute 147233 "dSlopeLimit"
 	public explicit_type "double"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -106,7 +106,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 140493 "deepening"
+      attribute 147361 "deepening"
 	public explicit_type "<complex type>"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}enum  {normal, notDeepening, lowerLimit} ${name}${value};
 "
@@ -116,7 +116,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 140621 "mindiff"
+      attribute 147489 "mindiff"
 	public explicit_type "double"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -126,7 +126,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 140749 "returnAsDiff"
+      attribute 147617 "returnAsDiff"
 	public explicit_type "bool"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -136,7 +136,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 140877 "pixR"
+      attribute 147745 "pixR"
 	public explicit_type "double"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -146,7 +146,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 141005 "reportProgress"
+      attribute 147873 "reportProgress"
 	public explicit_type "bool (*)(const char*, void *reportObject)"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}
 	bool (*${name})(const char*, void *reportObject)${value};
@@ -157,7 +157,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 141133 "reportProgressDlg"
+      attribute 148001 "reportProgressDlg"
 	public explicit_type "wxProgressDialog"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -167,7 +167,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 141261 "reportInterval"
+      attribute 148129 "reportInterval"
 	public explicit_type "int"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -177,7 +177,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 141389 "reportObject"
+      attribute 148257 "reportObject"
 	public explicit_type "void"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -187,7 +187,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 141517 "volume"
+      attribute 148385 "volume"
 	public explicit_type "double"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -197,7 +197,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 141645 "increasing"
+      attribute 148513 "increasing"
 	public explicit_type "bool"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -207,7 +207,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      operation 149069 "ParFit"
+      operation 157089 "ParFit"
 	cpp_inline public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${inline}${name}${(}${)}${volatile}${throw} {
@@ -235,7 +235,7 @@ ${inlines}
       end
     end
 
-    class 132173 "DynArray"
+    class 138785 "DynArray"
       visibility package 
       nformals 1
       formal name "T" type "class" explicit_default_value ""
@@ -250,7 +250,7 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      operation 148429 "DynArray"
+      operation 156449 "DynArray"
 	cpp_inline public explicit_return_type ""
 	nparams 2
 	  param in name "rows" explicit_type "int"
@@ -267,7 +267,7 @@ ${inlines}
 	
       end
 
-      operation 148557 "~DynArray"
+      operation 156577 "~DynArray"
 	cpp_inline public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw} {
@@ -280,10 +280,10 @@ ${inlines}
 	
       end
 
-      operation 148685 "copy"
-	cpp_inline public return_type class_ref 132173 // DynArray
+      operation 156705 "copy"
+	cpp_inline public return_type class_ref 138785 // DynArray
 	nparams 1
-	  param in name "o" type class_ref 132173 // DynArray
+	  param in name "o" type class_ref 138785 // DynArray
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} & ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract} {
 		//Must have the same dimensions
 		memcpy( d, o.d, sizeof(T)*nRows*nCols );
@@ -296,7 +296,7 @@ ${inlines}
 	
       end
 
-      operation 148813 "operator []"
+      operation 156833 "operator []"
 	cpp_inline public explicit_return_type "T"
 	nparams 1
 	  param in name "r" explicit_type "int"
@@ -310,7 +310,7 @@ ${inlines}
 	
       end
 
-      operation 148941 "operator []"
+      operation 156961 "operator []"
 	const cpp_inline public explicit_return_type "T"
 	nparams 1
 	  param in name "r" explicit_type "int"
@@ -324,7 +324,7 @@ ${inlines}
 	
       end
 
-      attribute 139725 "d"
+      attribute 146593 "d"
 	private explicit_type "T"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -335,7 +335,7 @@ ${inlines}
       end
     end
 
-    class 132301 "enumCommand"
+    class 138913 "enumCommand"
       visibility package stereotype "enum"
       cpp_decl "${comment}enum ${name} {
 ${items}
@@ -347,8 +347,8 @@ ${items}
       idl_decl ""
       explicit_switch_type ""
       
-      attribute 141773 "dem2rgb"
-	public type class_ref 132301 // enumCommand
+      attribute 148641 "dem2rgb"
+	public type class_ref 138913 // enumCommand
 	cpp_decl "  ${name}${value},${comment}"
 	java_decl ""
 	php_decl ""
@@ -356,8 +356,8 @@ ${items}
 	idl_decl ""
       end
 
-      attribute 141901 "demfit"
-	public type class_ref 132301 // enumCommand
+      attribute 148769 "demfit"
+	public type class_ref 138913 // enumCommand
 	cpp_decl "  ${name}${value},${comment}"
 	java_decl ""
 	php_decl ""
@@ -365,8 +365,8 @@ ${items}
 	idl_decl ""
       end
 
-      attribute 142029 "demtest"
-	public type class_ref 132301 // enumCommand
+      attribute 148897 "demtest"
+	public type class_ref 138913 // enumCommand
 	cpp_decl "  ${name}${value},${comment}"
 	java_decl ""
 	php_decl ""
@@ -374,8 +374,8 @@ ${items}
 	idl_decl ""
       end
 
-      attribute 142157 "demmatterock"
-	public type class_ref 132301 // enumCommand
+      attribute 149025 "demmatterock"
+	public type class_ref 138913 // enumCommand
 	cpp_decl "  ${name}${value},${comment}"
 	java_decl ""
 	php_decl ""
@@ -384,7 +384,7 @@ ${items}
       end
     end
 
-    class 132429 "enumMethod"
+    class 139041 "enumMethod"
       visibility package stereotype "enum"
       cpp_decl "${comment}enum ${name} {
 ${items}
@@ -396,8 +396,8 @@ ${items}
       idl_decl ""
       explicit_switch_type ""
       
-      attribute 142285 "SLBL"
-	public type class_ref 132429 // enumMethod
+      attribute 149153 "SLBL"
+	public type class_ref 139041 // enumMethod
 	cpp_decl "  ${name}${value},${comment}"
 	java_decl ""
 	php_decl ""
@@ -405,8 +405,8 @@ ${items}
 	idl_decl ""
       end
 
-      attribute 142413 "planefit"
-	public type class_ref 132429 // enumMethod
+      attribute 149281 "planefit"
+	public type class_ref 139041 // enumMethod
 	cpp_decl "  ${name}${value},${comment}"
 	java_decl ""
 	php_decl ""
@@ -414,8 +414,8 @@ ${items}
 	idl_decl ""
       end
 
-      attribute 142541 "LIP"
-	public type class_ref 132429 // enumMethod
+      attribute 149409 "LIP"
+	public type class_ref 139041 // enumMethod
 	cpp_decl "  ${name}${value},${comment}"
 	java_decl ""
 	php_decl ""
@@ -424,7 +424,7 @@ ${items}
       end
     end
 
-    class 132557 "enumOutputType"
+    class 139169 "enumOutputType"
       visibility package stereotype "enum"
       cpp_decl "${comment}enum ${name} {
 ${items}
@@ -436,8 +436,8 @@ ${items}
       idl_decl ""
       explicit_switch_type ""
       
-      attribute 142669 "single"
-	public type class_ref 132557 // enumOutputType
+      attribute 149537 "single"
+	public type class_ref 139169 // enumOutputType
 	cpp_decl "  ${name}${value},${comment}"
 	java_decl ""
 	php_decl ""
@@ -445,8 +445,8 @@ ${items}
 	idl_decl ""
       end
 
-      attribute 142797 "multi"
-	public type class_ref 132557 // enumOutputType
+      attribute 149665 "multi"
+	public type class_ref 139169 // enumOutputType
 	cpp_decl "  ${name}${value},${comment}"
 	java_decl ""
 	php_decl ""
@@ -454,8 +454,8 @@ ${items}
 	idl_decl ""
       end
 
-      attribute 142925 "both"
-	public type class_ref 132557 // enumOutputType
+      attribute 149793 "both"
+	public type class_ref 139169 // enumOutputType
 	cpp_decl "  ${name}${value},${comment}"
 	java_decl ""
 	php_decl ""
@@ -464,7 +464,7 @@ ${items}
       end
     end
 
-    class 132685 "demexception"
+    class 139297 "demexception"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -477,15 +477,15 @@ ${inlines}
       explicit_switch_type ""
       
       comment "void getDEMFitOpts( po::options_description &desc, ParFit &param );"
-      classrelation 131661 // <generalisation>
-	relation 131661 ---|>
+      classrelation 138273 // <generalisation>
+	relation 138273 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 131661 // <generalisation>
-	  b parent class_ref 132813 // typedef12
+	    classrelation_ref 138273 // <generalisation>
+	  b parent class_ref 139425 // typedef12
       end
 
-      operation 149197 "demexception"
+      operation 157217 "demexception"
 	cpp_inline public explicit_return_type ""
 	nparams 2
 	  param in name "m" explicit_type "string"
@@ -499,7 +499,7 @@ ${inlines}
 	
       end
 
-      operation 149325 "~demexception"
+      operation 157345 "~demexception"
 	cpp_virtual cpp_inline public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw} {};
@@ -510,7 +510,7 @@ ${inlines}
 	
       end
 
-      operation 149453 "what"
+      operation 157473 "what"
 	const cpp_virtual cpp_inline public explicit_return_type "char"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}const ${type} * ${name}${(}${)}${const}${volatile}${throw}${abstract} { return msg.c_str(); };
@@ -521,7 +521,7 @@ ${inlines}
 	
       end
 
-      operation 149581 "getOpt"
+      operation 157601 "getOpt"
 	cpp_inline public explicit_return_type "string"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} { return opt; };
@@ -533,7 +533,7 @@ ${inlines}
       end
     end
 
-    class 132813 "typedef12"
+    class 139425 "typedef12"
       visibility package stereotype "typedef" explicit_base_type "exception"
       cpp_decl "${comment}typedef ${type} ${name};
 "
@@ -545,7 +545,7 @@ ${inlines}
       
     end
 
-    class 132941 "sReportMF"
+    class 139553 "sReportMF"
       visibility package stereotype "struct"
       cpp_decl "${comment}${template}struct ${name}${inherit} {
 ${members}};
@@ -594,7 +594,7 @@ string appendNumber( const string &input, int number, const string &ext = \".tif
 	else
 		return (boost::format( \"%s-%04d%s\" ) % input % number % ext).str();
 }"
-      attribute 143053 "reportProgress"
+      attribute 149921 "reportProgress"
 	public explicit_type "bool (*)(const char*, void *reportObject)"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}
 	bool (*${name})(const char*, void *reportObject)${value};
@@ -605,7 +605,7 @@ string appendNumber( const string &input, int number, const string &ext = \".tif
 	idl_decl ""
       end
 
-      attribute 143181 "reportObject"
+      attribute 150049 "reportObject"
 	public explicit_type "void"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -615,7 +615,7 @@ string appendNumber( const string &input, int number, const string &ext = \".tif
 	idl_decl ""
       end
 
-      attribute 143309 "msg"
+      attribute 150177 "msg"
 	public explicit_type "string"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -627,11 +627,11 @@ string appendNumber( const string &input, int number, const string &ext = \".tif
     end
   end
 
-  deploymentview 128205 "core"
+  deploymentview 134689 "core"
     //deployment diagram settings
     package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
     draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-    artifact 129613 "demutil"
+    artifact 136225 "demutil"
       stereotype "source"
       cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
 #define ${NAMESPACE}_${NAME}_H
@@ -650,11 +650,11 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 132173 // DynArray
+	class_ref 138785 // DynArray
       end
     end
 
-    artifact 129741 "demutilopts"
+    artifact 136353 "demutilopts"
       stereotype "source"
       cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
 #define ${NAMESPACE}_${NAME}_H
@@ -673,16 +673,16 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 128717 // ParFit
-	class_ref 132301 // enumCommand
-	class_ref 132429 // enumMethod
-	class_ref 132557 // enumOutputType
-	class_ref 132813 // typedef12
-	class_ref 132685 // demexception
+	class_ref 135201 // ParFit
+	class_ref 138913 // enumCommand
+	class_ref 139041 // enumMethod
+	class_ref 139169 // enumOutputType
+	class_ref 139425 // typedef12
+	class_ref 139297 // demexception
       end
     end
 
-    artifact 129869 "sReportMF"
+    artifact 136481 "sReportMF"
       stereotype "source"
       cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
 #define ${NAMESPACE}_${NAME}_H
@@ -701,7 +701,7 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 132941 // sReportMF
+	class_ref 139553 // sReportMF
       end
     end
   end

@@ -1,0 +1,19 @@
+class PlIntToolEdit
+!!!147745.cpp!!!	PlIntToolEdit(inout display : vrViewerDisplay, inout overlay : PlIntViewerOverlay, in toolid : int = PLINT_TOOL_ID)
+    m_Overlay = overlay;
+    wxImage myEditCursorImg = _img_cursor_editing->ConvertToImage();
+    myEditCursorImg.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X, 8);
+    myEditCursorImg.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, 8);
+    Create(display, toolid, "Editing", wxCursor(myEditCursorImg));
+!!!148129.cpp!!!	MouseUp(in event : wxMouseEvent) : bool
+    wxASSERT(m_Overlay);
+    m_Overlay->AddPixelPoint(event.GetPosition(), true);
+    return true;
+!!!148257.cpp!!!	MouseMove(in event : wxMouseEvent) : bool
+    wxASSERT(m_Overlay);
+    if (m_Overlay->GetPointCount() != 2) {
+        return true;
+    }
+    
+    m_Overlay->UpdatePixelPoint(event.GetPosition(), 2);
+    return true;

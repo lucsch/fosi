@@ -74,7 +74,7 @@ bool PlIntViewerOverlay::UpdatePixelPoint (wxPoint pxpoint, int index){
         m_Pts.push_back(new wxPoint2DDouble());
     }
     
-    * m_Pts[index] = myRealPt;
+    *m_Pts[index] = myRealPt;
     return true;
 }
 

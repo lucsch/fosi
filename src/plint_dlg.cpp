@@ -227,7 +227,6 @@ PlInt_Tool_DLG::PlInt_Tool_DLG( PlInt_DLG * parent, wxWindowID id, const wxStrin
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( PlInt_Tool_DLG::OnClose ) );
-	this->Connect( wxEVT_IDLE, wxIdleEventHandler( PlInt_Tool_DLG::OnIdleProcess ) );
 	m_EditPtsBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PlInt_Tool_DLG::OnEditPoints ), NULL, this );
 	m_ClearPtsBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PlInt_Tool_DLG::OnClearPoints ), NULL, this );
 }
@@ -240,7 +239,6 @@ PlInt_Tool_DLG::~PlInt_Tool_DLG()
     
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( PlInt_Tool_DLG::OnClose ) );
-	this->Disconnect( wxEVT_IDLE, wxIdleEventHandler( PlInt_Tool_DLG::OnIdleProcess ) );
 	m_EditPtsBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PlInt_Tool_DLG::OnEditPoints ), NULL, this );
 	m_ClearPtsBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PlInt_Tool_DLG::OnClearPoints ), NULL, this );
 	
@@ -253,13 +251,14 @@ void PlInt_Tool_DLG::OnClose( wxCloseEvent& event ) {
 }
 
 
-
-void PlInt_Tool_DLG::OnIdleProcess( wxIdleEvent& event ) {
+void PlInt_Tool_DLG::UpdateControls (){
     if (m_Operation == NULL) {
         return;
     }
     
-    _UpdateDipDirPoints(m_Overlay->GetPointCount());
+    m_PtsTxtCtrl->SetLabel(wxString::Format(_T("%ld"), m_Overlay->GetPointCount()));
+    m_DirTxtCtrl->SetLabel("");
+    m_DipCtrl->SetValue("");
     
     if (m_Overlay->GetPointCount() != 3) {
         return;
@@ -275,25 +274,9 @@ void PlInt_Tool_DLG::OnIdleProcess( wxIdleEvent& event ) {
     if(m_Operation->GetPlaneInfo(dip, azimut) == false){
         return;
     }
-    
-    _UpdateDipDirPoints(m_Overlay->GetPointCount(), dip, azimut);
 
-}
-
-void PlInt_Tool_DLG::_UpdateDipDirPoints (int nbpoint, double dip, double dir){
-    m_PtsTxtCtrl->SetLabel(wxString::Format(_T("%d"), nbpoint));
-    if (dip == wxNOT_FOUND) {
-        m_DipCtrl->SetValue("");
-    }
-    else {
-        m_DipCtrl->SetValue(dip);
-    }
-    if (dir == wxNOT_FOUND) {
-        m_DirTxtCtrl->SetLabel("");
-    }
-    else {
-        m_DirTxtCtrl->SetLabel(wxString::FromDouble(dir));
-    }
+    m_DipCtrl->SetValue(dip);
+    m_DirTxtCtrl->SetLabel(wxString::FromDouble(azimut));
 }
 
 
@@ -301,7 +284,7 @@ void PlInt_Tool_DLG::_UpdateDipDirPoints (int nbpoint, double dip, double dir){
 void PlInt_Tool_DLG::OnEditPoints( wxCommandEvent& event ) {
     vrViewerDisplay * myDisplay = m_ParentDlg->m_ViewerLayerManager->GetDisplay();
     wxASSERT(myDisplay);
-    PlIntToolEdit * myEditTool  = new PlIntToolEdit (myDisplay, m_Overlay);
+    PlIntToolEdit * myEditTool  = new PlIntToolEdit (myDisplay, m_Overlay, this);
     myDisplay->SetTool(myEditTool);
 }
 
@@ -309,6 +292,7 @@ void PlInt_Tool_DLG::OnEditPoints( wxCommandEvent& event ) {
 void PlInt_Tool_DLG::OnClearPoints( wxCommandEvent& event ) {
     m_Overlay->ClearPoints(true);
     m_Operation->ClearPoints();
+    UpdateControls();
 }
 
 

@@ -1,7 +1,7 @@
 class ProfileView_DLG
-!!!145357.cpp!!!	~ProfileView_DLG()
+!!!153377.cpp!!!	~ProfileView_DLG()
     
-!!!145485.cpp!!!	_CreateControls() : void
+!!!153505.cpp!!!	_CreateControls() : void
     this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
 	wxBoxSizer* bSizer1;
@@ -25,7 +25,7 @@ class ProfileView_DLG
 	wxStatusBar* m_statusBar1 = this->CreateStatusBar( 1, wxST_SIZEGRIP, wxID_ANY );
     m_Display->SetStatusCoordinates(m_statusBar1, 0, _("No coordinates"));
     m_Display->SetNoDataText(_("No Profile Data"));
-!!!145613.cpp!!!	_CreateMenu() : void
+!!!153633.cpp!!!	_CreateMenu() : void
     wxMenuBar* m_menubar1;
 	m_menubar1 = new wxMenuBar( 0 );
 	wxMenu* m_menu1;
@@ -44,7 +44,7 @@ class ProfileView_DLG
 	m_menubar1->Append( m_menu1, _("Actions") );
 	
 	this->SetMenuBar( m_menubar1 );
-!!!145741.cpp!!!	_CreateToolBar() : void
+!!!153761.cpp!!!	_CreateToolBar() : void
     long myStyle = wxTB_FLAT | wxTB_HORIZONTAL;
     // conditionnal compilation for better look under win32
 #ifndef __WXMSW__
@@ -61,7 +61,7 @@ class ProfileView_DLG
     wxString myPanName = _("Pan");
     m_toolBar1->AddTool( wxID_MORE, myPanName, wxBitmap(*_img_toolbar_pan), wxNullBitmap, wxITEM_NORMAL, myPanName, wxEmptyString );
     m_toolBar1->Realize();
-!!!145869.cpp!!!	OnClose(inout event : wxCloseEvent) : void
+!!!153889.cpp!!!	OnClose(inout event : wxCloseEvent) : void
     for (unsigned int i = 0; i< m_CreatedProfileName.GetCount(); i++) {
         vrRenderer * myRenderer = m_ViewerLayerManager->GetRenderer(m_CreatedProfileName.Item(i));
         wxASSERT(myRenderer);
@@ -72,14 +72,14 @@ class ProfileView_DLG
     m_Display->ClearOverlayArray();
     m_LayerManagerRef->RemoveViewerLayerManager(m_ViewerLayerManager);
     Destroy();
-!!!145997.cpp!!!	OnZoomToFit(inout event : wxCommandEvent) : void
+!!!154017.cpp!!!	OnZoomToFit(inout event : wxCommandEvent) : void
     m_ViewerLayerManager->ZoomToFit(true);
     m_ViewerLayerManager->Reload();
-!!!146125.cpp!!!	OnToolZoom(inout event : wxCommandEvent) : void
+!!!154145.cpp!!!	OnToolZoom(inout event : wxCommandEvent) : void
 	m_Display->SetToolZoom();
-!!!146253.cpp!!!	OnToolPan(inout event : wxCommandEvent) : void
+!!!154273.cpp!!!	OnToolPan(inout event : wxCommandEvent) : void
 	m_Display->SetToolPan();
-!!!146381.cpp!!!	OnToolZoomAction(inout event : wxCommandEvent) : void
+!!!154401.cpp!!!	OnToolZoomAction(inout event : wxCommandEvent) : void
 	vrDisplayToolMessage * myMsg = (vrDisplayToolMessage*)event.GetClientData();
 	wxASSERT(myMsg);
 	// getting rectangle
@@ -103,7 +103,7 @@ class ProfileView_DLG
 		m_ViewerLayerManager->ZoomOut(myFittedRect);
 	}
 	wxDELETE(myMsg);
-!!!146509.cpp!!!	OnToolPanAction(inout event : wxCommandEvent) : void
+!!!154529.cpp!!!	OnToolPanAction(inout event : wxCommandEvent) : void
 	vrDisplayToolMessage * myMsg = (vrDisplayToolMessage*)event.GetClientData();
 	wxASSERT(myMsg);
     
@@ -124,7 +124,7 @@ class ProfileView_DLG
 	myCoord->SetExtent(myActExtent);
 	m_ViewerLayerManager->Reload();
 	wxDELETE(myMsg);
-!!!146637.cpp!!!	OnKeyDown(inout event : wxKeyEvent) : void
+!!!154657.cpp!!!	OnKeyDown(inout event : wxKeyEvent) : void
 	m_KeyBoardState = wxKeyboardState(event.ControlDown(),
 									  event.ShiftDown(),
 									  event.AltDown(),
@@ -144,7 +144,7 @@ class ProfileView_DLG
 		m_Display->SetToolZoomOut();
 	}
 	event.Skip();
-!!!146765.cpp!!!	OnKeyUp(inout event : wxKeyEvent) : void
+!!!154785.cpp!!!	OnKeyUp(inout event : wxKeyEvent) : void
 	if (m_KeyBoardState.GetModifiers() != wxMOD_CMD) {
 		event.Skip();
 		return;
@@ -160,5 +160,5 @@ class ProfileView_DLG
 		m_Display->SetToolZoom();
 	}
 	event.Skip();
-!!!146893.cpp!!!	OnCloseMenu(inout event : wxCommandEvent) : void
+!!!154913.cpp!!!	OnCloseMenu(inout event : wxCommandEvent) : void
     Close();

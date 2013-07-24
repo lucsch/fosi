@@ -1,5 +1,5 @@
 class PlInt_DLG
-!!!138317.cpp!!!	PlInt_DLG(inout parent : wxWindow, inout viewermanager : vrViewerLayerManager, in id : wxWindowID = wxID_ANY, in title : wxString = _("Plane Intersection"), in pos : wxPoint = wxDefaultPosition, in size : wxSize = wxDefaultSize, in style : long = wxFRAME_TOOL_WINDOW | wxFRAME_FLOAT_ON_PARENT | wxCLOSE_BOX | wxTINY_CAPTION, in name : wxString = PLINT_DIALOG_NAME)
+!!!144801.cpp!!!	PlInt_DLG(inout parent : wxWindow, inout viewermanager : vrViewerLayerManager, in id : wxWindowID = wxID_ANY, in title : wxString = _("Plane Intersection"), in pos : wxPoint = wxDefaultPosition, in size : wxSize = wxDefaultSize, in style : long = wxFRAME_TOOL_WINDOW | wxFRAME_FLOAT_ON_PARENT | wxCLOSE_BOX | wxTINY_CAPTION, in name : wxString = PLINT_DIALOG_NAME)
     m_ViewerLayerManager = viewermanager;
     m_DemListCtrlSelectedText = wxEmptyString;
     m_VectorListCtrlSelectedText = wxEmptyString;
@@ -11,13 +11,13 @@ class PlInt_DLG
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( PlInt_DLG::OnClose ) );
 	m_EditPtsBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PlInt_DLG::OnCreatePlaneIntersection ), NULL, this );
 	m_EditPtsBtn->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PlInt_DLG::OnUpdateUICreateIntersection ), NULL, this );
-!!!138445.cpp!!!	~PlInt_DLG()
+!!!144929.cpp!!!	~PlInt_DLG()
 	// Disconnect Events
 	this->Disconnect( wxEVT_ACTIVATE, wxActivateEventHandler( PlInt_DLG::OnWindowFocus ) );
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( PlInt_DLG::OnClose ) );
 	m_EditPtsBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PlInt_DLG::OnCreatePlaneIntersection ), NULL, this );
 	m_EditPtsBtn->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PlInt_DLG::OnUpdateUICreateIntersection ), NULL, this );
-!!!138573.cpp!!!	_CreateControls() : void
+!!!145057.cpp!!!	_CreateControls() : void
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
 	wxBoxSizer* bSizer4;
@@ -96,12 +96,12 @@ class PlInt_DLG
 	this->SetSizer( bSizer4 );
 	this->Layout();
 	bSizer4->Fit( this );
-!!!138701.cpp!!!	OnClose(inout event : wxCloseEvent) : void
+!!!145185.cpp!!!	OnClose(inout event : wxCloseEvent) : void
     m_ViewerLayerManager->GetDisplay()->ClearOverlayArray();
     m_ViewerLayerManager->GetDisplay()->Refresh();
     m_ViewerLayerManager->GetDisplay()->Update();
     Destroy();
-!!!138829.cpp!!!	OnWindowFocus(inout event : wxActivateEvent) : void
+!!!145313.cpp!!!	OnWindowFocus(inout event : wxActivateEvent) : void
     if (event.GetActive() == false) {
         return;
     }
@@ -135,7 +135,7 @@ class PlInt_DLG
         m_DemListCtrl->SetSelection(m_DemListCtrl->FindString(m_DemListCtrlSelectedText));
         m_VectorListCtrl->SetSelection(m_VectorListCtrl->FindString(m_VectorListCtrlSelectedText));
     }
-!!!138957.cpp!!!	OnCreatePlaneIntersection(inout event : wxCommandEvent) : void
+!!!145441.cpp!!!	OnCreatePlaneIntersection(inout event : wxCommandEvent) : void
     
     vrViewerDisplay * myDisplay = m_ViewerLayerManager->GetDisplay();
     PlIntViewerOverlay * myOverlay = static_cast<PlIntViewerOverlay*>(myDisplay->GetOverlayByName(PLINT_OVERLAY_NAME));
@@ -155,7 +155,7 @@ class PlInt_DLG
     PlInt_Tool_DLG * myToolDlg = new PlInt_Tool_DLG(this);
     myToolDlg->Show();
     
-!!!139085.cpp!!!	OnUpdateUICreateIntersection(inout event : wxUpdateUIEvent) : void
+!!!145569.cpp!!!	OnUpdateUICreateIntersection(inout event : wxUpdateUIEvent) : void
     if (m_DemListCtrl->GetStringSelection() == wxEmptyString) {
         event.Enable(false);
         return;

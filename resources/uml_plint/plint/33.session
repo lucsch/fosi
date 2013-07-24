@@ -1,0 +1,12 @@
+window_sizes 1920 1152 787 1127 959 136
+diagrams
+  active  classdiagram_ref 128077 // plint
+    1123 939 100 4 0 0
+end
+show_stereotypes
+selected class_ref 136353 // PlIntViewerOverlay
+open
+  classview_ref 128333 // plint
+  class_ref 136225 // PlInt_Tool_DLG
+end
+end

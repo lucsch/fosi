@@ -1,5 +1,5 @@
 class Frame
-!!!130509.cpp!!!	Frame(in title : wxString)
+!!!136993.cpp!!!	Frame(in title : wxString)
 	// Logging
 	wxLog::SetLogLevel(wxLOG_Info);
 	wxLog * myDlgLog = new tmLogGuiSeverity(wxLOG_Warning);
@@ -62,7 +62,7 @@ class Frame
     wxHgVersion::GetSoftNumber().ToLong(&mySVNversion);
     WebUpdateThread * myUpdate = new WebUpdateThread(m_InfoBar, myProxyInfo);
     myUpdate->CheckNewVersion(mySVNversion, true, false, true);
-!!!130637.cpp!!!	~Frame()
+!!!137121.cpp!!!	~Frame()
 	m_vrDisplay->Disconnect(wxEVT_KEY_DOWN, wxKeyEventHandler(Frame::OnKeyDown),NULL, this);
 	m_vrDisplay->Disconnect(wxEVT_KEY_UP, wxKeyEventHandler(Frame::OnKeyUp),NULL, this);
 
@@ -73,14 +73,14 @@ class Frame
 
 	uninitialize_images();
 	vroomgis_clear_images();
-!!!130893.cpp!!!	AddLayers(in names : wxArrayString) : bool
+!!!137377.cpp!!!	AddLayers(in names : wxArrayString) : bool
 	m_vrViewerLayerManager->FreezeBegin();
 	for (unsigned int i = 0; i< names.GetCount(); i++) {
 		AddLayer(names.Item(i));
 	}
 	m_vrViewerLayerManager->FreezeEnd();
 	return true;
-!!!131021.cpp!!!	AddLayer(in file : wxFileName, in position : long = -1, inout render : vrRender = NULL, inout label : vrLabel = NULL, in visible : bool = true, in readwrite : bool = false) : bool
+!!!137505.cpp!!!	AddLayer(in file : wxFileName, in position : long = -1, inout render : vrRender = NULL, inout label : vrLabel = NULL, in visible : bool = true, in readwrite : bool = false) : bool
 	if(m_vrLayerManager->Open(file, readwrite)==false){
 			wxLogError(_("File %s not found, we will implement a search function later on"),
 					   file.GetFullName());
@@ -122,11 +122,11 @@ class Frame
 	// add files to the viewer
 	m_vrViewerLayerManager->Add(position, myLayer, render, label, visible);
 	return true;
-!!!131149.cpp!!!	GetViewerLayerManager() : vrViewerLayerManager
+!!!137633.cpp!!!	GetViewerLayerManager() : vrViewerLayerManager
 	return m_vrViewerLayerManager;
-!!!131277.cpp!!!	GetLayerManager() : vrLayerManager
+!!!137761.cpp!!!	GetLayerManager() : vrLayerManager
 	return m_vrLayerManager;
-!!!131405.cpp!!!	_CreateControls() : void
+!!!137889.cpp!!!	_CreateControls() : void
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
@@ -165,7 +165,7 @@ class Frame
 	m_vrDisplay->SetStatusCoordinates(GetStatusBar(), 0, _("Coordinates not available"));
 	//this->SetSizer( bSizer1 );
 	//this->Layout();
-!!!131533.cpp!!!	_CreateMenus() : void
+!!!138017.cpp!!!	_CreateMenus() : void
 	wxMenuBar* m_menubar1;
 	m_menubar1 = new wxMenuBar( 0 );
 
@@ -266,7 +266,7 @@ class Frame
 	wxAcceleratorTable myAccelTable (3, myEntries);
 	wxASSERT(m_vrDisplay);
 	m_vrDisplay->SetAcceleratorTable(myAccelTable);
-!!!131661.cpp!!!	_CreateToolbar() : void
+!!!138145.cpp!!!	_CreateToolbar() : void
 	long myStyle = wxTB_FLAT | wxTB_HORIZONTAL;
 	// conditionnal compilation for better look under win32
 #ifndef __WXMSW__
@@ -291,7 +291,7 @@ class Frame
     myEditTxt = _("Modify");
 	m_toolBar1->AddTool( MENU_TOOL_MODFIY, myEditTxt, wxBitmap(*_img_toolbar_modify), wxNullBitmap, wxITEM_NORMAL, myEditTxt, wxEmptyString );
  	m_toolBar1->Realize();
-!!!131789.cpp!!!	_CreateAccelerators() : void
+!!!138273.cpp!!!	_CreateAccelerators() : void
 	wxArrayAccelerators myAccels;
 	wxAcceleratorEntry myEntry1 (wxACCEL_NORMAL, (int) 'V', MENU_FRAME_SELECT);
 	wxAcceleratorEntry myEntry2 (wxACCEL_NORMAL, (int) 'Z', wxID_ZOOM_IN);
@@ -314,7 +314,7 @@ class Frame
 	wxASSERT(m_vrDisplay);
 	m_vrDisplay->SetAcceleratorTable(myAccelTable);
 	wxDELETEA(myEntries);
-!!!131917.cpp!!!	_GetMemoryLayerNameFromUser(in name : wxString) : wxString
+!!!138401.cpp!!!	_GetMemoryLayerNameFromUser(in name : wxString) : wxString
     wxTextEntryDialog myNameDlg(this, _("Layer Names"));
     myNameDlg.SetValue(name);
     if (myNameDlg.ShowModal() != wxID_OK) {
@@ -328,14 +328,14 @@ class Frame
     }
     
     return myNameDlg.GetValue();
-!!!132045.cpp!!!	_SetSelectedFeature() : void
+!!!138529.cpp!!!	_SetSelectedFeature() : void
 	if (m_vrViewerLayerManager == NULL) {
 		return;
 	}
 
 	int mySel = m_vrViewerLayerManager->GetSelectionCount();
 	GetStatusBar()->SetStatusText(wxString::Format(_("%d Feature(s) selected"),mySel),1);
-!!!132173.cpp!!!	_RemoveLayer(in position : long) : bool
+!!!138657.cpp!!!	_RemoveLayer(in position : long) : bool
 	wxASSERT(m_vrViewerLayerManager);
 	vrRenderer * myRenderer = m_vrViewerLayerManager->GetRenderer(position);
 	if (myRenderer == NULL) {
@@ -351,7 +351,7 @@ class Frame
 	// close layer (not used anymore);
 	m_vrLayerManager->Close(myLayer);
     return true;
-!!!132301.cpp!!!	_PreferenceChanged(in refresh : bool = true) : void
+!!!138785.cpp!!!	_PreferenceChanged(in refresh : bool = true) : void
 	// update main panel color
 	wxConfigBase * myConfig = wxConfigBase::Get(false);
 	wxASSERT(myConfig);
@@ -374,12 +374,12 @@ class Frame
 		m_vrViewerLayerManager->Reload();
 	}
 
-!!!132557.cpp!!!	OnAbout(inout event : wxCommandEvent) : void
+!!!139041.cpp!!!	OnAbout(inout event : wxCommandEvent) : void
 	wxHgVersionDlg * myDlg = new wxHgVersionDlg (this, wxID_ANY, _T(""));
     myDlg->SetBitmapLogo(*_img_app_sml);
     myDlg->ShowModal();
     wxDELETE(myDlg);
-!!!132685.cpp!!!	OnCheckUpdates(inout event : wxCommandEvent) : void
+!!!139169.cpp!!!	OnCheckUpdates(inout event : wxCommandEvent) : void
     wxConfigBase * myConfig =  wxConfigBase::Get(false);
     wxASSERT(myConfig);
     myConfig->SetPath("INTERNET");
@@ -390,23 +390,23 @@ class Frame
     wxHgVersion::GetSoftNumber().ToLong(&mySVNversion);
     WebUpdateThread * myUpdate = new WebUpdateThread(m_InfoBar, myProxyInfo);
     myUpdate->CheckNewVersion(mySVNversion, true, true, true);
-!!!132813.cpp!!!	OnPreferences(inout event : wxCommandEvent) : void
+!!!139297.cpp!!!	OnPreferences(inout event : wxCommandEvent) : void
 	PreferenceDlg myPrefDlg (this);
 	myPrefDlg.CenterOnParent(wxBOTH);
 	int myValue = myPrefDlg.ShowModal();
 	if(myValue == wxID_OK){
 		_PreferenceChanged();
 	}
-!!!132941.cpp!!!	OnUserManual(inout event : wxCommandEvent) : void
+!!!139425.cpp!!!	OnUserManual(inout event : wxCommandEvent) : void
     wxLaunchDefaultBrowser("http://www.google.ch");
-!!!133069.cpp!!!	OnWebSite(inout event : wxCommandEvent) : void
+!!!139553.cpp!!!	OnWebSite(inout event : wxCommandEvent) : void
     wxLaunchDefaultBrowser("http://www.terranum.ch");
-!!!133197.cpp!!!	OnQuit(inout event : wxCommandEvent) : void
+!!!139681.cpp!!!	OnQuit(inout event : wxCommandEvent) : void
 	Close(true);
-!!!133325.cpp!!!	OnLogWindow(inout event : wxCommandEvent) : void
+!!!139809.cpp!!!	OnLogWindow(inout event : wxCommandEvent) : void
 	m_LogWnd->Show(true);
 	m_LogWnd->GetFrame()->Raise();
-!!!133453.cpp!!!	OnLayerAdd(inout event : wxCommandEvent) : void
+!!!139937.cpp!!!	OnLayerAdd(inout event : wxCommandEvent) : void
 	vrDrivers myDrivers;
 	wxFileDialog myFileDlg (this, "Select GIS Layers",
 							wxEmptyString,
@@ -423,7 +423,7 @@ class Frame
 		AddLayers(myPathsFileName);
 	}
 
-!!!133581.cpp!!!	OnLayerRemove(inout event : wxCommandEvent) : void
+!!!140065.cpp!!!	OnLayerRemove(inout event : wxCommandEvent) : void
 	wxArrayString myLayersName;
 	int myDipsIndex = wxNOT_FOUND;
 	for (int i = 0; i<m_vrViewerLayerManager->GetCount(); i++) {
@@ -467,7 +467,7 @@ class Frame
 	}
 
 	m_vrViewerLayerManager->FreezeEnd();
-!!!133709.cpp!!!	OnLayerMemoryAdd(inout event : wxCommandEvent) : void
+!!!140193.cpp!!!	OnLayerMemoryAdd(inout event : wxCommandEvent) : void
     // ask for spatial types
     const wxString myNames [] = {_("Points"), _("Lines"), _("Polygons")};
     wxSingleChoiceDialog myTypDlg(this, _("Select layer spatial type"), _("Memory layer"), sizeof(myNames) / sizeof(wxString), &myNames[0]);
@@ -491,16 +491,16 @@ class Frame
 	m_vrLayerManager->Add(myLayer);
 	m_vrViewerLayerManager->Add(-1, myLayer);
 	m_vrViewerLayerManager->FreezeEnd();
-!!!133837.cpp!!!	OnEditionStart(inout event : wxCommandEvent) : void
+!!!140321.cpp!!!	OnEditionStart(inout event : wxCommandEvent) : void
     vrRenderer * mySelectedRenderer =  m_vrViewerLayerManager->GetRenderer(m_vrTOC->GetSelection());
     if (mySelectedRenderer == NULL) {
         return;
     }
     m_vrViewerLayerManager->StopEdition();
     m_vrViewerLayerManager->StartEdition(mySelectedRenderer);
-!!!133965.cpp!!!	OnEditionStop(inout event : wxCommandEvent) : void
+!!!140449.cpp!!!	OnEditionStop(inout event : wxCommandEvent) : void
     m_vrViewerLayerManager->StopEdition();
-!!!134093.cpp!!!	OnDeleteFeature(inout event : wxCommandEvent) : void
+!!!140577.cpp!!!	OnDeleteFeature(inout event : wxCommandEvent) : void
     vrLayerVector * myLayer = static_cast<vrLayerVector *>(m_vrViewerLayerManager->GetEditionRenderer()->GetLayer());
     if (myLayer == NULL) {
         return;
@@ -509,7 +509,7 @@ class Frame
         myLayer->DeleteFeature(myLayer->GetSelectedIDs()->Item(i));
     }
     m_vrViewerLayerManager->Reload();
-!!!134221.cpp!!!	OnSaveSelectedLayer(inout event : wxCommandEvent) : void
+!!!140705.cpp!!!	OnSaveSelectedLayer(inout event : wxCommandEvent) : void
     vrLayerVectorOGR * myMemoryLayer = static_cast<vrLayerVectorOGR*>(m_vrViewerLayerManager->GetRenderer(m_vrTOC->GetSelection())->GetLayer());
     wxASSERT(myMemoryLayer);
     
@@ -546,11 +546,11 @@ class Frame
         OGRFeature::DestroyFeature(myFeature);
     }
     wxLogMessage(_("'%s' saved as: '%s'"), myMemoryLayer->GetDisplayName().GetName(), mySaveFile.GetFullName());
-!!!134349.cpp!!!	OnUpdateIdle(inout event : wxIdleEvent) : void
+!!!140833.cpp!!!	OnUpdateIdle(inout event : wxIdleEvent) : void
 	_SetSelectedFeature();
-!!!134477.cpp!!!	OnClose(inout event : wxCloseEvent) : void
+!!!140961.cpp!!!	OnClose(inout event : wxCloseEvent) : void
 	event.Skip();
-!!!134605.cpp!!!	OnKeyDown(inout event : wxKeyEvent) : void
+!!!141089.cpp!!!	OnKeyDown(inout event : wxKeyEvent) : void
 	m_KeyBoardState = wxKeyboardState(event.ControlDown(),
 									  event.ShiftDown(),
 									  event.AltDown(),
@@ -570,7 +570,7 @@ class Frame
 		m_vrDisplay->SetToolZoomOut();
 	}
 	event.Skip();
-!!!134733.cpp!!!	OnKeyUp(inout event : wxKeyEvent) : void
+!!!141217.cpp!!!	OnKeyUp(inout event : wxKeyEvent) : void
 	if (m_KeyBoardState.GetModifiers() != wxMOD_CMD) {
 		event.Skip();
 		return;
@@ -586,7 +586,7 @@ class Frame
 		m_vrDisplay->SetToolZoom();
 	}
 	event.Skip();
-!!!134861.cpp!!!	OnCreateSLBL(inout event : wxCommandEvent) : void
+!!!141345.cpp!!!	OnCreateSLBL(inout event : wxCommandEvent) : void
     CreateSLBL_DLG myDlg (this, m_vrViewerLayerManager, m_vrLayerManager);
     if(myDlg.ShowModal() != wxID_OK) {
         return;
@@ -637,7 +637,7 @@ class Frame
     if (myDlg.DoAddResultToDisplay() == true) {
         AddLayer(myRasterOut->GetFileName());
     }
-!!!134989.cpp!!!	OnPlaneIntersectionDialog(inout event : wxCommandEvent) : void
+!!!141473.cpp!!!	OnPlaneIntersectionDialog(inout event : wxCommandEvent) : void
     PlInt_DLG * myDlg = static_cast<PlInt_DLG*>(FindWindowByName(PLINT_DIALOG_NAME));
     if (myDlg != NULL) {
         myDlg->Raise();
@@ -646,7 +646,7 @@ class Frame
     
     myDlg = new PlInt_DLG(this, m_vrViewerLayerManager);
     myDlg->Show();
-!!!135117.cpp!!!	OnProfileDialog(inout event : wxCommandEvent) : void
+!!!141601.cpp!!!	OnProfileDialog(inout event : wxCommandEvent) : void
     Profile_DLG myDlg (this, m_vrViewerLayerManager);
     if (myDlg.ShowModal() != wxID_OK) {
         return;
@@ -655,7 +655,7 @@ class Frame
     
 	ProfileOperation myProfileOp (param, m_vrViewerLayerManager, m_vrLayerManager, this);
     myProfileOp.DoExport();
-!!!135245.cpp!!!	OnProfileView(inout event : wxCommandEvent) : void
+!!!141729.cpp!!!	OnProfileView(inout event : wxCommandEvent) : void
     wxArrayString myPaths;
     wxArrayString myNames;
     wxArrayString myDisplayNames;
@@ -717,12 +717,12 @@ class Frame
 
     ProfileView_DLG * myDlg = new ProfileView_DLG (this, m_vrLayerManager, myLayer, myRasterLayers);
     myDlg->Show();
-!!!135373.cpp!!!	OnToolZoomToFit(inout event : wxCommandEvent) : void
+!!!141857.cpp!!!	OnToolZoomToFit(inout event : wxCommandEvent) : void
 	m_vrViewerLayerManager->ZoomToFit(true);
 	m_vrViewerLayerManager->Reload();
-!!!135501.cpp!!!	OnToolSelect(inout event : wxCommandEvent) : void
+!!!141985.cpp!!!	OnToolSelect(inout event : wxCommandEvent) : void
 	m_vrDisplay->SetTool(new vrDisplayToolSelect(m_vrDisplay));
-!!!135629.cpp!!!	OnToolSelectAction(inout event : wxCommandEvent) : void
+!!!142113.cpp!!!	OnToolSelectAction(inout event : wxCommandEvent) : void
 	vrDisplayToolMessage * myMsg = (vrDisplayToolMessage*)event.GetClientData();
 	wxASSERT(myMsg);
 
@@ -734,13 +734,13 @@ class Frame
 
 	m_vrViewerLayerManager->Reload();
 	wxDELETE(myMsg);
-!!!135757.cpp!!!	OnToolClearSelection(inout event : wxCommandEvent) : void
+!!!142241.cpp!!!	OnToolClearSelection(inout event : wxCommandEvent) : void
     wxASSERT(m_vrViewerLayerManager);
     m_vrViewerLayerManager->ClearSelection();
     m_vrViewerLayerManager->Reload();
-!!!135885.cpp!!!	OnToolZoom(inout event : wxCommandEvent) : void
+!!!142369.cpp!!!	OnToolZoom(inout event : wxCommandEvent) : void
 	m_vrDisplay->SetToolZoom();
-!!!136013.cpp!!!	OnToolZoomAction(inout event : wxCommandEvent) : void
+!!!142497.cpp!!!	OnToolZoomAction(inout event : wxCommandEvent) : void
 	vrDisplayToolMessage * myMsg = (vrDisplayToolMessage*)event.GetClientData();
 	wxASSERT(myMsg);
 	// getting rectangle
@@ -764,9 +764,9 @@ class Frame
 		m_vrViewerLayerManager->ZoomOut(myFittedRect);
 	}
 	wxDELETE(myMsg);
-!!!136141.cpp!!!	OnToolPan(inout event : wxCommandEvent) : void
+!!!142625.cpp!!!	OnToolPan(inout event : wxCommandEvent) : void
 	m_vrDisplay->SetToolPan();
-!!!136269.cpp!!!	OnToolPanAction(inout event : wxCommandEvent) : void
+!!!142753.cpp!!!	OnToolPanAction(inout event : wxCommandEvent) : void
 	vrDisplayToolMessage * myMsg = (vrDisplayToolMessage*)event.GetClientData();
 	wxASSERT(myMsg);
 
@@ -787,7 +787,7 @@ class Frame
 	myCoord->SetExtent(myActExtent);
 	m_vrViewerLayerManager->Reload();
 	wxDELETE(myMsg);
-!!!136397.cpp!!!	OnToolDraw(inout event : wxCommandEvent) : void
+!!!142881.cpp!!!	OnToolDraw(inout event : wxCommandEvent) : void
     vrRenderer * myRendererEdit = m_vrViewerLayerManager->GetEditionRenderer();
     if (myRendererEdit == NULL) {
         return;
@@ -818,7 +818,7 @@ class Frame
         m_Editor->ViewChanged();
         m_Editor->DrawShapeEdit(m_vrViewerLayerManager->GetEditionRenderer()->GetRender());
     }
-!!!136525.cpp!!!	OnToolDrawAction(inout event : wxCommandEvent) : void
+!!!143009.cpp!!!	OnToolDrawAction(inout event : wxCommandEvent) : void
     vrDisplayToolMessage * myMsg = (vrDisplayToolMessage*)event.GetClientData();
 	wxASSERT(myMsg);
     
@@ -871,9 +871,9 @@ class Frame
         m_vrViewerLayerManager->Reload();
     }
     wxDELETE(myMsg);
-!!!136653.cpp!!!	OnToolModify(inout event : wxCommandEvent) : void
+!!!143137.cpp!!!	OnToolModify(inout event : wxCommandEvent) : void
     m_vrDisplay->SetTool(new vrDisplayToolModify (m_vrDisplay));
-!!!136781.cpp!!!	OnToolModifySearch(inout event : wxCommandEvent) : void
+!!!143265.cpp!!!	OnToolModifySearch(inout event : wxCommandEvent) : void
     vrDisplayToolMessage * myMsg = (vrDisplayToolMessage*)event.GetClientData();
 	wxASSERT(myMsg);
     
@@ -898,7 +898,7 @@ class Frame
         OGRFeature::DestroyFeature(myFeature);
         m_vrViewerLayerManager->Reload();
     }
-!!!136909.cpp!!!	OnToolModifyUpdate(inout event : wxCommandEvent) : void
+!!!143393.cpp!!!	OnToolModifyUpdate(inout event : wxCommandEvent) : void
     vrDisplayToolMessage * myMsg = (vrDisplayToolMessage*)event.GetClientData();
 	wxASSERT(myMsg);
     
@@ -953,19 +953,19 @@ class Frame
     myModifyTool->SetActiveGeometry(myFeature->GetGeometryRef(), myMemoryLayer->GetGeometryType(), m_vrDisplay->GetCoordinate());
     OGRFeature::DestroyFeature(myFeature);
     m_vrViewerLayerManager->Reload();
-!!!137037.cpp!!!	OnUpdateUIToolClearSelection(inout event : wxUpdateUIEvent) : void
+!!!143521.cpp!!!	OnUpdateUIToolClearSelection(inout event : wxUpdateUIEvent) : void
     if (m_vrViewerLayerManager && m_vrViewerLayerManager->GetSelectionCount() > 0) {
         event.Enable(true);
         return;
     }
     event.Enable(false);
-!!!137165.cpp!!!	OnUpdateUIRemoveLayer(inout event : wxUpdateUIEvent) : void
+!!!143649.cpp!!!	OnUpdateUIRemoveLayer(inout event : wxUpdateUIEvent) : void
     if (m_vrViewerLayerManager && m_vrViewerLayerManager->GetCount() > 0) {
         event.Enable(true);
         return;
     }
     event.Enable(false);
-!!!137293.cpp!!!	OnUpdateEditionStart(inout event : wxUpdateUIEvent) : void
+!!!143777.cpp!!!	OnUpdateEditionStart(inout event : wxUpdateUIEvent) : void
     if (m_vrTOC && m_vrTOC->GetSelection() != wxNOT_FOUND) {
         if (m_vrViewerLayerManager->GetRenderer( m_vrTOC->GetSelection()) != m_vrViewerLayerManager->GetEditionRenderer()) {
             event.Enable(true);
@@ -973,13 +973,13 @@ class Frame
         }
     }
     event.Enable(false);
-!!!137421.cpp!!!	OnUpdateEditionPossible(inout event : wxUpdateUIEvent) : void
+!!!143905.cpp!!!	OnUpdateEditionPossible(inout event : wxUpdateUIEvent) : void
     if (m_vrViewerLayerManager->GetEditionRenderer() == NULL) {
         event.Enable(false);
         return;
     }
     event.Enable(true);
-!!!137549.cpp!!!	OnUpdateDeletePossible(inout event : wxUpdateUIEvent) : void
+!!!144033.cpp!!!	OnUpdateDeletePossible(inout event : wxUpdateUIEvent) : void
     if (m_vrViewerLayerManager->GetEditionRenderer() != NULL) {
         vrLayerVector * myLayer = static_cast<vrLayerVector*>(m_vrViewerLayerManager->GetEditionRenderer()->GetLayer());
         wxASSERT(myLayer);
@@ -989,7 +989,7 @@ class Frame
         }
     }
     event.Enable(false);
-!!!137677.cpp!!!	OnUpdateUISaveSelectedLayer(inout event : wxUpdateUIEvent) : void
+!!!144161.cpp!!!	OnUpdateUISaveSelectedLayer(inout event : wxUpdateUIEvent) : void
     if (m_vrTOC && m_vrTOC->GetSelection() != wxNOT_FOUND) {
         vrLayerVector * myLayer = static_cast<vrLayerVector*>(m_vrViewerLayerManager->GetRenderer(m_vrTOC->GetSelection())->GetLayer());
         
@@ -1000,7 +1000,7 @@ class Frame
     }
     event.Enable(false);
     return;
-!!!137805.cpp!!!	OnUpdateUIPlaneIntersection(inout event : wxUpdateUIEvent) : void
+!!!144289.cpp!!!	OnUpdateUIPlaneIntersection(inout event : wxUpdateUIEvent) : void
     bool bCheck = false;
     if( FindWindowByName( PLINT_DIALOG_NAME ) != NULL){
         bCheck = true;

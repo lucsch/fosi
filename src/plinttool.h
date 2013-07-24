@@ -1,5 +1,5 @@
 /***************************************************************************
- plinttool.h
+ plinttool
  -------------------
  copyright            : (C) 2013 CREALP Lucien Schreiber
  email                : lucien.schreiber at gmail dot com
@@ -19,6 +19,7 @@ const int PLINT_TOOL_ID = wxID_HIGHEST + 30;
 
 class vrViewerDisplay;
 class PlIntViewerOverlay;
+class PlInt_Tool_DLG;
 
 /*************************************************************************************//**
 @brief Plane intersection editing tool
@@ -28,9 +29,10 @@ class PlIntViewerOverlay;
 class PlIntToolEdit : public vrDisplayTool {
 private:
     PlIntViewerOverlay * m_Overlay;
+    PlInt_Tool_DLG * m_Dialog;
     
 public:
-    PlIntToolEdit(vrViewerDisplay * display, PlIntViewerOverlay * overlay, int toolid = PLINT_TOOL_ID);
+    PlIntToolEdit(vrViewerDisplay * display, PlIntViewerOverlay * overlay, PlInt_Tool_DLG * dialog = NULL, int toolid = PLINT_TOOL_ID);
     virtual ~PlIntToolEdit();
     
     virtual bool MouseDown(const wxMouseEvent & event){return false;}

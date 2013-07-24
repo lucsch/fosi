@@ -1,5 +1,5 @@
 class Profile_DLG
-!!!143693.cpp!!!	Profile_DLG(inout parent : wxWindow, inout viewermanager : vrViewerLayerManager, in id : wxWindowID = wxID_ANY, in title : wxString = _("Profile"), in pos : wxPoint = wxDefaultPosition, in size : wxSize = wxDefaultSize, in style : long = wxDEFAULT_DIALOG_STYLE)
+!!!151713.cpp!!!	Profile_DLG(inout parent : wxWindow, inout viewermanager : vrViewerLayerManager, in id : wxWindowID = wxID_ANY, in title : wxString = _("Profile"), in pos : wxPoint = wxDefaultPosition, in size : wxSize = wxDefaultSize, in style : long = wxDEFAULT_DIALOG_STYLE)
     _CreateControls();
     
     wxASSERT(viewermanager);
@@ -21,12 +21,12 @@ class Profile_DLG
     m_TextFilePickerCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( Profile_DLG::OnUpdateUITextFilePickerCtrl ), NULL, this );
     m_BtnOkCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( Profile_DLG::OnUpdateUITBtnOk ), NULL, this );
 
-!!!143821.cpp!!!	~Profile_DLG()
+!!!151841.cpp!!!	~Profile_DLG()
     m_TextFilePickerCtrl->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( Profile_DLG::OnUpdateUITextFilePickerCtrl ), NULL, this );
     m_BtnOkCtrl->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( Profile_DLG::OnUpdateUITBtnOk ), NULL, this );
 
 
-!!!143949.cpp!!!	TransferDataFromWindow() : bool
+!!!151969.cpp!!!	TransferDataFromWindow() : bool
     m_Params.m_FileInputDEM = m_InputDEMCtrl->GetStringSelection();
     m_Params.m_FileInputVector = m_InputLineCtrl->GetStringSelection();
     if (m_Params.m_FileInputVector.GetExt() == wxEmptyString) {
@@ -57,7 +57,7 @@ class Profile_DLG
     }
     
     return true;
-!!!144205.cpp!!!	_CreateControls() : void
+!!!152225.cpp!!!	_CreateControls() : void
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
 	wxBoxSizer* bSizer8;
@@ -214,9 +214,9 @@ class Profile_DLG
 	bSizer8->Fit( this );
 	
 	this->Centre( wxBOTH );
-!!!144333.cpp!!!	OnUpdateUITextFilePickerCtrl(inout event : wxUpdateUIEvent) : void
+!!!152353.cpp!!!	OnUpdateUITextFilePickerCtrl(inout event : wxUpdateUIEvent) : void
     event.Enable(m_TextFileOptionCtrl->GetValue());
-!!!144461.cpp!!!	OnUpdateUITBtnOk(inout event : wxUpdateUIEvent) : void
+!!!152481.cpp!!!	OnUpdateUITBtnOk(inout event : wxUpdateUIEvent) : void
     if (m_InputLineCtrl->GetStringSelection() == wxEmptyString) {
         event.Enable(false);
         return;

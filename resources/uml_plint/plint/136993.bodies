@@ -1,5 +1,5 @@
 class PreferenceDlg
-!!!141517.cpp!!!	PreferenceDlg(inout parent : wxWindow)
+!!!149537.cpp!!!	PreferenceDlg(inout parent : wxWindow)
 	// generic panel
 	wxBookCtrlBase * notebook = GetBookCtrl();
 	wxASSERT(notebook);

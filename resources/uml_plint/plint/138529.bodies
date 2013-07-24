@@ -1,5 +1,5 @@
 class WebUpdateThread
-!!!147917.cpp!!!	Entry() : ExitCode
+!!!155937.cpp!!!	Entry() : ExitCode
     wxMilliSleep(1000);
     
     CURLcode myError = curl_easy_perform(m_CurlHandle);
@@ -42,7 +42,7 @@ class WebUpdateThread
         wxQueueEvent(m_Parent, myEvent.Clone());
     }
     return (wxThread::ExitCode)0;
-!!!148045.cpp!!!	WebUpdateThread(inout parent : wxWindow, in proxy : wxString = wxEmptyString)
+!!!156065.cpp!!!	WebUpdateThread(inout parent : wxWindow, in proxy : wxString = wxEmptyString)
     m_Parent = parent;    
     CURLcode myCurlError = curl_global_init(CURL_GLOBAL_ALL);
     wxASSERT(myCurlError == CURLE_OK);
@@ -77,9 +77,9 @@ class WebUpdateThread
     
     myCurlError = curl_easy_setopt(m_CurlHandle, CURLOPT_WRITEDATA,(void*)& m_Buffer);
     wxASSERT(myCurlError == CURLE_OK);
-!!!148173.cpp!!!	~WebUpdateThread()
+!!!156193.cpp!!!	~WebUpdateThread()
     curl_easy_cleanup(m_CurlHandle);
-!!!148301.cpp!!!	CheckNewVersion(in actualversion : long, in msgNewVersion : bool = true, in msgNoNewVersion : bool = true, in msgNoInternet : bool = true) : bool
+!!!156321.cpp!!!	CheckNewVersion(in actualversion : long, in msgNewVersion : bool = true, in msgNoNewVersion : bool = true, in msgNoInternet : bool = true) : bool
     m_msgNewVersion = msgNewVersion;
     m_msgNoNewVersion = msgNoNewVersion;
     m_msgNoInternet = msgNoInternet;

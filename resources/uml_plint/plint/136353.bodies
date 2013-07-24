@@ -1,9 +1,9 @@
 class PlIntViewerOverlay
-!!!140749.cpp!!!	PlIntViewerOverlay(inout viewer : vrViewerDisplay, in name : wxString = PLINT_OVERLAY_NAME)
+!!!148385.cpp!!!	PlIntViewerOverlay(inout viewer : vrViewerDisplay, in name : wxString = PLINT_OVERLAY_NAME)
     m_Display = viewer;
-!!!140877.cpp!!!	~PlIntViewerOverlay()
+!!!148513.cpp!!!	~PlIntViewerOverlay()
     ClearPoints();
-!!!141005.cpp!!!	GetPixelPoint(in index : int) : wxPoint
+!!!148641.cpp!!!	GetPixelPoint(in index : int) : wxPoint
     wxPoint myReturnPxPt = wxDefaultPosition;
     if (index < 0 || index  >= m_Pts.GetCount() ) {
         wxLogError(_("Index out of bounds!"));
@@ -13,23 +13,38 @@ class PlIntViewerOverlay
     wxASSERT(m_Display);
     m_Display->GetCoordinate()->ConvertToPixels(*m_Pts[index], myReturnPxPt);
     return myReturnPxPt;
-!!!141133.cpp!!!	AddPixelPoint(in pxpoint : wxPoint, in refresh : bool = false) : bool
-    if (m_Pts.GetCount() >= 3) {
-        return false;
-    }
-    
+!!!148769.cpp!!!	GetRealPoint(in index : int) : wxPoint2DDouble
+    wxASSERT(index >= 0 && index < m_Pts.GetCount());
+    return *m_Pts[index];
+!!!148897.cpp!!!	AddPixelPoint(in pxpoint : wxPoint, in refresh : bool = false) : bool
     wxPoint2DDouble myRealPt = wxDefaultPosition;
     wxASSERT(m_Display);
     m_Display->GetCoordinate()->ConvertFromPixels(pxpoint, myRealPt);
-    m_Pts.push_back(new wxPoint2DDouble(myRealPt));
-    
+
+    if (m_Pts.GetCount() >= 2) {
+        *m_Pts[2] = myRealPt;
+    }
+    else {
+        m_Pts.push_back(new wxPoint2DDouble(myRealPt));
+    }
+        
     if (refresh == true){
         m_Display->Refresh();
         m_Display->Update();
     }
-    
     return true;
-!!!141261.cpp!!!	ClearPoints(in refresh : bool = false) : void
+!!!149025.cpp!!!	UpdatePixelPoint(in pxpoint : wxPoint, in index : int) : bool
+    wxPoint2DDouble myRealPt = wxDefaultPosition;
+    wxASSERT(m_Display);
+    m_Display->GetCoordinate()->ConvertFromPixels(pxpoint, myRealPt);
+    
+    if (index == GetPointCount()) {
+        m_Pts.push_back(new wxPoint2DDouble());
+    }
+    
+    * m_Pts[index] = myRealPt;
+    return true;
+!!!149153.cpp!!!	ClearPoints(in refresh : bool = false) : void
     m_Pts.DeleteContents(true);
     m_Pts.clear();
     
@@ -37,7 +52,7 @@ class PlIntViewerOverlay
         m_Display->Refresh();
         m_Display->Update();
     }
-!!!141389.cpp!!!	DrawOverlay(inout dc : wxPaintDC) : bool
+!!!149409.cpp!!!	DrawOverlay(inout dc : wxPaintDC) : bool
     wxASSERT(dc);
     wxPen myPen (PLINT_OVERLAY_COLOR, PLINT_OVERLAY_SIZE);
     dc->SetPen(myPen);

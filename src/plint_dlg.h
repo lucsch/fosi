@@ -65,6 +65,7 @@ public:
     
     PlInt_Tool_DLG( PlInt_DLG * parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plane Intersection Tools"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxFRAME_FLOAT_ON_PARENT|wxFRAME_TOOL_WINDOW|wxTAB_TRAVERSAL, const wxString & name = PLINT_DIALOG_TOOL_NAME);
     ~PlInt_Tool_DLG();
+    void UpdateControls ();
     
 private:
     wxStaticText* m_DirTxtCtrl;
@@ -78,12 +79,10 @@ private:
     PlIntViewerOverlay * m_Overlay;
     PlIntOperation * m_Operation;
     
-    
     void _CreateControls ();
-    void _UpdateDipDirPoints (int nbpoint, double dip = wxNOT_FOUND, double dir = wxNOT_FOUND);
+
     
     void OnClose( wxCloseEvent& event ) ;
-    void OnIdleProcess( wxIdleEvent& event ) ;
     void OnEditPoints( wxCommandEvent& event ) ;
     void OnClearPoints( wxCommandEvent& event ) ;
 	

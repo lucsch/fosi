@@ -1,7 +1,7 @@
 format 75
 "src" // src
   revision 1
-  modified_by 77 "lucien"
+  modified_by 33 "lucien"
   // class settings
   //class diagram settings
   draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
@@ -26,9 +26,9 @@ format 75
   package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
   show_infonote default drawing_language default show_stereotype_properties default
   
-  cpp_h_dir "/Users/lucien/Documents/PROGRAMMATION/fosi/trunk_fosi/src/"
-  cpp_src_dir "/Users/lucien/Documents/PROGRAMMATION/fosi/trunk_fosi/src/"
-  classview 128077 "src"
+  cpp_h_dir "/Users/lucien/DATA/PROGRAMATION/fosi/trunk_fosi/src/"
+  cpp_src_dir "/Users/lucien/DATA/PROGRAMATION/fosi/trunk_fosi/src/"
+  classview 134561 "src"
     //class diagram settings
     draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
     //collaboration diagram settings
@@ -44,7 +44,7 @@ format 75
     //activity diagram settings
     package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
     show_infonote default drawing_language default show_stereotype_properties default
-    class 128077 "App"
+    class 134561 "App"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -56,24 +56,24 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 128077 // <generalisation>
-	relation 128077 ---|>
+      classrelation 134561 // <generalisation>
+	relation 134561 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 128077 // <generalisation>
-	  b parent class_ref 128205 // typedef1
+	    classrelation_ref 134561 // <generalisation>
+	  b parent class_ref 134689 // typedef1
       end
 
-      classrelation 128205 // m_Frame (<unidirectional association>)
-	relation 128205 --->
+      classrelation 134689 // m_Frame (<unidirectional association>)
+	relation 134689 --->
 	  a role_name "m_Frame" private
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
-	    classrelation_ref 128205 // m_Frame (<unidirectional association>)
-	  b parent class_ref 128333 // Frame
+	    classrelation_ref 134689 // m_Frame (<unidirectional association>)
+	  b parent class_ref 134817 // Frame
       end
 
-      operation 128077 "App"
+      operation 134561 "App"
 	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${inline}${name}${(}${)}${volatile}${throw};
@@ -87,7 +87,7 @@ ${inlines}
 	
       end
 
-      operation 128205 "OnInit"
+      operation 134689 "OnInit"
 	preserve_cpp_body_indent cpp_virtual public explicit_return_type "bool"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -101,7 +101,7 @@ ${inlines}
 	
       end
 
-      operation 128333 "OnFatalException"
+      operation 134817 "OnFatalException"
 	preserve_cpp_body_indent cpp_virtual public explicit_return_type "void"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -116,7 +116,7 @@ ${inlines}
       end
     end
 
-    class 128205 "typedef1"
+    class 134689 "typedef1"
       visibility package stereotype "typedef" explicit_base_type "wxApp"
       cpp_decl "${comment}typedef ${type} ${name};
 "
@@ -128,7 +128,7 @@ ${inlines}
       
     end
 
-    class 128333 "Frame"
+    class 134817 "Frame"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -140,15 +140,15 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 128845 // <generalisation>
-	relation 128845 ---|>
+      classrelation 135329 // <generalisation>
+	relation 135329 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 128845 // <generalisation>
-	  b parent class_ref 129101 // typedef4
+	    classrelation_ref 135329 // <generalisation>
+	  b parent class_ref 135585 // typedef4
       end
 
-      operation 130509 "Frame"
+      operation 136993 "Frame"
 	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 1
 	  param in name "title" explicit_type "wxString"
@@ -164,7 +164,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 130637 "~Frame"
+      operation 137121 "~Frame"
 	preserve_cpp_body_indent cpp_virtual public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw};
@@ -178,7 +178,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 130765 "ProjectOpen"
+      operation 137249 "ProjectOpen"
 	public explicit_return_type "bool"
 	nparams 1
 	  param in name "file" explicit_type "wxFileName"
@@ -193,7 +193,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 130893 "AddLayers"
+      operation 137377 "AddLayers"
 	preserve_cpp_body_indent public explicit_return_type "bool"
 	nparams 1
 	  param in name "names" explicit_type "wxArrayString"
@@ -208,7 +208,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 131021 "AddLayer"
+      operation 137505 "AddLayer"
 	preserve_cpp_body_indent public explicit_return_type "bool"
 	nparams 6
 	  param in name "file" explicit_type "wxFileName"
@@ -233,7 +233,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 131149 "GetViewerLayerManager"
+      operation 137633 "GetViewerLayerManager"
 	preserve_cpp_body_indent const cpp_inline public explicit_return_type "vrViewerLayerManager"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} * ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -247,7 +247,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 131277 "GetLayerManager"
+      operation 137761 "GetLayerManager"
 	preserve_cpp_body_indent const cpp_inline public explicit_return_type "vrLayerManager"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} * ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -261,7 +261,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      attribute 129485 "m_vrTOC"
+      attribute 135969 "m_vrTOC"
 	private explicit_type "vrViewerTOCTree"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -272,7 +272,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	comment " vroomgis engine members"
       end
 
-      attribute 129613 "m_vrLayerManager"
+      attribute 136097 "m_vrLayerManager"
 	private explicit_type "vrLayerManager"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -282,7 +282,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	idl_decl ""
       end
 
-      attribute 129741 "m_vrViewerLayerManager"
+      attribute 136225 "m_vrViewerLayerManager"
 	private explicit_type "vrViewerLayerManager"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -292,7 +292,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	idl_decl ""
       end
 
-      attribute 129869 "m_vrDisplay"
+      attribute 136353 "m_vrDisplay"
 	private explicit_type "vrViewerDisplay"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -302,7 +302,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	idl_decl ""
       end
 
-      attribute 129997 "m_Editor"
+      attribute 136481 "m_Editor"
 	private explicit_type "vrShapeEditor"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -312,7 +312,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	idl_decl ""
       end
 
-      attribute 130125 "m_LogWnd"
+      attribute 136609 "m_LogWnd"
 	private explicit_type "wxLogWindow"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -322,7 +322,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	idl_decl ""
       end
 
-      attribute 130253 "m_RecentMenu"
+      attribute 136737 "m_RecentMenu"
 	private explicit_type "wxMenu"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -332,7 +332,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	idl_decl ""
       end
 
-      attribute 130381 "m_KeyBoardState"
+      attribute 136865 "m_KeyBoardState"
 	private explicit_type "wxKeyboardState"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -342,16 +342,16 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	idl_decl ""
       end
 
-      classrelation 128973 // m_InfoBar (<unidirectional association>)
-	relation 128973 --->
+      classrelation 135457 // m_InfoBar (<unidirectional association>)
+	relation 135457 --->
 	  a role_name "m_InfoBar" private
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
-	    classrelation_ref 128973 // m_InfoBar (<unidirectional association>)
-	  b parent class_ref 129229 // WebUpdateInformationBar
+	    classrelation_ref 135457 // m_InfoBar (<unidirectional association>)
+	  b parent class_ref 135713 // WebUpdateInformationBar
       end
 
-      operation 131405 "_CreateControls"
+      operation 137889 "_CreateControls"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -365,7 +365,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 131533 "_CreateMenus"
+      operation 138017 "_CreateMenus"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -379,7 +379,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 131661 "_CreateToolbar"
+      operation 138145 "_CreateToolbar"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -393,7 +393,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 131789 "_CreateAccelerators"
+      operation 138273 "_CreateAccelerators"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -407,7 +407,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 131917 "_GetMemoryLayerNameFromUser"
+      operation 138401 "_GetMemoryLayerNameFromUser"
 	preserve_cpp_body_indent private explicit_return_type "wxString"
 	nparams 1
 	  param in name "name" explicit_type "wxString"
@@ -422,7 +422,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 132045 "_SetSelectedFeature"
+      operation 138529 "_SetSelectedFeature"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -436,7 +436,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 132173 "_RemoveLayer"
+      operation 138657 "_RemoveLayer"
 	preserve_cpp_body_indent private explicit_return_type "bool"
 	nparams 1
 	  param in name "position" explicit_type "long"
@@ -451,7 +451,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 132301 "_PreferenceChanged"
+      operation 138785 "_PreferenceChanged"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param in name "refresh" explicit_type "bool"
@@ -467,7 +467,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 132429 "OnDisplaySecurityMessage"
+      operation 138913 "OnDisplaySecurityMessage"
 	private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxThreadEvent"
@@ -482,7 +482,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 132557 "OnAbout"
+      operation 139041 "OnAbout"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -497,7 +497,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 132685 "OnCheckUpdates"
+      operation 139169 "OnCheckUpdates"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -512,7 +512,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 132813 "OnPreferences"
+      operation 139297 "OnPreferences"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -527,7 +527,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 132941 "OnUserManual"
+      operation 139425 "OnUserManual"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -542,7 +542,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 133069 "OnWebSite"
+      operation 139553 "OnWebSite"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -557,7 +557,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 133197 "OnQuit"
+      operation 139681 "OnQuit"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -572,7 +572,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 133325 "OnLogWindow"
+      operation 139809 "OnLogWindow"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -587,7 +587,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 133453 "OnLayerAdd"
+      operation 139937 "OnLayerAdd"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -602,7 +602,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 133581 "OnLayerRemove"
+      operation 140065 "OnLayerRemove"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -617,7 +617,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 133709 "OnLayerMemoryAdd"
+      operation 140193 "OnLayerMemoryAdd"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -632,7 +632,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 133837 "OnEditionStart"
+      operation 140321 "OnEditionStart"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -647,7 +647,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 133965 "OnEditionStop"
+      operation 140449 "OnEditionStop"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -662,7 +662,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 134093 "OnDeleteFeature"
+      operation 140577 "OnDeleteFeature"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -677,7 +677,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 134221 "OnSaveSelectedLayer"
+      operation 140705 "OnSaveSelectedLayer"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -692,7 +692,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 134349 "OnUpdateIdle"
+      operation 140833 "OnUpdateIdle"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxIdleEvent"
@@ -707,7 +707,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 134477 "OnClose"
+      operation 140961 "OnClose"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCloseEvent"
@@ -722,7 +722,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 134605 "OnKeyDown"
+      operation 141089 "OnKeyDown"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxKeyEvent"
@@ -737,7 +737,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 134733 "OnKeyUp"
+      operation 141217 "OnKeyUp"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxKeyEvent"
@@ -752,7 +752,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 134861 "OnCreateSLBL"
+      operation 141345 "OnCreateSLBL"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -767,7 +767,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 134989 "OnPlaneIntersectionDialog"
+      operation 141473 "OnPlaneIntersectionDialog"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -782,7 +782,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 135117 "OnProfileDialog"
+      operation 141601 "OnProfileDialog"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -797,7 +797,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 135245 "OnProfileView"
+      operation 141729 "OnProfileView"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -812,7 +812,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 135373 "OnToolZoomToFit"
+      operation 141857 "OnToolZoomToFit"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -827,7 +827,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 135501 "OnToolSelect"
+      operation 141985 "OnToolSelect"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -842,7 +842,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 135629 "OnToolSelectAction"
+      operation 142113 "OnToolSelectAction"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -857,7 +857,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 135757 "OnToolClearSelection"
+      operation 142241 "OnToolClearSelection"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -872,7 +872,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 135885 "OnToolZoom"
+      operation 142369 "OnToolZoom"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -887,7 +887,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 136013 "OnToolZoomAction"
+      operation 142497 "OnToolZoomAction"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -902,7 +902,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 136141 "OnToolPan"
+      operation 142625 "OnToolPan"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -917,7 +917,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 136269 "OnToolPanAction"
+      operation 142753 "OnToolPanAction"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -932,7 +932,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 136397 "OnToolDraw"
+      operation 142881 "OnToolDraw"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -947,7 +947,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 136525 "OnToolDrawAction"
+      operation 143009 "OnToolDrawAction"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -962,7 +962,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 136653 "OnToolModify"
+      operation 143137 "OnToolModify"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -977,7 +977,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 136781 "OnToolModifySearch"
+      operation 143265 "OnToolModifySearch"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -992,7 +992,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 136909 "OnToolModifyUpdate"
+      operation 143393 "OnToolModifyUpdate"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -1007,7 +1007,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 137037 "OnUpdateUIToolClearSelection"
+      operation 143521 "OnUpdateUIToolClearSelection"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxUpdateUIEvent"
@@ -1023,7 +1023,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	comment " Update UI functions"
       end
 
-      operation 137165 "OnUpdateUIRemoveLayer"
+      operation 143649 "OnUpdateUIRemoveLayer"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxUpdateUIEvent"
@@ -1038,7 +1038,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 137293 "OnUpdateEditionStart"
+      operation 143777 "OnUpdateEditionStart"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxUpdateUIEvent"
@@ -1053,7 +1053,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 137421 "OnUpdateEditionPossible"
+      operation 143905 "OnUpdateEditionPossible"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxUpdateUIEvent"
@@ -1068,7 +1068,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 137549 "OnUpdateDeletePossible"
+      operation 144033 "OnUpdateDeletePossible"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxUpdateUIEvent"
@@ -1083,7 +1083,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 137677 "OnUpdateUISaveSelectedLayer"
+      operation 144161 "OnUpdateUISaveSelectedLayer"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxUpdateUIEvent"
@@ -1098,7 +1098,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
 	
       end
 
-      operation 137805 "OnUpdateUIPlaneIntersection"
+      operation 144289 "OnUpdateUIPlaneIntersection"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxUpdateUIEvent"
@@ -1114,7 +1114,7 @@ wxFrame(NULL, FRAME_WINDOW, title) ${throw}{
       end
     end
 
-    class 128461 "CreateSLBL_DLG"
+    class 134945 "CreateSLBL_DLG"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -1126,15 +1126,15 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 128333 // <generalisation>
-	relation 128333 ---|>
+      classrelation 134817 // <generalisation>
+	relation 134817 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 128333 // <generalisation>
-	  b parent class_ref 128589 // typedef2
+	    classrelation_ref 134817 // <generalisation>
+	  b parent class_ref 135073 // typedef2
       end
 
-      operation 128461 "CreateSLBL_DLG"
+      operation 134945 "CreateSLBL_DLG"
 	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 8
 	  param inout name "parent" explicit_type "wxWindow"
@@ -1162,7 +1162,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	
       end
 
-      operation 128589 "~CreateSLBL_DLG"
+      operation 135073 "~CreateSLBL_DLG"
 	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw};
@@ -1176,7 +1176,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	
       end
 
-      operation 128717 "TransferDataToWindow"
+      operation 135201 "TransferDataToWindow"
 	preserve_cpp_body_indent cpp_virtual public explicit_return_type "bool"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -1190,7 +1190,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	
       end
 
-      operation 128845 "TransferDataFromWindow"
+      operation 135329 "TransferDataFromWindow"
 	preserve_cpp_body_indent cpp_virtual public explicit_return_type "bool"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -1204,7 +1204,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	
       end
 
-      operation 128973 "GetInputRaster"
+      operation 135457 "GetInputRaster"
 	preserve_cpp_body_indent public explicit_return_type "vrLayerRaster"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} * ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -1218,7 +1218,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	
       end
 
-      operation 129101 "GetMaskRaster"
+      operation 135585 "GetMaskRaster"
 	preserve_cpp_body_indent public explicit_return_type "vrLayerRaster"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} * ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -1232,7 +1232,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	
       end
 
-      operation 129229 "GetOutputRaster"
+      operation 135713 "GetOutputRaster"
 	preserve_cpp_body_indent public explicit_return_type "vrLayerRaster"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} * ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -1246,7 +1246,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	
       end
 
-      operation 129357 "DoAddResultToDisplay"
+      operation 135841 "DoAddResultToDisplay"
 	preserve_cpp_body_indent public explicit_return_type "bool"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -1260,8 +1260,8 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	
       end
 
-      operation 129485 "GetParameters"
-	preserve_cpp_body_indent public return_type class_ref 128717 // ParFit
+      operation 135969 "GetParameters"
+	preserve_cpp_body_indent public return_type class_ref 135201 // ParFit
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
 "
@@ -1274,7 +1274,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	
       end
 
-      operation 129613 "OnInputBrowseBtn"
+      operation 136097 "OnInputBrowseBtn"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -1289,7 +1289,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	
       end
 
-      operation 129741 "OnUseMaskCheck"
+      operation 136225 "OnUseMaskCheck"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -1304,7 +1304,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	
       end
 
-      operation 129869 "OnMaskBrowseBtn"
+      operation 136353 "OnMaskBrowseBtn"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -1319,7 +1319,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	
       end
 
-      operation 129997 "OnUpdateUIOK"
+      operation 136481 "OnUpdateUIOK"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxUpdateUIEvent"
@@ -1334,7 +1334,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	
       end
 
-      attribute 128077 "m_InputListCtrl"
+      attribute 134561 "m_InputListCtrl"
 	private explicit_type "wxComboBox"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -1344,7 +1344,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	idl_decl ""
       end
 
-      attribute 128205 "m_InputBrowseBtnCtrl"
+      attribute 134689 "m_InputBrowseBtnCtrl"
 	private explicit_type "wxButton"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -1354,7 +1354,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	idl_decl ""
       end
 
-      attribute 128333 "m_MaskUseCtrl"
+      attribute 134817 "m_MaskUseCtrl"
 	private explicit_type "wxCheckBox"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -1364,7 +1364,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	idl_decl ""
       end
 
-      attribute 128461 "m_MaskListCtrl"
+      attribute 134945 "m_MaskListCtrl"
 	private explicit_type "wxComboBox"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -1374,7 +1374,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	idl_decl ""
       end
 
-      attribute 128589 "m_MaskBrowseBtnCtrl"
+      attribute 135073 "m_MaskBrowseBtnCtrl"
 	private explicit_type "wxButton"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -1384,7 +1384,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	idl_decl ""
       end
 
-      attribute 128717 "m_OptMaxIterCtrl"
+      attribute 135201 "m_OptMaxIterCtrl"
 	private explicit_type "wxSpinCtrl"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -1394,7 +1394,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	idl_decl ""
       end
 
-      attribute 128845 "m_OptMinDiffCtrl"
+      attribute 135329 "m_OptMinDiffCtrl"
 	private explicit_type "wxSpinCtrlDouble"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -1404,7 +1404,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	idl_decl ""
       end
 
-      attribute 128973 "m_OKBtnCtrl"
+      attribute 135457 "m_OKBtnCtrl"
 	private explicit_type "wxButton"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -1414,7 +1414,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	idl_decl ""
       end
 
-      attribute 129101 "m_OutputCtrl"
+      attribute 135585 "m_OutputCtrl"
 	private explicit_type "wxFilePickerCtrl"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -1424,7 +1424,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	idl_decl ""
       end
 
-      attribute 129229 "m_AppendResultCtrl"
+      attribute 135713 "m_AppendResultCtrl"
 	private explicit_type "wxCheckBox"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -1434,7 +1434,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	idl_decl ""
       end
 
-      attribute 129357 "m_LayerManager"
+      attribute 135841 "m_LayerManager"
 	private explicit_type "vrLayerManager"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -1444,16 +1444,16 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
 	idl_decl ""
       end
 
-      classrelation 128461 // m_Params (<directional composition>)
-	relation 128461 *-->
+      classrelation 134945 // m_Params (<directional composition>)
+	relation 134945 *-->
 	  a role_name "m_Params" private
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
-	    classrelation_ref 128461 // m_Params (<directional composition>)
-	  b parent class_ref 128717 // ParFit
+	    classrelation_ref 134945 // m_Params (<directional composition>)
+	  b parent class_ref 135201 // ParFit
       end
 
-      operation 130125 "_CreateControls"
+      operation 136609 "_CreateControls"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -1468,7 +1468,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
       end
     end
 
-    class 128589 "typedef2"
+    class 135073 "typedef2"
       visibility package stereotype "typedef" explicit_base_type "wxDialog"
       cpp_decl "${comment}typedef ${type} ${name};
 "
@@ -1480,7 +1480,7 @@ wxDialog( parent, id, title, pos, size, style )${throw}{
       
     end
 
-    class 128845 "ctDropFiles"
+    class 135329 "ctDropFiles"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -1492,18 +1492,18 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 128589 // <generalisation>
-	relation 128589 ---|>
+      classrelation 135073 // <generalisation>
+	relation 135073 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 128589 // <generalisation>
-	  b parent class_ref 128973 // typedef3
+	    classrelation_ref 135073 // <generalisation>
+	  b parent class_ref 135457 // typedef3
       end
 
-      operation 130253 "ctDropFiles"
+      operation 136737 "ctDropFiles"
 	public explicit_return_type ""
 	nparams 1
-	  param inout name "parent" type class_ref 128333 // Frame
+	  param inout name "parent" type class_ref 134817 // Frame
 	cpp_decl "    ${comment}${inline}${name}${(}${t0} * ${p0}${v0}${)}${volatile}${throw};
 "
 	cpp_def "${comment}${inline}${class}::${name}${(}${t0} * ${p0}${)}${throw}{
@@ -1515,7 +1515,7 @@ ${inlines}
 	
       end
 
-      operation 130381 "OnDropFiles"
+      operation 136865 "OnDropFiles"
 	preserve_cpp_body_indent cpp_virtual public explicit_return_type "bool"
 	nparams 3
 	  param in name "x" explicit_type "wxCoord"
@@ -1532,17 +1532,17 @@ ${inlines}
 	
       end
 
-      classrelation 128717 // m_Frame (<unidirectional association>)
-	relation 128717 --->
+      classrelation 135201 // m_Frame (<unidirectional association>)
+	relation 135201 --->
 	  a role_name "m_Frame" private
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
-	    classrelation_ref 128717 // m_Frame (<unidirectional association>)
-	  b parent class_ref 128333 // Frame
+	    classrelation_ref 135201 // m_Frame (<unidirectional association>)
+	  b parent class_ref 134817 // Frame
       end
     end
 
-    class 128973 "typedef3"
+    class 135457 "typedef3"
       visibility package stereotype "typedef" explicit_base_type "wxFileDropTarget"
       cpp_decl "${comment}typedef ${type} ${name};
 "
@@ -1554,7 +1554,7 @@ ${inlines}
       
     end
 
-    class 129101 "typedef4"
+    class 135585 "typedef4"
       visibility package stereotype "typedef" explicit_base_type "wxFrame"
       cpp_decl "${comment}typedef ${type} ${name};
 "
@@ -1566,7 +1566,7 @@ ${inlines}
       
     end
 
-    class 129229 "WebUpdateInformationBar"
+    class 135713 "WebUpdateInformationBar"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -1578,24 +1578,24 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 131277 // <generalisation>
-	relation 131277 ---|>
+      classrelation 137889 // <generalisation>
+	relation 137889 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 131277 // <generalisation>
-	  b parent class_ref 131789 // typedef10
+	    classrelation_ref 137889 // <generalisation>
+	  b parent class_ref 138401 // typedef10
       end
 
-      classrelation 131405 // m_Parent (<unidirectional association>)
-	relation 131405 --->
+      classrelation 138017 // m_Parent (<unidirectional association>)
+	relation 138017 --->
 	  a role_name "m_Parent" private
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
-	    classrelation_ref 131405 // m_Parent (<unidirectional association>)
-	  b parent class_ref 128333 // Frame
+	    classrelation_ref 138017 // m_Parent (<unidirectional association>)
+	  b parent class_ref 134817 // Frame
       end
 
-      operation 147021 "_ClearBar"
+      operation 155041 "_ClearBar"
 	private explicit_return_type "void"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -1609,7 +1609,7 @@ ${inlines}
 	
       end
 
-      operation 147149 "OnCommandDownload"
+      operation 155169 "OnCommandDownload"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -1624,7 +1624,7 @@ ${inlines}
 	
       end
 
-      operation 147277 "OnInternetFailed"
+      operation 155297 "OnInternetFailed"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxThreadEvent"
@@ -1639,7 +1639,7 @@ ${inlines}
 	
       end
 
-      operation 147405 "OnNewVersion"
+      operation 155425 "OnNewVersion"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxThreadEvent"
@@ -1654,7 +1654,7 @@ ${inlines}
 	
       end
 
-      operation 147533 "OnNoNewVersion"
+      operation 155553 "OnNoNewVersion"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxThreadEvent"
@@ -1669,10 +1669,10 @@ ${inlines}
 	
       end
 
-      operation 147661 "WebUpdateInformationBar"
+      operation 155681 "WebUpdateInformationBar"
 	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 1
-	  param inout name "parent" type class_ref 128333 // Frame
+	  param inout name "parent" type class_ref 134817 // Frame
 	cpp_decl "    ${comment}${inline}${name}${(}${t0} * ${p0}${v0}${)}${volatile}${throw};
 "
 	cpp_def "${comment}${inline}${class}::${name}${(}${t0} * ${p0}${)} : wxInfoBar((wxWindow*)parent, wxID_ANY) ${throw}{
@@ -1684,7 +1684,7 @@ ${inlines}
 	
       end
 
-      operation 147789 "~WebUpdateInformationBar"
+      operation 155809 "~WebUpdateInformationBar"
 	preserve_cpp_body_indent cpp_virtual public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw};
@@ -1699,7 +1699,7 @@ ${inlines}
       end
     end
 
-    class 129357 "tmLogGuiSeverity"
+    class 135841 "tmLogGuiSeverity"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -1711,15 +1711,15 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 129101 // <generalisation>
-	relation 129101 ---|>
+      classrelation 135585 // <generalisation>
+	relation 135585 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 129101 // <generalisation>
-	  b parent class_ref 129485 // typedef5
+	    classrelation_ref 135585 // <generalisation>
+	  b parent class_ref 135969 // typedef5
       end
 
-      attribute 130509 "m_LogLevel"
+      attribute 136993 "m_LogLevel"
 	private explicit_type "wxLogLevel"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -1729,7 +1729,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      operation 137933 "tmLogGuiSeverity"
+      operation 144417 "tmLogGuiSeverity"
 	cpp_inline public explicit_return_type ""
 	nparams 1
 	  param in name "minlevel" explicit_type "wxLogLevel"
@@ -1742,7 +1742,7 @@ ${inlines}
 	
       end
 
-      operation 138061 "DoLogRecord"
+      operation 144545 "DoLogRecord"
 	cpp_virtual cpp_inline public explicit_return_type "void"
 	nparams 3
 	  param in name "level" explicit_type "wxLogLevel"
@@ -1760,7 +1760,7 @@ ${inlines}
 	
       end
 
-      operation 138189 "DoLog"
+      operation 144673 "DoLog"
 	cpp_virtual cpp_inline public explicit_return_type "void"
 	nparams 3
 	  param in name "level" explicit_type "wxLogLevel"
@@ -1781,7 +1781,7 @@ ${inlines}
       end
     end
 
-    class 129485 "typedef5"
+    class 135969 "typedef5"
       visibility package stereotype "typedef" explicit_base_type "wxLogGui"
       cpp_decl "${comment}typedef ${type} ${name};
 "
@@ -1793,7 +1793,7 @@ ${inlines}
       
     end
 
-    class 129613 "PlInt_DLG"
+    class 136097 "PlInt_DLG"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -1805,15 +1805,15 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 129229 // <generalisation>
-	relation 129229 ---|>
+      classrelation 135713 // <generalisation>
+	relation 135713 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 129229 // <generalisation>
-	  b parent class_ref 129101 // typedef4
+	    classrelation_ref 135713 // <generalisation>
+	  b parent class_ref 135585 // typedef4
       end
 
-      operation 138317 "PlInt_DLG"
+      operation 144801 "PlInt_DLG"
 	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 8
 	  param inout name "parent" explicit_type "wxWindow"
@@ -1842,7 +1842,7 @@ ${throw}{
 	
       end
 
-      operation 138445 "~PlInt_DLG"
+      operation 144929 "~PlInt_DLG"
 	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw};
@@ -1856,7 +1856,7 @@ ${throw}{
 	
       end
 
-      attribute 130637 "m_DemListCtrl"
+      attribute 137121 "m_DemListCtrl"
 	private explicit_type "wxComboBox"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -1866,7 +1866,7 @@ ${throw}{
 	idl_decl ""
       end
 
-      attribute 130765 "m_VectorListCtrl"
+      attribute 137249 "m_VectorListCtrl"
 	private explicit_type "wxComboBox"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -1876,7 +1876,7 @@ ${throw}{
 	idl_decl ""
       end
 
-      attribute 130893 "m_3PointsCtrl"
+      attribute 137377 "m_3PointsCtrl"
 	private explicit_type "wxRadioButton"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -1886,7 +1886,7 @@ ${throw}{
 	idl_decl ""
       end
 
-      attribute 131021 "m_2PointsCtrl"
+      attribute 137505 "m_2PointsCtrl"
 	private explicit_type "wxRadioButton"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -1896,7 +1896,7 @@ ${throw}{
 	idl_decl ""
       end
 
-      attribute 131149 "m_EditPtsBtn"
+      attribute 137633 "m_EditPtsBtn"
 	private explicit_type "wxButton"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -1906,7 +1906,7 @@ ${throw}{
 	idl_decl ""
       end
 
-      attribute 131277 "m_ViewerLayerManager"
+      attribute 137761 "m_ViewerLayerManager"
 	private explicit_type "vrViewerLayerManager"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -1916,7 +1916,7 @@ ${throw}{
 	idl_decl ""
       end
 
-      attribute 131405 "m_DemListCtrlSelectedText"
+      attribute 137889 "m_DemListCtrlSelectedText"
 	private explicit_type "wxString"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -1926,7 +1926,7 @@ ${throw}{
 	idl_decl ""
       end
 
-      attribute 131533 "m_VectorListCtrlSelectedText"
+      attribute 138017 "m_VectorListCtrlSelectedText"
 	private explicit_type "wxString"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -1936,7 +1936,7 @@ ${throw}{
 	idl_decl ""
       end
 
-      operation 138573 "_CreateControls"
+      operation 145057 "_CreateControls"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -1950,7 +1950,7 @@ ${throw}{
 	
       end
 
-      operation 138701 "OnClose"
+      operation 145185 "OnClose"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCloseEvent"
@@ -1965,7 +1965,7 @@ ${throw}{
 	
       end
 
-      operation 138829 "OnWindowFocus"
+      operation 145313 "OnWindowFocus"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxActivateEvent"
@@ -1980,7 +1980,7 @@ ${throw}{
 	
       end
 
-      operation 138957 "OnCreatePlaneIntersection"
+      operation 145441 "OnCreatePlaneIntersection"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -1995,7 +1995,7 @@ ${throw}{
 	
       end
 
-      operation 139085 "OnUpdateUICreateIntersection"
+      operation 145569 "OnUpdateUICreateIntersection"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxUpdateUIEvent"
@@ -2010,17 +2010,17 @@ ${throw}{
 	
       end
 
-      classrelation 129357 // <dependency>
-	relation 129357 -_->
+      classrelation 135841 // <dependency>
+	relation 135841 -_->
 	  stereotype "friend"
 	  a default
 	    cpp default "Generated"
-	    classrelation_ref 129357 // <dependency>
-	  b parent class_ref 129741 // PlInt_Tool_DLG
+	    classrelation_ref 135841 // <dependency>
+	  b parent class_ref 136225 // PlInt_Tool_DLG
       end
     end
 
-    class 129741 "PlInt_Tool_DLG"
+    class 136225 "PlInt_Tool_DLG"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -2032,18 +2032,18 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 129485 // <generalisation>
-	relation 129485 ---|>
+      classrelation 135969 // <generalisation>
+	relation 135969 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 129485 // <generalisation>
-	  b parent class_ref 129101 // typedef4
+	    classrelation_ref 135969 // <generalisation>
+	  b parent class_ref 135585 // typedef4
       end
 
-      operation 139213 "PlInt_Tool_DLG"
+      operation 145697 "PlInt_Tool_DLG"
 	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 7
-	  param inout name "parent" type class_ref 129613 // PlInt_DLG
+	  param inout name "parent" type class_ref 136097 // PlInt_DLG
 	  param in name "id" explicit_type "wxWindowID"
 	    defaultvalue "wxID_ANY"
 	  param in name "title" explicit_type "wxString"
@@ -2067,7 +2067,7 @@ ${inlines}
 	
       end
 
-      operation 139341 "~PlInt_Tool_DLG"
+      operation 145825 "~PlInt_Tool_DLG"
 	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw};
@@ -2081,7 +2081,7 @@ ${inlines}
 	
       end
 
-      attribute 131661 "m_DirTxtCtrl"
+      attribute 138145 "m_DirTxtCtrl"
 	private explicit_type "wxStaticText"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -2091,8 +2091,8 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 131789 "m_DipCtrl"
-	private explicit_type "wxSpinCtrl"
+      attribute 138273 "m_DipCtrl"
+	private explicit_type "wxSpinCtrlDouble"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
 	java_decl ""
@@ -2101,7 +2101,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 131917 "m_PtsTxtCtrl"
+      attribute 138401 "m_PtsTxtCtrl"
 	private explicit_type "wxStaticText"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -2111,7 +2111,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 132045 "m_LivePreviewCtrl"
+      attribute 138529 "m_LivePreviewCtrl"
 	private explicit_type "wxCheckBox"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -2121,7 +2121,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 132173 "m_EditPtsBtn"
+      attribute 138657 "m_EditPtsBtn"
 	private explicit_type "wxButton"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -2131,7 +2131,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 132301 "m_ClearPtsBtn"
+      attribute 138785 "m_ClearPtsBtn"
 	private explicit_type "wxButton"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -2141,25 +2141,34 @@ ${inlines}
 	idl_decl ""
       end
 
-      classrelation 129613 // m_ParentDlg (<unidirectional association>)
-	relation 129613 --->
+      classrelation 136097 // m_ParentDlg (<unidirectional association>)
+	relation 136097 --->
 	  a role_name "m_ParentDlg" private
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
-	    classrelation_ref 129613 // m_ParentDlg (<unidirectional association>)
-	  b parent class_ref 129613 // PlInt_DLG
+	    classrelation_ref 136097 // m_ParentDlg (<unidirectional association>)
+	  b parent class_ref 136097 // PlInt_DLG
       end
 
-      classrelation 129741 // m_Overlay (<unidirectional association>)
-	relation 129741 --->
+      classrelation 136225 // m_Overlay (<unidirectional association>)
+	relation 136225 --->
 	  a role_name "m_Overlay" private
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
-	    classrelation_ref 129741 // m_Overlay (<unidirectional association>)
-	  b parent class_ref 129869 // PlIntViewerOverlay
+	    classrelation_ref 136225 // m_Overlay (<unidirectional association>)
+	  b parent class_ref 136353 // PlIntViewerOverlay
       end
 
-      operation 139469 "_CreateControls"
+      classrelation 136353 // m_Operation (<unidirectional association>)
+	relation 136353 --->
+	  a role_name "m_Operation" private
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 136353 // m_Operation (<unidirectional association>)
+	  b parent class_ref 136481 // PlIntOperation
+      end
+
+      operation 145953 "_CreateControls"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -2173,7 +2182,26 @@ ${inlines}
 	
       end
 
-      operation 139597 "OnClose"
+      operation 146081 "_UpdateDipDirPoints"
+	preserve_cpp_body_indent private explicit_return_type "void"
+	nparams 3
+	  param in name "nbpoint" explicit_type "int"
+	  param in name "dip" explicit_type "double"
+	    defaultvalue "wxNOT_FOUND"
+	  param in name "dir" explicit_type "double"
+	    defaultvalue "wxNOT_FOUND"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${const}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 146209 "OnClose"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCloseEvent"
@@ -2188,7 +2216,7 @@ ${inlines}
 	
       end
 
-      operation 139725 "OnIdleProcess"
+      operation 146337 "OnIdleProcess"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxIdleEvent"
@@ -2203,7 +2231,7 @@ ${inlines}
 	
       end
 
-      operation 139853 "OnEditPoints"
+      operation 146465 "OnEditPoints"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -2218,7 +2246,7 @@ ${inlines}
 	
       end
 
-      operation 139981 "OnClearPoints"
+      operation 146593 "OnClearPoints"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -2234,7 +2262,7 @@ ${inlines}
       end
     end
 
-    class 129869 "PlIntViewerOverlay"
+    class 136353 "PlIntViewerOverlay"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -2246,15 +2274,15 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 130125 // <generalisation>
-	relation 130125 ---|>
+      classrelation 136737 // <generalisation>
+	relation 136737 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 130125 // <generalisation>
-	  b parent class_ref 130253 // typedef7
+	    classrelation_ref 136737 // <generalisation>
+	  b parent class_ref 136865 // typedef7
       end
 
-      attribute 132429 "m_Pts"
+      attribute 139297 "m_Pts"
 	private explicit_type "wxRealPointList"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -2264,7 +2292,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 132557 "m_Display"
+      attribute 139425 "m_Display"
 	private explicit_type "vrViewerDisplay"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -2274,7 +2302,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      operation 140749 "PlIntViewerOverlay"
+      operation 148385 "PlIntViewerOverlay"
 	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 2
 	  param inout name "viewer" explicit_type "vrViewerDisplay"
@@ -2291,7 +2319,7 @@ ${inlines}
 	
       end
 
-      operation 140877 "~PlIntViewerOverlay"
+      operation 148513 "~PlIntViewerOverlay"
 	preserve_cpp_body_indent cpp_virtual public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw};
@@ -2305,7 +2333,7 @@ ${inlines}
 	
       end
 
-      operation 141005 "GetPixelPoint"
+      operation 148641 "GetPixelPoint"
 	preserve_cpp_body_indent public explicit_return_type "wxPoint"
 	nparams 1
 	  param in name "index" explicit_type "int"
@@ -2320,7 +2348,22 @@ ${inlines}
 	
       end
 
-      operation 141133 "AddPixelPoint"
+      operation 148769 "GetRealPoint"
+	preserve_cpp_body_indent public explicit_return_type "wxPoint2DDouble"
+	nparams 1
+	  param in name "index" explicit_type "int"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 148897 "AddPixelPoint"
 	preserve_cpp_body_indent public explicit_return_type "bool"
 	nparams 2
 	  param in name "pxpoint" explicit_type "wxPoint"
@@ -2337,7 +2380,23 @@ ${inlines}
 	
       end
 
-      operation 141261 "ClearPoints"
+      operation 149025 "UpdatePixelPoint"
+	preserve_cpp_body_indent public explicit_return_type "bool"
+	nparams 2
+	  param in name "pxpoint" explicit_type "wxPoint"
+	  param in name "index" explicit_type "int"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 149153 "ClearPoints"
 	preserve_cpp_body_indent public explicit_return_type "void"
 	nparams 1
 	  param in name "refresh" explicit_type "bool"
@@ -2353,7 +2412,18 @@ ${inlines}
 	
       end
 
-      operation 141389 "DrawOverlay"
+      operation 149281 "GetPointCount"
+	cpp_inline public explicit_return_type "long"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {return m_Pts.GetCount();};
+"
+	
+	
+	
+	
+      end
+
+      operation 149409 "DrawOverlay"
 	preserve_cpp_body_indent cpp_virtual public explicit_return_type "bool"
 	nparams 1
 	  param inout name "dc" explicit_type "wxPaintDC"
@@ -2369,7 +2439,170 @@ ${inlines}
       end
     end
 
-    class 129997 "PlIntToolEdit"
+    class 136481 "PlIntOperation"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 146721 "PlIntOperation"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 2
+	  param inout name "mnt" explicit_type "vrLayerRasterGDAL"
+	  param in name "bandno" explicit_type "int"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} * ${p0}${v0}, ${t1} ${p1}${v1}${)}${volatile}${throw};
+"
+	cpp_def "${comment}${inline}${class}::${name}${(}${t0} * ${p0}, ${t1} ${p1}${)}${throw}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 146849 "~PlIntOperation"
+	preserve_cpp_body_indent cpp_virtual public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw};
+"
+	cpp_def "${comment}${inline}${class}::${name}${(}${)}${throw}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 146977 "ComputeAndAddPoint"
+	preserve_cpp_body_indent public explicit_return_type "bool"
+	nparams 3
+	  param in name "x" explicit_type "double"
+	  param in name "y" explicit_type "double"
+	  param in name "index" explicit_type "long"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${const}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 147105 "ClearPoints"
+	preserve_cpp_body_indent public explicit_return_type "bool"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 147233 "GetPlaneInfo"
+	preserve_cpp_body_indent public explicit_return_type "bool"
+	nparams 2
+	  param inout name "dip" explicit_type "double"
+	  param inout name "direction" explicit_type "double"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} & ${p0}${v0}, ${t1} & ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${t0} & ${p0}, ${t1} & ${p1}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 147361 "GetPointsRef"
+	cpp_inline public explicit_return_type "OGRMultiPoint"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} * ${name}${(}${)}${const}${volatile}${throw}${abstract} {return &m_Points;};
+"
+	
+	
+	
+	
+      end
+
+      attribute 138913 "m_MNT"
+	private explicit_type "vrLayerRasterGDAL"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 139041 "m_MNTBand"
+	private explicit_type "int"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 139169 "m_Points"
+	private explicit_type "OGRMultiPoint"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      operation 147489 "_ComputeVector"
+	preserve_cpp_body_indent private explicit_return_type "OGRPoint"
+	nparams 2
+	  param in name "index1" explicit_type "int"
+	  param in name "index2" explicit_type "int"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 147617 "_MultiplyVector"
+	preserve_cpp_body_indent private explicit_return_type "OGRPoint"
+	nparams 2
+	  param in name "v1" explicit_type "OGRPoint"
+	  param in name "v2" explicit_type "OGRPoint"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 136609 "PlIntToolEdit"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -2387,28 +2620,28 @@ ${inlines}
 @author Lucien Schreiber 
 @date 04 july 2013
  ****************************************************************************************"
-      classrelation 129869 // <generalisation>
-	relation 129869 ---|>
+      classrelation 136481 // <generalisation>
+	relation 136481 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 129869 // <generalisation>
-	  b parent class_ref 130125 // typedef6
+	    classrelation_ref 136481 // <generalisation>
+	  b parent class_ref 136737 // typedef6
       end
 
-      classrelation 129997 // m_Overlay (<unidirectional association>)
-	relation 129997 --->
+      classrelation 136609 // m_Overlay (<unidirectional association>)
+	relation 136609 --->
 	  a role_name "m_Overlay" private
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
-	    classrelation_ref 129997 // m_Overlay (<unidirectional association>)
-	  b parent class_ref 129869 // PlIntViewerOverlay
+	    classrelation_ref 136609 // m_Overlay (<unidirectional association>)
+	  b parent class_ref 136353 // PlIntViewerOverlay
       end
 
-      operation 140109 "PlIntToolEdit"
+      operation 147745 "PlIntToolEdit"
 	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 3
 	  param inout name "display" explicit_type "vrViewerDisplay"
-	  param inout name "overlay" type class_ref 129869 // PlIntViewerOverlay
+	  param inout name "overlay" type class_ref 136353 // PlIntViewerOverlay
 	  param in name "toolid" explicit_type "int"
 	    defaultvalue "PLINT_TOOL_ID"
 	cpp_decl "    ${comment}${inline}${name}${(}${t0} * ${p0}${v0}, ${t1} * ${p1}${v1}, ${t2} ${p2}${v2}${)}${volatile}${throw};
@@ -2422,7 +2655,7 @@ ${inlines}
 	
       end
 
-      operation 140237 "~PlIntToolEdit"
+      operation 147873 "~PlIntToolEdit"
 	preserve_cpp_body_indent cpp_virtual public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw};
@@ -2436,7 +2669,7 @@ ${inlines}
 	
       end
 
-      operation 140365 "MouseDown"
+      operation 148001 "MouseDown"
 	cpp_virtual cpp_inline public explicit_return_type "bool"
 	nparams 1
 	  param in name "event" explicit_type "wxMouseEvent"
@@ -2448,7 +2681,7 @@ ${inlines}
 	
       end
 
-      operation 140493 "MouseUp"
+      operation 148129 "MouseUp"
 	preserve_cpp_body_indent cpp_virtual public explicit_return_type "bool"
 	nparams 1
 	  param in name "event" explicit_type "wxMouseEvent"
@@ -2463,11 +2696,14 @@ ${inlines}
 	
       end
 
-      operation 140621 "MouseMove"
-	cpp_virtual cpp_inline public explicit_return_type "bool"
+      operation 148257 "MouseMove"
+	preserve_cpp_body_indent cpp_virtual public explicit_return_type "bool"
 	nparams 1
 	  param in name "event" explicit_type "wxMouseEvent"
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract} {return false;};
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
 "
 	
 	
@@ -2476,7 +2712,7 @@ ${inlines}
       end
     end
 
-    class 130125 "typedef6"
+    class 136737 "typedef6"
       visibility package stereotype "typedef" explicit_base_type "vrDisplayTool"
       cpp_decl "${comment}typedef ${type} ${name};
 "
@@ -2488,7 +2724,7 @@ ${inlines}
       
     end
 
-    class 130253 "typedef7"
+    class 136865 "typedef7"
       visibility package stereotype "typedef" explicit_base_type "vrViewerOverlay"
       cpp_decl "${comment}typedef ${type} ${name};
 "
@@ -2500,7 +2736,7 @@ ${inlines}
       
     end
 
-    class 130381 "PreferenceDlg"
+    class 136993 "PreferenceDlg"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -2512,15 +2748,15 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 130253 // <generalisation>
-	relation 130253 ---|>
+      classrelation 136865 // <generalisation>
+	relation 136865 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 130253 // <generalisation>
-	  b parent class_ref 130509 // typedef8
+	    classrelation_ref 136865 // <generalisation>
+	  b parent class_ref 137121 // typedef8
       end
 
-      operation 141517 "PreferenceDlg"
+      operation 149537 "PreferenceDlg"
 	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 1
 	  param inout name "parent" explicit_type "wxWindow"
@@ -2535,7 +2771,7 @@ ${inlines}
 	
       end
 
-      operation 141645 "~PreferenceDlg"
+      operation 149665 "~PreferenceDlg"
 	preserve_cpp_body_indent cpp_virtual public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw};
@@ -2549,7 +2785,7 @@ ${inlines}
 	
       end
 
-      operation 141773 "OnSave"
+      operation 149793 "OnSave"
 	private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -2565,7 +2801,7 @@ ${inlines}
       end
     end
 
-    class 130509 "typedef8"
+    class 137121 "typedef8"
       visibility package stereotype "typedef" explicit_base_type "wxPropertySheetDialog"
       cpp_decl "${comment}typedef ${type} ${name};
 "
@@ -2577,7 +2813,7 @@ ${inlines}
       
     end
 
-    class 130637 "PreferencePanel"
+    class 137249 "PreferencePanel"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -2589,15 +2825,15 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 130381 // <generalisation>
-	relation 130381 ---|>
+      classrelation 136993 // <generalisation>
+	relation 136993 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 130381 // <generalisation>
-	  b parent class_ref 130765 // typedef9
+	    classrelation_ref 136993 // <generalisation>
+	  b parent class_ref 137377 // typedef9
       end
 
-      attribute 132685 "m_Parent"
+      attribute 139553 "m_Parent"
 	private explicit_type "wxWindow"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -2607,7 +2843,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      operation 141901 "_LoadSettings"
+      operation 149921 "_LoadSettings"
 	cpp_virtual cpp_inline protected explicit_return_type "void"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {;};
@@ -2618,7 +2854,7 @@ ${inlines}
 	
       end
 
-      operation 142029 "PreferencePanel"
+      operation 150049 "PreferencePanel"
 	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 1
 	  param inout name "parent" explicit_type "wxWindow"
@@ -2634,7 +2870,7 @@ wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL) ${t
 	
       end
 
-      operation 142157 "~PreferencePanel"
+      operation 150177 "~PreferencePanel"
 	preserve_cpp_body_indent cpp_virtual public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw};
@@ -2648,7 +2884,7 @@ wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL) ${t
 	
       end
 
-      operation 142285 "SaveSettings"
+      operation 150305 "SaveSettings"
 	preserve_cpp_body_indent cpp_virtual public explicit_return_type "bool"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -2662,7 +2898,7 @@ wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL) ${t
 	
       end
 
-      operation 142413 "GetPanelParent"
+      operation 150433 "GetPanelParent"
 	preserve_cpp_body_indent const cpp_inline public explicit_return_type "wxWindow"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}const ${type} * ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -2677,7 +2913,7 @@ wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL) ${t
       end
     end
 
-    class 130765 "typedef9"
+    class 137377 "typedef9"
       visibility package stereotype "typedef" explicit_base_type "wxPanel"
       cpp_decl "${comment}typedef ${type} ${name};
 "
@@ -2689,7 +2925,7 @@ wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL) ${t
       
     end
 
-    class 130893 "PreferencePanelMain"
+    class 137505 "PreferencePanelMain"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -2701,15 +2937,15 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 130509 // <generalisation>
-	relation 130509 ---|>
+      classrelation 137121 // <generalisation>
+	relation 137121 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 130509 // <generalisation>
-	  b parent class_ref 130637 // PreferencePanel
+	    classrelation_ref 137121 // <generalisation>
+	  b parent class_ref 137249 // PreferencePanel
       end
 
-      attribute 132813 "m_BackgroundColourCtrl"
+      attribute 139681 "m_BackgroundColourCtrl"
 	private explicit_type "wxColourPickerCtrl"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -2719,7 +2955,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 132941 "m_SelectionColourCtrl"
+      attribute 139809 "m_SelectionColourCtrl"
 	private explicit_type "wxColourPickerCtrl"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -2729,7 +2965,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 133069 "m_UnitChoiceCtrl"
+      attribute 139937 "m_UnitChoiceCtrl"
 	private explicit_type "wxChoice"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -2739,7 +2975,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 133197 "m_RelativePathCtrl"
+      attribute 140065 "m_RelativePathCtrl"
 	private explicit_type "wxCheckBox"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -2749,7 +2985,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 133325 "m_BuildOverviewCtrl"
+      attribute 140193 "m_BuildOverviewCtrl"
 	private explicit_type "wxCheckBox"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -2759,7 +2995,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      operation 142541 "_LoadSettings"
+      operation 150561 "_LoadSettings"
 	preserve_cpp_body_indent cpp_virtual protected explicit_return_type "void"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -2773,7 +3009,7 @@ ${inlines}
 	
       end
 
-      operation 142669 "PreferencePanelMain"
+      operation 150689 "PreferencePanelMain"
 	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 1
 	  param inout name "parent" explicit_type "wxWindow"
@@ -2789,7 +3025,7 @@ PreferencePanel(parent) ${throw}{
 	
       end
 
-      operation 142797 "~PreferencePanelMain"
+      operation 150817 "~PreferencePanelMain"
 	preserve_cpp_body_indent cpp_virtual public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw};
@@ -2803,7 +3039,7 @@ PreferencePanel(parent) ${throw}{
 	
       end
 
-      operation 142925 "SaveSettings"
+      operation 150945 "SaveSettings"
 	preserve_cpp_body_indent cpp_virtual public explicit_return_type "bool"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -2818,7 +3054,7 @@ PreferencePanel(parent) ${throw}{
       end
     end
 
-    class 131021 "PreferencePanelInternet"
+    class 137633 "PreferencePanelInternet"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -2830,15 +3066,15 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 130637 // <generalisation>
-	relation 130637 ---|>
+      classrelation 137249 // <generalisation>
+	relation 137249 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 130637 // <generalisation>
-	  b parent class_ref 130637 // PreferencePanel
+	    classrelation_ref 137249 // <generalisation>
+	  b parent class_ref 137249 // PreferencePanel
       end
 
-      attribute 133453 "m_CheckAtStartup"
+      attribute 140321 "m_CheckAtStartup"
 	private explicit_type "wxCheckBox"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -2848,7 +3084,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 133581 "m_ProxyInfo"
+      attribute 140449 "m_ProxyInfo"
 	private explicit_type "wxTextCtrl"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -2858,7 +3094,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      operation 143053 "_LoadSettings"
+      operation 151073 "_LoadSettings"
 	preserve_cpp_body_indent cpp_virtual protected explicit_return_type "void"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -2872,7 +3108,7 @@ ${inlines}
 	
       end
 
-      operation 143181 "PreferencePanelInternet"
+      operation 151201 "PreferencePanelInternet"
 	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 1
 	  param inout name "parent" explicit_type "wxWindow"
@@ -2888,7 +3124,7 @@ PreferencePanel(parent) ${throw}{
 	
       end
 
-      operation 143309 "~PreferencePanelInternet"
+      operation 151329 "~PreferencePanelInternet"
 	preserve_cpp_body_indent cpp_virtual public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw};
@@ -2902,7 +3138,7 @@ PreferencePanel(parent) ${throw}{
 	
       end
 
-      operation 143437 "SaveSettings"
+      operation 151457 "SaveSettings"
 	preserve_cpp_body_indent cpp_virtual public explicit_return_type "bool"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -2917,7 +3153,7 @@ PreferencePanel(parent) ${throw}{
       end
     end
 
-    class 131149 "ProfileParams"
+    class 137761 "ProfileParams"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -2929,7 +3165,7 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      attribute 133709 "m_FileInputDEM"
+      attribute 140577 "m_FileInputDEM"
 	public explicit_type "wxFileName"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -2939,7 +3175,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 133837 "m_FileInputVector"
+      attribute 140705 "m_FileInputVector"
 	public explicit_type "wxFileName"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -2949,7 +3185,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 133965 "m_FileOutputText"
+      attribute 140833 "m_FileOutputText"
 	public explicit_type "wxFileName"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -2959,7 +3195,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 134093 "m_FileOutputVector"
+      attribute 140961 "m_FileOutputVector"
 	public explicit_type "wxFileName"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -2969,7 +3205,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 134221 "m_AllValues"
+      attribute 141089 "m_AllValues"
 	public explicit_type "bool"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -2979,7 +3215,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 134349 "m_ExportTypeFormat"
+      attribute 141217 "m_ExportTypeFormat"
 	public explicit_type "<complex type>"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}enum   {PROFILE_EXPORT_TEXT = 0, PROFILE_EXPORT_VECTOR = 1 } ${name}${value};
 "
@@ -2989,7 +3225,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 134477 "m_ExportTypeTextFormat"
+      attribute 141345 "m_ExportTypeTextFormat"
 	public explicit_type "<complex type>"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}enum   {PROFILE_TEXT_CLIPBOARD, PROFILE_TEXT_FILE} ${name}${value};
 "
@@ -2999,7 +3235,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 134605 "m_ExportTypeText"
+      attribute 141473 "m_ExportTypeText"
 	public explicit_type "<complex type>"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}enum   {PROFILE_TEXT_DISTANCE_HEIGHT, PROFILE_TEXT_XYZ } ${name}${value};
 "
@@ -3009,7 +3245,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 134733 "m_ExportTypeVector"
+      attribute 141601 "m_ExportTypeVector"
 	public explicit_type "<complex type>"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}enum   {PROFILE_VECTOR_POINT, PROFILE_VECTOR_LINE } ${name}${value};
 "
@@ -3019,7 +3255,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      operation 143565 "ProfileParams"
+      operation 151585 "ProfileParams"
 	cpp_inline public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${inline}${name}${(}${)}${volatile}${throw} {
@@ -3037,7 +3273,7 @@ ${inlines}
       end
     end
 
-    class 131277 "Profile_DLG"
+    class 137889 "Profile_DLG"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -3049,15 +3285,15 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 130765 // <generalisation>
-	relation 130765 ---|>
+      classrelation 137377 // <generalisation>
+	relation 137377 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 130765 // <generalisation>
-	  b parent class_ref 128589 // typedef2
+	    classrelation_ref 137377 // <generalisation>
+	  b parent class_ref 135073 // typedef2
       end
 
-      operation 143693 "Profile_DLG"
+      operation 151713 "Profile_DLG"
 	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 7
 	  param inout name "parent" explicit_type "wxWindow"
@@ -3083,7 +3319,7 @@ ${inlines}
 	
       end
 
-      operation 143821 "~Profile_DLG"
+      operation 151841 "~Profile_DLG"
 	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw};
@@ -3097,7 +3333,7 @@ ${inlines}
 	
       end
 
-      operation 143949 "TransferDataFromWindow"
+      operation 151969 "TransferDataFromWindow"
 	preserve_cpp_body_indent cpp_virtual public explicit_return_type "bool"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -3111,8 +3347,8 @@ ${inlines}
 	
       end
 
-      operation 144077 "GetParams"
-	cpp_inline public return_type class_ref 131149 // ProfileParams
+      operation 152097 "GetParams"
+	cpp_inline public return_type class_ref 137761 // ProfileParams
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {return m_Params;};
 "
@@ -3122,7 +3358,7 @@ ${inlines}
 	
       end
 
-      attribute 134861 "m_InputDEMCtrl"
+      attribute 141729 "m_InputDEMCtrl"
 	private explicit_type "wxComboBox"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3132,7 +3368,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 134989 "m_InputLineCtrl"
+      attribute 141857 "m_InputLineCtrl"
 	private explicit_type "wxComboBox"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3142,7 +3378,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 135117 "m_FeaturesAllCtrl"
+      attribute 141985 "m_FeaturesAllCtrl"
 	private explicit_type "wxRadioButton"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3152,7 +3388,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 135245 "m_FeaturesSelectedCtrl"
+      attribute 142113 "m_FeaturesSelectedCtrl"
 	private explicit_type "wxRadioButton"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3162,7 +3398,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 135373 "m_ExportNotebookCtrl"
+      attribute 142241 "m_ExportNotebookCtrl"
 	private explicit_type "wxNotebook"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3172,7 +3408,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 135501 "m_PanelText"
+      attribute 142369 "m_PanelText"
 	private explicit_type "wxPanel"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3182,7 +3418,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 135629 "m_DistanceHeightCtrl"
+      attribute 142497 "m_DistanceHeightCtrl"
 	private explicit_type "wxRadioButton"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3192,7 +3428,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 135757 "m_XYZCtrl"
+      attribute 142625 "m_XYZCtrl"
 	private explicit_type "wxRadioButton"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3202,7 +3438,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 135885 "m_ClipBoardCtrl"
+      attribute 142753 "m_ClipBoardCtrl"
 	private explicit_type "wxRadioButton"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3212,7 +3448,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 136013 "m_TextFileOptionCtrl"
+      attribute 142881 "m_TextFileOptionCtrl"
 	private explicit_type "wxRadioButton"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3222,7 +3458,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 136141 "m_TextFilePickerCtrl"
+      attribute 143009 "m_TextFilePickerCtrl"
 	private explicit_type "wxFilePickerCtrl"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3232,7 +3468,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 136269 "m_PanelVector"
+      attribute 143137 "m_PanelVector"
 	private explicit_type "wxPanel"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3242,7 +3478,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 136397 "m_3DPointCtrl"
+      attribute 143265 "m_3DPointCtrl"
 	private explicit_type "wxRadioButton"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3252,7 +3488,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 136525 "m_3dLineCtrl"
+      attribute 143393 "m_3dLineCtrl"
 	private explicit_type "wxRadioButton"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3262,7 +3498,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 136653 "m_VectorFilePickerCtrl"
+      attribute 143521 "m_VectorFilePickerCtrl"
 	private explicit_type "wxFilePickerCtrl"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3272,7 +3508,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 136781 "m_BtnOkCtrl"
+      attribute 143649 "m_BtnOkCtrl"
 	private explicit_type "wxButton"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3282,16 +3518,16 @@ ${inlines}
 	idl_decl ""
       end
 
-      classrelation 130893 // m_Params (<directional composition>)
-	relation 130893 *-->
+      classrelation 137505 // m_Params (<directional composition>)
+	relation 137505 *-->
 	  a role_name "m_Params" private
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
-	    classrelation_ref 130893 // m_Params (<directional composition>)
-	  b parent class_ref 131149 // ProfileParams
+	    classrelation_ref 137505 // m_Params (<directional composition>)
+	  b parent class_ref 137761 // ProfileParams
       end
 
-      operation 144205 "_CreateControls"
+      operation 152225 "_CreateControls"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -3305,7 +3541,7 @@ ${inlines}
 	
       end
 
-      operation 144333 "OnUpdateUITextFilePickerCtrl"
+      operation 152353 "OnUpdateUITextFilePickerCtrl"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxUpdateUIEvent"
@@ -3320,7 +3556,7 @@ ${inlines}
 	
       end
 
-      operation 144461 "OnUpdateUITBtnOk"
+      operation 152481 "OnUpdateUITBtnOk"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxUpdateUIEvent"
@@ -3336,7 +3572,7 @@ ${inlines}
       end
     end
 
-    class 131405 "ProfileOperation"
+    class 138017 "ProfileOperation"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -3348,10 +3584,10 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      operation 144589 "ProfileOperation"
+      operation 152609 "ProfileOperation"
 	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 4
-	  param in name "param" type class_ref 131149 // ProfileParams
+	  param in name "param" type class_ref 137761 // ProfileParams
 	  param inout name "viewermanager" explicit_type "vrViewerLayerManager"
 	  param inout name "layermanager" explicit_type "vrLayerManager"
 	  param inout name "window" explicit_type "wxWindow"
@@ -3366,7 +3602,7 @@ ${inlines}
 	
       end
 
-      operation 144717 "~ProfileOperation"
+      operation 152737 "~ProfileOperation"
 	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw};
@@ -3380,7 +3616,7 @@ ${inlines}
 	
       end
 
-      operation 144845 "IsOK"
+      operation 152865 "IsOK"
 	cpp_inline public explicit_return_type "bool"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {return bCorrectlyInited;};
@@ -3391,7 +3627,7 @@ ${inlines}
 	
       end
 
-      operation 144973 "DoExport"
+      operation 152993 "DoExport"
 	preserve_cpp_body_indent public explicit_return_type "bool"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -3405,16 +3641,16 @@ ${inlines}
 	
       end
 
-      classrelation 131021 // m_Param (<directional composition>)
-	relation 131021 *-->
+      classrelation 137633 // m_Param (<directional composition>)
+	relation 137633 *-->
 	  a role_name "m_Param" private
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
-	    classrelation_ref 131021 // m_Param (<directional composition>)
-	  b parent class_ref 131149 // ProfileParams
+	    classrelation_ref 137633 // m_Param (<directional composition>)
+	  b parent class_ref 137761 // ProfileParams
       end
 
-      attribute 136909 "m_ViewerManager"
+      attribute 143777 "m_ViewerManager"
 	private explicit_type "vrViewerLayerManager"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3424,7 +3660,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 137037 "m_LayerManager"
+      attribute 143905 "m_LayerManager"
 	private explicit_type "vrLayerManager"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3434,7 +3670,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 137165 "m_Parent"
+      attribute 144033 "m_Parent"
 	private explicit_type "wxWindow"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3444,7 +3680,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 137293 "bCorrectlyInited"
+      attribute 144161 "bCorrectlyInited"
 	private explicit_type "bool"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -3454,7 +3690,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 137421 "m_LayerVector"
+      attribute 144289 "m_LayerVector"
 	private explicit_type "vrLayerVectorOGR"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3464,7 +3700,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 137549 "m_LayerRaster"
+      attribute 144417 "m_LayerRaster"
 	private explicit_type "vrLayerRasterGDAL"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3474,7 +3710,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 137677 "m_TextFile"
+      attribute 144545 "m_TextFile"
 	private explicit_type "wxFile"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3484,7 +3720,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 137805 "m_LayerVectorOutput"
+      attribute 144673 "m_LayerVectorOutput"
 	private explicit_type "vrLayerVectorOGR"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3495,7 +3731,7 @@ ${inlines}
       end
     end
 
-    class 131533 "ProfileViewData"
+    class 138145 "ProfileViewData"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -3507,7 +3743,7 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      attribute 137933 "m_ProfileSource"
+      attribute 144801 "m_ProfileSource"
 	public explicit_type "vrLayerVectorOGR"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3517,7 +3753,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 138061 "m_RasterLayers"
+      attribute 144929 "m_RasterLayers"
 	public explicit_type "vrArrayLayer"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -3527,7 +3763,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      operation 145101 "ProfileViewData"
+      operation 153121 "ProfileViewData"
 	cpp_inline public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${inline}${name}${(}${)}${volatile}${throw} {
@@ -3541,7 +3777,7 @@ ${inlines}
       end
     end
 
-    class 131661 "ProfileView_DLG"
+    class 138273 "ProfileView_DLG"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -3553,15 +3789,15 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 131149 // <generalisation>
-	relation 131149 ---|>
+      classrelation 137761 // <generalisation>
+	relation 137761 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 131149 // <generalisation>
-	  b parent class_ref 129101 // typedef4
+	    classrelation_ref 137761 // <generalisation>
+	  b parent class_ref 135585 // typedef4
       end
 
-      operation 145229 "ProfileView_DLG"
+      operation 153249 "ProfileView_DLG"
 	public explicit_return_type ""
 	nparams 9
 	  param inout name "parent" explicit_type "wxWindow"
@@ -3589,7 +3825,7 @@ ${inlines}
 	
       end
 
-      operation 145357 "~ProfileView_DLG"
+      operation 153377 "~ProfileView_DLG"
 	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw};
@@ -3603,7 +3839,7 @@ ${inlines}
 	
       end
 
-      attribute 138189 "m_LayerManagerRef"
+      attribute 145057 "m_LayerManagerRef"
 	private explicit_type "vrLayerManager"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3613,7 +3849,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 138317 "m_ViewerLayerManager"
+      attribute 145185 "m_ViewerLayerManager"
 	private explicit_type "vrViewerLayerManager"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3623,7 +3859,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 138445 "m_Display"
+      attribute 145313 "m_Display"
 	private explicit_type "vrViewerDisplay"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3633,7 +3869,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 138573 "m_KeyBoardState"
+      attribute 145441 "m_KeyBoardState"
 	private explicit_type "wxKeyboardState"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -3643,7 +3879,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 138701 "m_CreatedProfileName"
+      attribute 145569 "m_CreatedProfileName"
 	private explicit_type "wxArrayString"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -3653,7 +3889,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      operation 145485 "_CreateControls"
+      operation 153505 "_CreateControls"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -3667,7 +3903,7 @@ ${inlines}
 	
       end
 
-      operation 145613 "_CreateMenu"
+      operation 153633 "_CreateMenu"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -3681,7 +3917,7 @@ ${inlines}
 	
       end
 
-      operation 145741 "_CreateToolBar"
+      operation 153761 "_CreateToolBar"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -3695,7 +3931,7 @@ ${inlines}
 	
       end
 
-      operation 145869 "OnClose"
+      operation 153889 "OnClose"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCloseEvent"
@@ -3710,7 +3946,7 @@ ${inlines}
 	
       end
 
-      operation 145997 "OnZoomToFit"
+      operation 154017 "OnZoomToFit"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -3725,7 +3961,7 @@ ${inlines}
 	
       end
 
-      operation 146125 "OnToolZoom"
+      operation 154145 "OnToolZoom"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -3740,7 +3976,7 @@ ${inlines}
 	
       end
 
-      operation 146253 "OnToolPan"
+      operation 154273 "OnToolPan"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -3755,7 +3991,7 @@ ${inlines}
 	
       end
 
-      operation 146381 "OnToolZoomAction"
+      operation 154401 "OnToolZoomAction"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -3770,7 +4006,7 @@ ${inlines}
 	
       end
 
-      operation 146509 "OnToolPanAction"
+      operation 154529 "OnToolPanAction"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -3785,7 +4021,7 @@ ${inlines}
 	
       end
 
-      operation 146637 "OnKeyDown"
+      operation 154657 "OnKeyDown"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxKeyEvent"
@@ -3800,7 +4036,7 @@ ${inlines}
 	
       end
 
-      operation 146765 "OnKeyUp"
+      operation 154785 "OnKeyUp"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxKeyEvent"
@@ -3815,7 +4051,7 @@ ${inlines}
 	
       end
 
-      operation 146893 "OnCloseMenu"
+      operation 154913 "OnCloseMenu"
 	preserve_cpp_body_indent private explicit_return_type "void"
 	nparams 1
 	  param inout name "event" explicit_type "wxCommandEvent"
@@ -3831,7 +4067,7 @@ ${inlines}
       end
     end
 
-    class 131789 "typedef10"
+    class 138401 "typedef10"
       visibility package stereotype "typedef" explicit_base_type "wxInfoBar"
       cpp_decl "${comment}typedef ${type} ${name};
 "
@@ -3843,7 +4079,7 @@ ${inlines}
       
     end
 
-    class 131917 "WebUpdateThread"
+    class 138529 "WebUpdateThread"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -3855,15 +4091,15 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 131533 // <generalisation>
-	relation 131533 ---|>
+      classrelation 138145 // <generalisation>
+	relation 138145 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 131533 // <generalisation>
-	  b parent class_ref 132045 // typedef11
+	    classrelation_ref 138145 // <generalisation>
+	  b parent class_ref 138657 // typedef11
       end
 
-      attribute 138829 "m_CurlHandle"
+      attribute 145697 "m_CurlHandle"
 	private explicit_type "CURL"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3873,7 +4109,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 138957 "m_Parent"
+      attribute 145825 "m_Parent"
 	private explicit_type "wxWindow"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
@@ -3883,7 +4119,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 139085 "m_Buffer"
+      attribute 145953 "m_Buffer"
 	private explicit_type "wxStringOutputStream"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -3893,7 +4129,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 139213 "m_msgNewVersion"
+      attribute 146081 "m_msgNewVersion"
 	private explicit_type "bool"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -3903,7 +4139,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 139341 "m_msgNoNewVersion"
+      attribute 146209 "m_msgNoNewVersion"
 	private explicit_type "bool"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -3913,7 +4149,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 139469 "m_msgNoInternet"
+      attribute 146337 "m_msgNoInternet"
 	private explicit_type "bool"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -3923,7 +4159,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      attribute 139597 "m_ActualVersion"
+      attribute 146465 "m_ActualVersion"
 	private explicit_type "long"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -3933,7 +4169,7 @@ ${inlines}
 	idl_decl ""
       end
 
-      operation 147917 "Entry"
+      operation 155937 "Entry"
 	preserve_cpp_body_indent cpp_virtual protected explicit_return_type "ExitCode"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -3947,7 +4183,7 @@ ${inlines}
 	
       end
 
-      operation 148045 "WebUpdateThread"
+      operation 156065 "WebUpdateThread"
 	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 2
 	  param inout name "parent" explicit_type "wxWindow"
@@ -3964,7 +4200,7 @@ ${inlines}
 	
       end
 
-      operation 148173 "~WebUpdateThread"
+      operation 156193 "~WebUpdateThread"
 	preserve_cpp_body_indent cpp_virtual public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw};
@@ -3978,7 +4214,7 @@ ${inlines}
 	
       end
 
-      operation 148301 "CheckNewVersion"
+      operation 156321 "CheckNewVersion"
 	preserve_cpp_body_indent public explicit_return_type "bool"
 	nparams 4
 	  param in name "actualversion" explicit_type "long"
@@ -4000,7 +4236,7 @@ ${inlines}
       end
     end
 
-    class 132045 "typedef11"
+    class 138657 "typedef11"
       visibility package stereotype "typedef" explicit_base_type "wxThread"
       cpp_decl "${comment}typedef ${type} ${name};
 "
@@ -4013,11 +4249,11 @@ ${inlines}
     end
   end
 
-  deploymentview 128077 "src"
+  deploymentview 134561 "src"
     //deployment diagram settings
     package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
     draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-    artifact 128077 "app"
+    artifact 134561 "app"
       stereotype "source"
       cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
 #define ${NAMESPACE}_${NAME}_H
@@ -4036,12 +4272,12 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 128205 // typedef1
-	class_ref 128077 // App
+	class_ref 134689 // typedef1
+	class_ref 134561 // App
       end
     end
 
-    artifact 128205 "createslbl_dlg"
+    artifact 134689 "createslbl_dlg"
       stereotype "source"
       cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
 #define ${NAMESPACE}_${NAME}_H
@@ -4060,12 +4296,12 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 128589 // typedef2
-	class_ref 128461 // CreateSLBL_DLG
+	class_ref 135073 // typedef2
+	class_ref 134945 // CreateSLBL_DLG
       end
     end
 
-    artifact 128333 "frame"
+    artifact 134817 "frame"
       stereotype "source"
       cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
 #define ${NAMESPACE}_${NAME}_H
@@ -4084,14 +4320,14 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 128973 // typedef3
-	class_ref 128845 // ctDropFiles
-	class_ref 129101 // typedef4
-	class_ref 128333 // Frame
+	class_ref 135457 // typedef3
+	class_ref 135329 // ctDropFiles
+	class_ref 135585 // typedef4
+	class_ref 134817 // Frame
       end
     end
 
-    artifact 128461 "log"
+    artifact 134945 "log"
       stereotype "source"
       cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
 #define ${NAMESPACE}_${NAME}_H
@@ -4110,12 +4346,12 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 129485 // typedef5
-	class_ref 129357 // tmLogGuiSeverity
+	class_ref 135969 // typedef5
+	class_ref 135841 // tmLogGuiSeverity
       end
     end
 
-    artifact 128589 "plint_dlg"
+    artifact 135073 "plint_dlg"
       stereotype "source"
       cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
 #define ${NAMESPACE}_${NAME}_H
@@ -4134,12 +4370,12 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 129613 // PlInt_DLG
-	class_ref 129741 // PlInt_Tool_DLG
+	class_ref 136097 // PlInt_DLG
+	class_ref 136225 // PlInt_Tool_DLG
       end
     end
 
-    artifact 128717 "plinttool"
+    artifact 135201 "plintoperation"
       stereotype "source"
       cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
 #define ${NAMESPACE}_${NAME}_H
@@ -4158,12 +4394,11 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 130125 // typedef6
-	class_ref 129997 // PlIntToolEdit
+	class_ref 136481 // PlIntOperation
       end
     end
 
-    artifact 128845 "plintvieweroverlay"
+    artifact 135329 "plinttool"
       stereotype "source"
       cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
 #define ${NAMESPACE}_${NAME}_H
@@ -4182,12 +4417,12 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 130253 // typedef7
-	class_ref 129869 // PlIntViewerOverlay
+	class_ref 136737 // typedef6
+	class_ref 136609 // PlIntToolEdit
       end
     end
 
-    artifact 128973 "preference_dlg"
+    artifact 135457 "plintvieweroverlay"
       stereotype "source"
       cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
 #define ${NAMESPACE}_${NAME}_H
@@ -4206,12 +4441,12 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 130509 // typedef8
-	class_ref 130381 // PreferenceDlg
+	class_ref 136865 // typedef7
+	class_ref 136353 // PlIntViewerOverlay
       end
     end
 
-    artifact 129101 "preferencepanel"
+    artifact 135585 "preference_dlg"
       stereotype "source"
       cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
 #define ${NAMESPACE}_${NAME}_H
@@ -4230,14 +4465,12 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 130765 // typedef9
-	class_ref 130637 // PreferencePanel
-	class_ref 130893 // PreferencePanelMain
-	class_ref 131021 // PreferencePanelInternet
+	class_ref 137121 // typedef8
+	class_ref 136993 // PreferenceDlg
       end
     end
 
-    artifact 129229 "profile_dlg"
+    artifact 135713 "preferencepanel"
       stereotype "source"
       cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
 #define ${NAMESPACE}_${NAME}_H
@@ -4256,13 +4489,14 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 131149 // ProfileParams
-	class_ref 131277 // Profile_DLG
-	class_ref 131405 // ProfileOperation
+	class_ref 137377 // typedef9
+	class_ref 137249 // PreferencePanel
+	class_ref 137505 // PreferencePanelMain
+	class_ref 137633 // PreferencePanelInternet
       end
     end
 
-    artifact 129357 "profileview_dlg"
+    artifact 135841 "profile_dlg"
       stereotype "source"
       cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
 #define ${NAMESPACE}_${NAME}_H
@@ -4281,12 +4515,13 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 131533 // ProfileViewData
-	class_ref 131661 // ProfileView_DLG
+	class_ref 137761 // ProfileParams
+	class_ref 137889 // Profile_DLG
+	class_ref 138017 // ProfileOperation
       end
     end
 
-    artifact 129485 "update"
+    artifact 135969 "profileview_dlg"
       stereotype "source"
       cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
 #define ${NAMESPACE}_${NAME}_H
@@ -4305,13 +4540,37 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 131789 // typedef10
-	class_ref 129229 // WebUpdateInformationBar
-	class_ref 132045 // typedef11
-	class_ref 131917 // WebUpdateThread
+	class_ref 138145 // ProfileViewData
+	class_ref 138273 // ProfileView_DLG
+      end
+    end
+
+    artifact 136097 "update"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 138401 // typedef10
+	class_ref 135713 // WebUpdateInformationBar
+	class_ref 138657 // typedef11
+	class_ref 138529 // WebUpdateThread
       end
     end
   end
 
-  package_ref 128205 // core
+  package_ref 134689 // core
 end
