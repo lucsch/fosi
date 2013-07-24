@@ -259,16 +259,43 @@ void PlInt_Tool_DLG::OnIdleProcess( wxIdleEvent& event ) {
         return;
     }
     
+    _UpdateDipDirPoints(m_Overlay->GetPointCount());
+    
+    if (m_Overlay->GetPointCount() != 3) {
+        return;
+    }
+    
+    for (unsigned int i = 0; i< m_Overlay->GetPointCount(); i++) {
+        wxPoint2DDouble myPt = m_Overlay->GetRealPoint(i);
+        m_Operation->ComputeAndAddPoint(myPt.m_x, myPt.m_y, i);
+    }
+    
     double dip  = 0;
     double azimut = 0;
     if(m_Operation->GetPlaneInfo(dip, azimut) == false){
         return;
     }
     
-    
-    
+    _UpdateDipDirPoints(m_Overlay->GetPointCount(), dip, azimut);
 
 }
+
+void PlInt_Tool_DLG::_UpdateDipDirPoints (int nbpoint, double dip, double dir){
+    m_PtsTxtCtrl->SetLabel(wxString::Format(_T("%d"), nbpoint));
+    if (dip == wxNOT_FOUND) {
+        m_DipCtrl->SetValue("");
+    }
+    else {
+        m_DipCtrl->SetValue(dip);
+    }
+    if (dir == wxNOT_FOUND) {
+        m_DirTxtCtrl->SetLabel("");
+    }
+    else {
+        m_DirTxtCtrl->SetLabel(wxString::FromDouble(dir));
+    }
+}
+
 
 
 void PlInt_Tool_DLG::OnEditPoints( wxCommandEvent& event ) {
@@ -281,6 +308,7 @@ void PlInt_Tool_DLG::OnEditPoints( wxCommandEvent& event ) {
 
 void PlInt_Tool_DLG::OnClearPoints( wxCommandEvent& event ) {
     m_Overlay->ClearPoints(true);
+    m_Operation->ClearPoints();
 }
 
 
@@ -317,7 +345,7 @@ void PlInt_Tool_DLG::_CreateControls(){
 	m_DipTxtCtrl->Wrap( -1 );
 	fgSizer1->Add( m_DipTxtCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_DipCtrl = new wxSpinCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 200,-1 ), wxSP_ARROW_KEYS, 0, 10, 0 );
+	m_DipCtrl = new wxSpinCtrlDouble( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 200,-1 ), wxSP_ARROW_KEYS, 0, 10, 0 );
 	fgSizer1->Add( m_DipCtrl, 1, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
     m_DipCtrl->Enable(m_ParentDlg->m_2PointsCtrl->GetValue());
 	

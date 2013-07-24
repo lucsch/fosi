@@ -28,8 +28,11 @@ public:
     virtual ~PlIntViewerOverlay();
     
     wxPoint GetPixelPoint (int index);
+    wxPoint2DDouble GetRealPoint (int index);
     bool AddPixelPoint (wxPoint pxpoint, bool refresh = false);
+    bool UpdatePixelPoint (wxPoint pxpoint, int index);
     void ClearPoints (bool refresh = false);
+    long GetPointCount () {return m_Pts.GetCount();}
     
     virtual bool DrawOverlay(wxPaintDC * dc);
 };

@@ -37,22 +37,44 @@ wxPoint PlIntViewerOverlay::GetPixelPoint (int index){
 }
 
 
+wxPoint2DDouble PlIntViewerOverlay::GetRealPoint (int index){
+    wxASSERT(index >= 0 && index < m_Pts.GetCount());
+    return *m_Pts[index];
+}
+
+
 
 bool PlIntViewerOverlay::AddPixelPoint (wxPoint pxpoint, bool refresh){
-    if (m_Pts.GetCount() >= 3) {
-        return false;
-    }
-    
     wxPoint2DDouble myRealPt = wxDefaultPosition;
     wxASSERT(m_Display);
     m_Display->GetCoordinate()->ConvertFromPixels(pxpoint, myRealPt);
-    m_Pts.push_back(new wxPoint2DDouble(myRealPt));
-    
+
+    if (m_Pts.GetCount() >= 2) {
+        *m_Pts[2] = myRealPt;
+    }
+    else {
+        m_Pts.push_back(new wxPoint2DDouble(myRealPt));
+    }
+        
     if (refresh == true){
         m_Display->Refresh();
         m_Display->Update();
     }
+    return true;
+}
+
+
+
+bool PlIntViewerOverlay::UpdatePixelPoint (wxPoint pxpoint, int index){
+    wxPoint2DDouble myRealPt = wxDefaultPosition;
+    wxASSERT(m_Display);
+    m_Display->GetCoordinate()->ConvertFromPixels(pxpoint, myRealPt);
     
+    if (index == GetPointCount()) {
+        m_Pts.push_back(new wxPoint2DDouble());
+    }
+    
+    * m_Pts[index] = myRealPt;
     return true;
 }
 

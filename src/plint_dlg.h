@@ -68,7 +68,7 @@ public:
     
 private:
     wxStaticText* m_DirTxtCtrl;
-    wxSpinCtrl* m_DipCtrl;
+    wxSpinCtrlDouble * m_DipCtrl;
     wxStaticText* m_PtsTxtCtrl;
     wxCheckBox* m_LivePreviewCtrl;
     wxButton* m_EditPtsBtn;
@@ -80,6 +80,7 @@ private:
     
     
     void _CreateControls ();
+    void _UpdateDipDirPoints (int nbpoint, double dip = wxNOT_FOUND, double dir = wxNOT_FOUND);
     
     void OnClose( wxCloseEvent& event ) ;
     void OnIdleProcess( wxIdleEvent& event ) ;

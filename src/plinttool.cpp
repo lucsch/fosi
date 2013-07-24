@@ -33,3 +33,13 @@ bool PlIntToolEdit::MouseUp(const wxMouseEvent & event) {
 }
 
 
+bool PlIntToolEdit::MouseMove(const wxMouseEvent & event){
+    wxASSERT(m_Overlay);
+    if (m_Overlay->GetPointCount() != 2) {
+        return true;
+    }
+    
+    m_Overlay->UpdatePixelPoint(event.GetPosition(), 2);
+    return true;
+}
+
