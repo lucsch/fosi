@@ -14,18 +14,16 @@
 
 
 
-
 Profile_DLG::Profile_DLG( wxWindow* parent, vrViewerLayerManager * viewermanager, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style ){
     _CreateControls();
     
     ProfileOperation myOperation (viewermanager, NULL);
-    wxArrayString myPaths;
-    wxArrayString myNames;
     wxArrayString myDisplayNames;
-    myOperation.GetListRasters(myPaths, myNames, myDisplayNames);
+    myOperation.GetListRasters(m_AllRaster, myDisplayNames);
     
-    m_RasterList->InsertItems(myDisplayNames, 0);
-
+    if (myDisplayNames.GetCount() != 0) {
+        m_RasterList->InsertItems(myDisplayNames, 0);
+    }
     m_BtnOkCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( Profile_DLG::OnUpdateUITBtnOk ), NULL, this );
     
     SetMinSize(GetSize());
@@ -38,15 +36,29 @@ Profile_DLG::~Profile_DLG(){
 }
 
 
+
 void Profile_DLG::OnUpdateUITBtnOk( wxUpdateUIEvent& event ){
+    wxArrayInt myCheckedItems;
+    m_RasterList->GetCheckedItems(myCheckedItems);
+    if (myCheckedItems.GetCount() == 0) {
+        event.Enable(false);
+        return;
+    }
     
+    event.Enable( m_TextFilePickerCtrl->GetFileName().IsOk());
 }
 
 
-
-
-
 bool Profile_DLG::TransferDataFromWindow(){
+    m_OutFile = m_TextFilePickerCtrl->GetFileName();
+    m_SelectedRasterNames.Clear();
+    
+    wxArrayInt mySelectedIndex;
+    m_RasterList->GetCheckedItems(mySelectedIndex);
+    for (unsigned int i = 0; i< mySelectedIndex.GetCount(); i++) {
+        int myIndex = mySelectedIndex.Item(i);
+        m_SelectedRasterNames.Add( m_AllRaster.Item(myIndex) );
+    }
     return true;
 }
 
@@ -74,7 +86,6 @@ void Profile_DLG::_CreateControls(){
 	m_TextFilePickerCtrl = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, _("Select a file"), wxT("*.*"), wxDefaultPosition, wxSize( -1,-1 ), wxFLP_OVERWRITE_PROMPT|wxFLP_SAVE|wxFLP_USE_TEXTCTRL );
 	sbSizer13->Add( m_TextFilePickerCtrl, 1, wxALL|wxEXPAND, 5 );
 	
-	
 	bSizer8->Add( sbSizer13, 0, wxEXPAND|wxALL, 5 );
 	
 	wxStdDialogButtonSizer* m_sdbSizer1;
@@ -99,6 +110,11 @@ void Profile_DLG::_CreateControls(){
 
 
 
+
+
+
+
+
 ProfileOperation::ProfileOperation (vrViewerLayerManager * viewermanager, vrLayerManager * layermanager){
     m_ViewerManager = viewermanager;
     m_LayerManager = layermanager;
@@ -106,15 +122,14 @@ ProfileOperation::ProfileOperation (vrViewerLayerManager * viewermanager, vrLaye
 
 
 ProfileOperation::~ProfileOperation (){
-   }
+}
 
 
 
-bool ProfileOperation::GetListRasters(wxArrayString & paths, wxArrayString & names, wxArrayString & displayname){
+bool ProfileOperation::GetListRasters(wxArrayString & fullnames, wxArrayString & displayname){
     wxASSERT(m_ViewerManager);
     
-    paths.Clear();
-    names.Clear();
+    fullnames.Clear();
     displayname.Clear();
     
     for (unsigned int i = 0; i< m_ViewerManager->GetCount(); i++) {
@@ -123,12 +138,11 @@ bool ProfileOperation::GetListRasters(wxArrayString & paths, wxArrayString & nam
         
         if (myLayer->GetType() > vrDRIVER_VECTOR_MEMORY && myLayer->GetType() <= vrDRIVER_RASTER_SGRD7){
             displayname.Add(myLayer->GetDisplayName().GetFullName());
-            names.Add(myLayer->GetFileName().GetFullName());
-            paths.Add(myLayer->GetFileName().GetPath());
+            fullnames.Add(myLayer->GetFileName().GetFullPath());
         }
     }
 
-    if (names.GetCount() == 0) {
+    if (fullnames.GetCount() == 0) {
         return false;
     }
     return true;
@@ -136,7 +150,53 @@ bool ProfileOperation::GetListRasters(wxArrayString & paths, wxArrayString & nam
 
 
 OGRGeometry * ProfileOperation::GetSelectedProfileGeometry (vrViewerTOC * toc){
+    wxASSERT(toc);
     
+    int mySelLayer = toc->GetSelection();
+    if (mySelLayer == wxNOT_FOUND) {
+        wxLogWarning(_("No layer Selected! Select a layer!"));
+        return NULL;
+    }
+    
+    vrRenderer * myRenderer = m_ViewerManager->GetRenderer(mySelLayer);
+    if (myRenderer == NULL || myRenderer->GetLayer()->GetType() > vrDRIVER_VECTOR_MEMORY) {
+        wxLogWarning(_("Incorrect layer type selected! Select a vector layer"));
+        return NULL;
+    }
+    
+    vrLayerVectorOGR * myLayer = static_cast<vrLayerVectorOGR*>(myRenderer->GetLayer());
+    if (myLayer->GetSelectedIDs()->GetCount() != 1) {
+        wxLogWarning(_("Select one feature to create profile on it!"));
+        return NULL;
+    }
+    if (wkbFlatten( myLayer->GetGeometryType() ) != wkbLineString) {
+        wxLogWarning(_("Incorrect geometry: profile is only working with line layers!"));
+        return NULL;
+    }
+    
+    OGRFeature * myFeature = myLayer->GetFeature(myLayer->GetSelectedIDs()->Item(0));
+    if (myFeature == NULL) {
+        wxLogError(_("Unable to get feature: %ld"), myLayer->GetSelectedIDs()->Item(0));
+        return NULL;
+    }
+    
+    OGRGeometry * myGeom = myFeature->GetGeometryRef()->clone();
+    OGRFeature::DestroyFeature(myFeature);
+    return myGeom;
+}
+
+
+bool ProfileOperation::DoExportText (OGRGeometry * profile, const wxArrayString & rasternames, const wxFileName & destination){
+    wxFileOutputStream myFStream ( destination.GetFullPath() );
+    if (myFStream.IsOk() == false) {
+        wxLogError(_("Unable to write to: %s"), destination.GetFullName());
+        return false;
+    }
+    wxTextOutputStream myTxtStream (myFStream);
+    
+    
+    
+    return true;
 }
 
 

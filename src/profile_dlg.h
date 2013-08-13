@@ -16,6 +16,7 @@
 #include <wx/filepicker.h>
 #include <wx/notebook.h>
 #include <wx/clipbrd.h>
+#include <wx/wfstream.h>
 
 
 class vrViewerLayerManager;
@@ -50,27 +51,27 @@ public:
 
 class Profile_DLG : public wxDialog
 {
-
-public:
-    
-    Profile_DLG( wxWindow* parent, vrViewerLayerManager * viewermanager, wxWindowID id = wxID_ANY, const wxString& title = _("Profile"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER );
-    ~Profile_DLG();
-    
-    virtual bool TransferDataFromWindow();
-    ProfileParams GetParams () {return m_Params;}
-
-    
 private:
     wxFilePickerCtrl* m_TextFilePickerCtrl;
     wxCheckListBox* m_RasterList;
     wxButton* m_BtnOkCtrl;
     
-    ProfileParams m_Params;
+    wxFileName m_OutFile;
+    wxArrayString m_AllRaster;
+    wxArrayString m_SelectedRasterNames;
     
     void _CreateControls();
     
     void OnUpdateUITBtnOk( wxUpdateUIEvent& event );
-	
+    
+public:
+    Profile_DLG( wxWindow* parent, vrViewerLayerManager * viewermanager, wxWindowID id = wxID_ANY, const wxString& title = _("Profile"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER );
+    ~Profile_DLG();
+    
+    wxFileName GetDestinationFileName() { return m_OutFile;}
+    wxArrayString GetSelectedRasterName () {return m_SelectedRasterNames;}
+    
+    virtual bool TransferDataFromWindow();    
 };
 
 
@@ -78,21 +79,20 @@ private:
 class OGRGeometry;
 class vrViewerTOC;
 class ProfileOperation {
-public:
-    ProfileOperation (vrViewerLayerManager * viewermanager, vrLayerManager * layermanager);
-    ~ProfileOperation ();
-    bool DoExport();
-    
-    bool GetListRasters(wxArrayString & paths, wxArrayString & names, wxArrayString & displayname);
-    OGRGeometry * GetSelectedProfileGeometry (vrViewerTOC * toc);
-    
 private:
     vrViewerLayerManager * m_ViewerManager;
     vrLayerManager * m_LayerManager;
 
     
+public:
+    ProfileOperation (vrViewerLayerManager * viewermanager, vrLayerManager * layermanager);
+    ~ProfileOperation ();
+    bool DoExport();
     
+    bool GetListRasters(wxArrayString & fullnames, wxArrayString & displayname);
+    OGRGeometry * GetSelectedProfileGeometry (vrViewerTOC * toc);
     
+    bool DoExportText (OGRGeometry * profile, const wxArrayString & rasternames, const wxFileName & destination);
 };
 
 

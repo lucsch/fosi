@@ -789,14 +789,22 @@ void Frame::OnPlaneIntersectionDialog (wxCommandEvent & event){
 
 
 void Frame::OnProfileDialog (wxCommandEvent & event){
-    Profile_DLG myDlg (this, m_vrViewerLayerManager);
-    if (myDlg.ShowModal() != wxID_OK) {
+    ProfileOperation myProfileOp (m_vrViewerLayerManager, m_vrLayerManager);
+    OGRGeometry * myGeom = myProfileOp.GetSelectedProfileGeometry(m_vrTOC);
+    if (myGeom == NULL) {
         return;
     }
-    ProfileParams param = myDlg.GetParams();
     
-	//ProfileOperation myProfileOp (param, m_vrViewerLayerManager, m_vrLayerManager, this);
-    //myProfileOp.DoExport();
+    Profile_DLG myDlg (this, m_vrViewerLayerManager);
+    if (myDlg.ShowModal() != wxID_OK) {
+        OGRGeometryFactory::destroyGeometry(myGeom);
+        return;
+    }
+    
+    if(myProfileOp.DoExportText(myGeom, myDlg.GetSelectedRasterName(), myDlg.GetDestinationFileName()) == true) {
+        wxMessageBox(_("Profil exported correctly!"));
+    }
+    OGRGeometryFactory::destroyGeometry(myGeom);
 }
 
 
