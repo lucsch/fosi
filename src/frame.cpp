@@ -795,8 +795,8 @@ void Frame::OnProfileDialog (wxCommandEvent & event){
     }
     ProfileParams param = myDlg.GetParams();
     
-	ProfileOperation myProfileOp (param, m_vrViewerLayerManager, m_vrLayerManager, this);
-    myProfileOp.DoExport();
+	//ProfileOperation myProfileOp (param, m_vrViewerLayerManager, m_vrLayerManager, this);
+    //myProfileOp.DoExport();
 }
 
 

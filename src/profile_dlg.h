@@ -53,7 +53,7 @@ class Profile_DLG : public wxDialog
 
 public:
     
-    Profile_DLG( wxWindow* parent, vrViewerLayerManager * viewermanager, wxWindowID id = wxID_ANY, const wxString& title = _("Profile"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+    Profile_DLG( wxWindow* parent, vrViewerLayerManager * viewermanager, wxWindowID id = wxID_ANY, const wxString& title = _("Profile"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER );
     ~Profile_DLG();
     
     virtual bool TransferDataFromWindow();
@@ -61,28 +61,14 @@ public:
 
     
 private:
-    wxComboBox* m_InputDEMCtrl;
-    wxComboBox* m_InputLineCtrl;
-    wxRadioButton* m_FeaturesAllCtrl;
-    wxRadioButton* m_FeaturesSelectedCtrl;
-    wxNotebook* m_ExportNotebookCtrl;
-    wxPanel* m_PanelText;
-    wxRadioButton* m_DistanceHeightCtrl;
-    wxRadioButton* m_XYZCtrl;
-    wxRadioButton* m_ClipBoardCtrl;
-    wxRadioButton* m_TextFileOptionCtrl;
     wxFilePickerCtrl* m_TextFilePickerCtrl;
-    wxPanel* m_PanelVector;
-    wxRadioButton* m_3DPointCtrl;
-    wxRadioButton* m_3dLineCtrl;
-    wxFilePickerCtrl* m_VectorFilePickerCtrl;
+    wxCheckListBox* m_RasterList;
     wxButton* m_BtnOkCtrl;
     
     ProfileParams m_Params;
     
     void _CreateControls();
     
-    void OnUpdateUITextFilePickerCtrl( wxUpdateUIEvent& event );
     void OnUpdateUITBtnOk( wxUpdateUIEvent& event );
 	
 };
@@ -92,22 +78,16 @@ private:
 
 class ProfileOperation {
 public:
-    ProfileOperation (ProfileParams param, vrViewerLayerManager * viewermanager, vrLayerManager * layermanager, wxWindow * window);
+    ProfileOperation (vrViewerLayerManager * viewermanager, vrLayerManager * layermanager);
     ~ProfileOperation ();
-    bool IsOK() {return bCorrectlyInited;}
     bool DoExport();
     
+    bool GetListRasters(wxArrayString & paths, wxArrayString & names, wxArrayString & displayname);
+    
 private:
-    ProfileParams m_Param;
     vrViewerLayerManager * m_ViewerManager;
     vrLayerManager * m_LayerManager;
-    wxWindow * m_Parent;
-    bool bCorrectlyInited;
-    
-    vrLayerVectorOGR * m_LayerVector;
-    vrLayerRasterGDAL * m_LayerRaster;
-    wxFile * m_TextFile;
-    vrLayerVectorOGR * m_LayerVectorOutput;
+
     
     
     
