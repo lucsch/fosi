@@ -75,7 +75,8 @@ private:
 
 
 
-
+class OGRGeometry;
+class vrViewerTOC;
 class ProfileOperation {
 public:
     ProfileOperation (vrViewerLayerManager * viewermanager, vrLayerManager * layermanager);
@@ -83,6 +84,7 @@ public:
     bool DoExport();
     
     bool GetListRasters(wxArrayString & paths, wxArrayString & names, wxArrayString & displayname);
+    OGRGeometry * GetSelectedProfileGeometry (vrViewerTOC * toc);
     
 private:
     vrViewerLayerManager * m_ViewerManager;

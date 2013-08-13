@@ -25,25 +25,6 @@ Profile_DLG::Profile_DLG( wxWindow* parent, vrViewerLayerManager * viewermanager
     myOperation.GetListRasters(myPaths, myNames, myDisplayNames);
     
     m_RasterList->InsertItems(myDisplayNames, 0);
-    
-    /*wxASSERT(viewermanager);
-    for (unsigned int i = 0; i< viewermanager->GetCount(); i++) {
-        vrLayer * myLayer =  viewermanager->GetRenderer(i)->GetLayer();
-        wxASSERT(myLayer);
-        
-        if (myLayer->GetType() > vrDRIVER_UNKNOWN  && myLayer->GetType() <= vrDRIVER_VECTOR_MEMORY) {
-            // add polygon mask
-            vrLayerVector * myLayerVector = static_cast<vrLayerVector*>(myLayer);
-            if (wkbFlatten(myLayerVector->GetGeometryType()) == wkbLineString) {
-                m_InputLineCtrl->Append(myLayerVector->GetDisplayName().GetFullPath());
-            }
-        }
-        else if (myLayer->GetType() > vrDRIVER_VECTOR_MEMORY && myLayer->GetType() <= vrDRIVER_RASTER_SGRD7){
-            m_InputDEMCtrl->Append(myLayer->GetDisplayName().GetFullPath());
-        }
-    }
-    m_TextFilePickerCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( Profile_DLG::OnUpdateUITextFilePickerCtrl ), NULL, this );
-      */
 
     m_BtnOkCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( Profile_DLG::OnUpdateUITBtnOk ), NULL, this );
     
@@ -151,6 +132,11 @@ bool ProfileOperation::GetListRasters(wxArrayString & paths, wxArrayString & nam
         return false;
     }
     return true;
+}
+
+
+OGRGeometry * ProfileOperation::GetSelectedProfileGeometry (vrViewerTOC * toc){
+    
 }
 
 
