@@ -10,6 +10,7 @@
 #include "vrlayervector.h"
 #include "vrlayerraster.h"
 #include "vroperationvectorprofiler.h"
+#include "Excel.h"
 
 
 
@@ -83,7 +84,7 @@ void Profile_DLG::_CreateControls(){
 	wxStaticBoxSizer* sbSizer13;
 	sbSizer13 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Output") ), wxVERTICAL );
 	
-	m_TextFilePickerCtrl = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, _("Select a file"), wxT("*.*"), wxDefaultPosition, wxSize( -1,-1 ), wxFLP_OVERWRITE_PROMPT|wxFLP_SAVE|wxFLP_USE_TEXTCTRL );
+	m_TextFilePickerCtrl = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, _("Select a file"), _("Excel files (*.xls)|*.xls"), wxDefaultPosition, wxSize( -1,-1 ), wxFLP_OVERWRITE_PROMPT|wxFLP_SAVE|wxFLP_USE_TEXTCTRL );
 	sbSizer13->Add( m_TextFilePickerCtrl, 1, wxALL|wxEXPAND, 5 );
 	
 	bSizer8->Add( sbSizer13, 0, wxEXPAND|wxALL, 5 );
@@ -187,15 +188,68 @@ OGRGeometry * ProfileOperation::GetSelectedProfileGeometry (vrViewerTOC * toc){
 
 
 bool ProfileOperation::DoExportText (OGRGeometry * profile, const wxArrayString & rasternames, const wxFileName & destination){
-    wxFileOutputStream myFStream ( destination.GetFullPath() );
-    if (myFStream.IsOk() == false) {
-        wxLogError(_("Unable to write to: %s"), destination.GetFullName());
+    Excel myExcel;
+    if(myExcel.Open((const char *) destination.GetFullPath().mb_str(wxConvUTF8))==false){
+        wxLogError(_("Unable to open: '%s'"), destination.GetFullName());
         return false;
     }
-    wxTextOutputStream myTxtStream (myFStream);
     
+    myExcel.Begin();
+    /* file structure is:
+    rastername
+    distance | X | Y | Z
+     0 | 1 | 2 | 3
+     ...
+    */
+    for (unsigned int i = 0; i < rasternames.GetCount(); i++) {
+        vrRenderer * myRenderer = m_ViewerManager->GetRenderer(rasternames.Item(i));
+        if (myRenderer == NULL) {
+            wxLogError(_("Error getting raster: %s"), rasternames.Item(i));
+            continue;
+        }
+        
+        vrOperationVectorProfiler myProfiler (profile, static_cast<vrLayerRasterGDAL*>( myRenderer->GetLayer()));
+        if( myProfiler.DoProfile() == false ) {
+            wxLogError(_("Error computing profile on: %s"), rasternames.Item(i));
+            continue;
+        }
+        
+        // write xls header
+        wxFileName myRasterName (rasternames.Item(i));
+        myExcel.Write(0, i * 4, myRasterName.GetFullName().mb_str(wxConvUTF8));
+        myExcel.Write(1, i * 4, "DISTANCE");
+        myExcel.Write(1, (i * 4) + 1, "X");
+        myExcel.Write(1, (i * 4) + 2, "Y");
+        myExcel.Write(1, (i * 4) + 3, "Z");
+        
+        // write xls data
+        double myDist = myProfiler.GetIncrementDistance();
+        double myXStep = myProfiler.GetIncrementX();
+        double myYStep = myProfiler.GetIncrementY();
+        
+        OGRPoint myOriginPt;
+        static_cast<OGRLineString*>(profile)->getPoint(0, &myOriginPt);
+        wxArrayDouble * myResults = myProfiler.GetResultRef();
+        wxASSERT(myResults);
+        
+        double myD = 0.0;
+        double myX = myOriginPt.getX();
+        double myY = myOriginPt.getY();
+        
+        for (unsigned int d = 0; d < myResults->GetCount(); d++) {
+            myExcel.Write(2 + d, i * 4, myD);
+            myExcel.Write(2 + d, (i * 4) + 1, myX);
+            myExcel.Write(2 + d, (i * 4) + 2, myY);
+            myExcel.Write(2 + d, (i * 4) + 3, myResults->Item(d));
+            
+            myD += myDist;
+            myX += myXStep;
+            myY += myYStep;
+        }
+        
+    }
     
-    
+    myExcel.End();
     return true;
 }
 

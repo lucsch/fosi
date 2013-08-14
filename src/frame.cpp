@@ -210,7 +210,7 @@ void Frame::_CreateMenus() {
     myStructMenu->AppendSubMenu(myPlintMenu, _("Plane Intersection"));
     
     wxMenu * myProfileMenu = new wxMenu();
-    myProfileMenu->Append(MENU_FRAME_PROFILE_DIALOG, _("Profile Dialog...\tCtrl+P"), wxEmptyString);
+    myProfileMenu->Append(MENU_FRAME_PROFILE_DIALOG, _("Export profile...\tCtrl+Alt+V"), wxEmptyString);
     myProfileMenu->Append(MENU_FRAME_PROFILE_VIEW, _("View profile...\tCtrl+V"), wxEmptyString);
     myStructMenu->AppendSubMenu(myProfileMenu, _("Profile"));
     

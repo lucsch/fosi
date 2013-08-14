@@ -17,6 +17,7 @@
 #include <wx/notebook.h>
 #include <wx/clipbrd.h>
 #include <wx/wfstream.h>
+#include <wx/txtstrm.h>
 
 
 class vrViewerLayerManager;
