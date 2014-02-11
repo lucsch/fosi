@@ -1,7 +1,11 @@
 # BUILD VARIABLES FOR LINUX (UBUNTU HOME)
 
-SET(CMAKE_PREFIX_PATH
-  /home/lucien/programmation/LIB/_LIBGIS
-  /Users/lucien/DATA/PROGRAMATION/_LIB/64/_LIBWXSVN #TODO: Change for Linux here 
-)
-# TODO: CHANGE SET(wxWIDGETS_PATH_SVN "/Users/lucien/DATA/PROGRAMATION/_LIB/64/wxWidgets-svn")
+# BUILD VARIABLES FOR DARWIN (MACBOOK PRO)
+MESSAGE ("Linux user variables...")
+
+# COMMENT THIS LINES TO USE FRAMEWORK 
+SET (SEARCH_GIS_LIB_PATH /home/lucien/programmation/LIB/_LIBGIS)
+
+SET (CMAKE_WXWINDOWS_WXCONFIG_EXECUTABLE /home/lucien/programmation/LIB/_LIBWX/bin/wx-config)
+SET (wxWIDGETS_PATH_SVN /home/lucien/programmation/LIB/wxWidgets-SVN/)
+

@@ -13,7 +13,7 @@
 IMPLEMENT_APP(App);
 
 App::App(){
-    wxHandleFatalExceptions();
+    //wxHandleFatalExceptions();
 }
 
 
