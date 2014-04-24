@@ -68,7 +68,7 @@ ENDIF ( CXXTEST_INCLUDE_DIR )
 
 
 IF (WIN32)
-  INCLUDE ("../plugins/vroomgis/vroomgis/build/cmake/Use_visualstudioMT.cmake")
+  # INCLUDE ("../plugins/vroomgis/vroomgis/build/cmake/Use_visualstudioMT.cmake")
 ENDIF (WIN32)
 
 
