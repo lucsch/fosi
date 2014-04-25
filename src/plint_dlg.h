@@ -66,6 +66,7 @@ public:
     PlInt_Tool_DLG( PlInt_DLG * parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plane Intersection Tools"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxFRAME_FLOAT_ON_PARENT|wxFRAME_TOOL_WINDOW|wxTAB_TRAVERSAL, const wxString & name = PLINT_DIALOG_TOOL_NAME);
     ~PlInt_Tool_DLG();
     void UpdateControls (bool liveupdate);
+    void ComputeLine ();
     
 private:
     wxStaticText* m_DirTxtCtrl;

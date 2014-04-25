@@ -34,6 +34,7 @@ bool PlIntToolEdit::MouseUp(const wxMouseEvent & event) {
     
     if (m_Dialog) {
         m_Dialog->UpdateControls(true);
+        m_Dialog->ComputeLine();
     }
     return true;
 }

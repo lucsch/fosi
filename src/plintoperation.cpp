@@ -7,6 +7,7 @@
 
 #include "plintoperation.h"
 #include "vrlayerraster.h"
+#include "vrcoordinate.h"
 
 
 PlIntOperation::PlIntOperation(vrLayerRasterGDAL * mnt, int bandno) {
@@ -88,6 +89,171 @@ bool PlIntOperation::GetPlaneInfo(double & dip, double & direction) {
     return true;
 }
 
+
+
+bool PlIntOperation::ComputeLine (vrCoordinate * coord){
+    // extract visible part of the DEM into memory
+    return _ExtractRaster(coord);
+}
+
+
+
+/***************************************************************************//**
+@brief Compute all position info for displaying a raster
+@param pximgsize Size of image in pixels stored on disk
+@param imgextent Coordinate Extent of the raster
+@param wndextent Coordinate extent of the Window
+@param pxsize Pixel conversion Reality - Window
+@param pximginfo Part of the raster to read in pixels
+@param pximgpos Position and size of the raster for displaying it on the window
+@return  true if computing was successfull
+@author Lucien Schreiber (c) CREALP 2010
+@date 17 mars 2010
+ *******************************************************************************/
+/*
+bool PlIntOperation::_ComputeDisplayPosSize(const wxSize & pximgsize,
+							const vrRealRect & imgextent,
+							const vrRealRect & wndextent,
+							double pxsize,
+                                            wxRect & pximginfo) { //, wxRect & pximgpos){
+
+	// get intersection between display and img
+	vrRealRect myWndExtentTemp = wndextent;
+	wxASSERT(myWndExtentTemp == wndextent);
+
+
+	pximginfo = wxRect(0,0,0,0);
+	//pximgpos = wxRect(0,0,0,0);
+
+	vrRealRect myIntersect = myWndExtentTemp.Intersect(imgextent);
+	if (myIntersect.IsOk() == false) {
+		wxLogMessage("Image out of the dislay, intersection is null");
+		return false;
+	}
+
+
+	// width of image to display (in pixels)
+	int pxWidthVisible = wxRound(myIntersect.m_width * pximgsize.GetWidth() / imgextent.m_width);
+	int pxHeightVisible = wxRound(myIntersect.m_height * pximgsize.GetHeight() / imgextent.m_height);
+
+	// starting position from where we get image data (px)
+	int ximg = wxRound((myIntersect.GetLeft() - imgextent.GetLeft())  * pximgsize.GetWidth() / imgextent.m_width);
+	int yimg = wxRound((myIntersect.GetTop() - imgextent.GetTop()) * pximgsize.GetHeight() / imgextent.m_height);
+
+	// position for displaying the bitmap (in pixels)
+	//int vx = wxRound((myIntersect.GetLeft() - wndextent.GetLeft()) / pxsize);
+	//int vy = wxRound((wndextent.GetTop()- myIntersect.GetTop()) / pxsize);
+
+	//pixels size of displayed bitmap
+	//int vw = wxRound(fabs(myIntersect.m_width / pxsize));
+	//int vh = wxRound(fabs(myIntersect.m_height / pxsize));
+
+
+	// returning values
+	pximginfo.SetTopLeft(wxPoint(ximg, yimg));
+	pximginfo.width = pxWidthVisible;
+	pximginfo.height = pxHeightVisible;
+
+	//pximgpos.x = vx;
+	//pximgpos.y = vy;
+	//pximgpos.SetWidth(vw);
+	//pximgpos.SetHeight(vh);
+
+
+	if (pximginfo.IsEmpty()) {
+		wxLogMessage("Image is outside the display.");
+		return false;
+
+	}
+
+	return true;
+}
+
+*/
+
+
+bool PlIntOperation::_ExtractRaster (vrCoordinate * coord){
+    
+    ////////////////////////////
+    // compute visible DEM part and resolution
+    ////////////////////////////
+    vrRealRect myImgReal;
+    m_MNT->GetExtent(myImgReal);
+    wxSize myImgPx = m_MNT->GetPixelSize();
+    
+    vrRealRect myWndReal = coord->GetExtent();
+    vrRealRect myIntersect = myWndReal.Intersect(myImgReal);
+    if (myIntersect.IsOk() == false) {
+        return false;
+    }
+    
+    // width of image to display (in pixels)
+	int pxWidthVisible = wxRound(myIntersect.m_width * myImgPx.GetWidth() / myImgReal.m_width);
+	int pxHeightVisible = wxRound(myIntersect.m_height * myImgPx.GetHeight() / myImgReal.m_height);
+    
+	// starting position from where we get image data (px)
+	int ximg = wxRound((myIntersect.GetLeft() - myImgReal.GetLeft())  * myImgPx.GetWidth() / myImgReal.m_width);
+	int yimg = wxRound((myIntersect.GetTop() - myImgReal.GetTop()) * myImgPx.GetHeight() / myImgReal.m_height);
+    
+	// returning values
+    wxRect myImgPxExtractedResult;
+	myImgPxExtractedResult.SetTopLeft(wxPoint(ximg, yimg));
+	myImgPxExtractedResult.width = pxWidthVisible;
+	myImgPxExtractedResult.height = pxHeightVisible;
+    
+    double myRasterPxSizeX = wxRound(fabs(myIntersect.m_width / coord->GetPixelSize()));
+    double myRasterPxSizeY = wxRound(fabs(myIntersect.m_height / coord->GetPixelSize()));
+
+	if (myImgPxExtractedResult.IsEmpty()) {
+		wxLogMessage("Image is outside the display.");
+		return false;
+        
+	}
+    
+    /////////////////////////////
+    // Create memory raster for results
+    ////////////////////////////
+    
+    //TODO: Change to memory when working
+    GDALDriverH	hDriver = GDALGetDriverByName("GTiff");
+	if (hDriver == NULL) {
+		wxLogError(_("Unable to load GTiff Driver, export unavailable!"));
+		return false;
+	}
+    wxFileName destination (wxFileName::GetHomeDir(), "test_pling.tif");
+    
+	GDALDatasetH hOutDS = GDALCreate(hDriver, destination.GetFullPath(),
+									 myRasterPxSizeX,
+									 myRasterPxSizeY,
+									 1, GDT_Byte, NULL);
+	if (hOutDS == NULL) {
+		wxLogError(_("Error creating '%s'!"), destination.GetFullName());
+		return false;
+	}
+	wxLogMessage(_("Creating '%s'"), destination.GetFullPath());
+    
+    double myGeoTransform[6] = {
+        myIntersect.GetLeft(),
+        coord->GetPixelSize(),
+        myIntersect.GetTop(),
+        0.0,
+        0.0,
+        coord->GetPixelSize()
+    };
+    GDALSetGeoTransform(hOutDS, &myGeoTransform[0]);
+    
+    
+    ////////////////////////////
+    // extract DEM data for
+    // concerned area, compute above or under the plane
+    // and write the result to the temporary raster.
+    ///////////////////////////
+    
+    
+    
+    GDALClose(hOutDS);
+	return true;
+}
 
 
 OGRPoint PlIntOperation::_ComputeVector (int index1, int index2){

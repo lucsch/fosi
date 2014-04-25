@@ -286,6 +286,18 @@ void PlInt_Tool_DLG::UpdateControls (bool liveupdate){
 
 
 
+void PlInt_Tool_DLG::ComputeLine (){
+    if (m_Overlay->GetPointAdded() != 3) {
+        return;
+    }
+    
+    vrViewerDisplay * myDisplay = m_ParentDlg->m_ViewerLayerManager->GetDisplay();
+    wxASSERT(myDisplay);
+    m_Operation->ComputeLine(myDisplay->GetCoordinate());
+}
+
+
+
 void PlInt_Tool_DLG::OnEditPoints( wxCommandEvent& event ) {
     vrViewerDisplay * myDisplay = m_ParentDlg->m_ViewerLayerManager->GetDisplay();
     wxASSERT(myDisplay);
