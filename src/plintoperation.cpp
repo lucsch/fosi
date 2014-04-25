@@ -98,80 +98,6 @@ bool PlIntOperation::ComputeLine (vrCoordinate * coord){
 
 
 
-/***************************************************************************//**
-@brief Compute all position info for displaying a raster
-@param pximgsize Size of image in pixels stored on disk
-@param imgextent Coordinate Extent of the raster
-@param wndextent Coordinate extent of the Window
-@param pxsize Pixel conversion Reality - Window
-@param pximginfo Part of the raster to read in pixels
-@param pximgpos Position and size of the raster for displaying it on the window
-@return  true if computing was successfull
-@author Lucien Schreiber (c) CREALP 2010
-@date 17 mars 2010
- *******************************************************************************/
-/*
-bool PlIntOperation::_ComputeDisplayPosSize(const wxSize & pximgsize,
-							const vrRealRect & imgextent,
-							const vrRealRect & wndextent,
-							double pxsize,
-                                            wxRect & pximginfo) { //, wxRect & pximgpos){
-
-	// get intersection between display and img
-	vrRealRect myWndExtentTemp = wndextent;
-	wxASSERT(myWndExtentTemp == wndextent);
-
-
-	pximginfo = wxRect(0,0,0,0);
-	//pximgpos = wxRect(0,0,0,0);
-
-	vrRealRect myIntersect = myWndExtentTemp.Intersect(imgextent);
-	if (myIntersect.IsOk() == false) {
-		wxLogMessage("Image out of the dislay, intersection is null");
-		return false;
-	}
-
-
-	// width of image to display (in pixels)
-	int pxWidthVisible = wxRound(myIntersect.m_width * pximgsize.GetWidth() / imgextent.m_width);
-	int pxHeightVisible = wxRound(myIntersect.m_height * pximgsize.GetHeight() / imgextent.m_height);
-
-	// starting position from where we get image data (px)
-	int ximg = wxRound((myIntersect.GetLeft() - imgextent.GetLeft())  * pximgsize.GetWidth() / imgextent.m_width);
-	int yimg = wxRound((myIntersect.GetTop() - imgextent.GetTop()) * pximgsize.GetHeight() / imgextent.m_height);
-
-	// position for displaying the bitmap (in pixels)
-	//int vx = wxRound((myIntersect.GetLeft() - wndextent.GetLeft()) / pxsize);
-	//int vy = wxRound((wndextent.GetTop()- myIntersect.GetTop()) / pxsize);
-
-	//pixels size of displayed bitmap
-	//int vw = wxRound(fabs(myIntersect.m_width / pxsize));
-	//int vh = wxRound(fabs(myIntersect.m_height / pxsize));
-
-
-	// returning values
-	pximginfo.SetTopLeft(wxPoint(ximg, yimg));
-	pximginfo.width = pxWidthVisible;
-	pximginfo.height = pxHeightVisible;
-
-	//pximgpos.x = vx;
-	//pximgpos.y = vy;
-	//pximgpos.SetWidth(vw);
-	//pximgpos.SetHeight(vh);
-
-
-	if (pximginfo.IsEmpty()) {
-		wxLogMessage("Image is outside the display.");
-		return false;
-
-	}
-
-	return true;
-}
-
-*/
-
-
 bool PlIntOperation::_ExtractRaster (vrCoordinate * coord){
     
     ////////////////////////////
@@ -225,7 +151,7 @@ bool PlIntOperation::_ExtractRaster (vrCoordinate * coord){
 	GDALDatasetH hOutDS = GDALCreate(hDriver, destination.GetFullPath(),
 									 myRasterPxSizeX,
 									 myRasterPxSizeY,
-									 1, GDT_Byte, NULL);
+									 1, GDT_Float32, NULL);
 	if (hOutDS == NULL) {
 		wxLogError(_("Error creating '%s'!"), destination.GetFullName());
 		return false;
@@ -249,8 +175,47 @@ bool PlIntOperation::_ExtractRaster (vrCoordinate * coord){
     // and write the result to the temporary raster.
     ///////////////////////////
     
-    
-    
+    // read row by row
+    double myYinc = myImgPxExtractedResult.GetHeight() / myRasterPxSizeY;
+    for (unsigned int i = 0 ; i < myRasterPxSizeY; i++) {
+        
+        // TODO: Fix error here !!!!
+        double * imgdata = (double *) malloc( myRasterPxSizeX * 1 );
+        if(m_MNT->GetDatasetRef()->RasterIO(GF_Read,
+                                         myImgPxExtractedResult.GetLeft(),
+                                         myImgPxExtractedResult.GetTop() + ( i * myYinc ),
+                                         myImgPxExtractedResult.GetWidth(),
+                                         wxRound(myImgPxExtractedResult.GetHeight() / myRasterPxSizeY),
+                                         imgdata,
+                                         myRasterPxSizeX,
+                                         1,
+                                         GDT_Float32,
+                                         1,
+                                            NULL, 0, 0, 0) != CE_None){
+            wxLogError(_("Error while reading loop : %d"), i);
+            break;
+        }
+        
+        if(GDALDatasetRasterIO (hOutDS,
+                             GF_Write,
+                             0,
+                             i,
+                             myRasterPxSizeX,
+                             1,
+                             imgdata,
+                             myRasterPxSizeX,
+                             1,
+                             GDT_Float32,
+                             1,
+                             NULL,
+                             0,
+                             0,
+                                0) != CE_None){
+            break;
+        }
+        CPLFree(imgdata);
+    }
+        
     GDALClose(hOutDS);
 	return true;
 }

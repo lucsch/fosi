@@ -36,7 +36,6 @@ private:
     
     OGRPoint _ComputeVector (int index1, int index2);
     OGRPoint _MultiplyVector (OGRPoint v1, OGRPoint v2);
-    //bool _ComputeDisplayPosSize(const wxSize & pximgsize, const vrRealRect & imgextent, const vrRealRect & wndextent, double pxsize, wxRect & pximginfo); //, wxRect & pximgpos);
     bool _ExtractRaster (vrCoordinate * coord);
 };
 
