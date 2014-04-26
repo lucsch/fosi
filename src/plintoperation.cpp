@@ -175,49 +175,107 @@ bool PlIntOperation::_ExtractRaster (vrCoordinate * coord){
     // and write the result to the temporary raster.
     ///////////////////////////
     
+    double a = 0;
+    double b = 0;
+    double c = 0;
+    double d = 0;
+    _ComputeABCD(a, b, c, d);
+    
     // read row by row
     double myYinc = myImgPxExtractedResult.GetHeight() / myRasterPxSizeY;
     for (unsigned int i = 0 ; i < myRasterPxSizeY; i++) {
-        
-        // TODO: Fix error here !!!!
-        void * imgdata = CPLMalloc(myRasterPxSizeX * GDALGetDataTypeSize(GDT_Float32) / 8);
+        double * imgdata = (double*) CPLMalloc(myRasterPxSizeX * GDALGetDataTypeSize(GDT_Float32) / 8);
         if(m_MNT->GetDatasetRef()->RasterIO(GF_Read,
-                                         myImgPxExtractedResult.GetLeft(),
-                                         myImgPxExtractedResult.GetTop() + ( i * myYinc ),
-                                         myImgPxExtractedResult.GetWidth(),
-                                         wxRound(myImgPxExtractedResult.GetHeight() / myRasterPxSizeY),
-                                         imgdata,
-                                         myRasterPxSizeX,
-                                         1,
-                                         GDT_Float32,
-                                         1,
+                                            myImgPxExtractedResult.GetLeft(),
+                                            myImgPxExtractedResult.GetTop() + ( i * myYinc ),
+                                            myImgPxExtractedResult.GetWidth(),
+                                            wxRound(myImgPxExtractedResult.GetHeight() / myRasterPxSizeY),
+                                            imgdata,
+                                            myRasterPxSizeX,
+                                            1,
+                                            GDT_Float32,
+                                            1,
                                             NULL, 0, 0, 0) != CE_None){
             wxLogError(_("Error while reading loop : %d"), i);
             break;
         }
         
+        // compute under / above plane
+        for (unsigned int y = 0; y < myRasterPxSizeX ; y++) {
+            OGRPoint myPt;
+            myPt.setX( myIntersect.GetLeft() + ( y * coord->GetPixelSize() ) );
+            myPt.setY( myIntersect.GetTop() + ( i * coord->GetPixelSize() ) );
+            
+            // TODO : Iterating imgdata like that isn't working
+            myPt.setZ( *(imgdata + y) );
+            
+            * (imgdata + y) = _IsUnderOrAbovePlane(a, b, c, d, &myPt);
+        }
+        
         if(GDALDatasetRasterIO (hOutDS,
-                             GF_Write,
-                             0,
-                             i,
-                             myRasterPxSizeX,
-                             1,
-                             imgdata,
-                             myRasterPxSizeX,
-                             1,
-                             GDT_Float32,
-                             1,
-                             NULL,
-                             0,
-                             0,
+                                GF_Write,
+                                0,
+                                i,
+                                myRasterPxSizeX,
+                                1,
+                                imgdata,
+                                myRasterPxSizeX,
+                                1,
+                                GDT_Float32,
+                                1,
+                                NULL,
+                                0,
+                                0,
                                 0) != CE_None){
             break;
         }
         CPLFree(imgdata);
     }
-        
+    
     GDALClose(hOutDS);
 	return true;
+}
+
+
+
+void PlIntOperation::_ComputeABCD (double & a, double & b, double & c, double & d){
+    
+    OGRPoint * myP1 = static_cast<OGRPoint*>( m_Points.getGeometryRef(0) );
+    OGRPoint * myP2 = static_cast<OGRPoint*>( m_Points.getGeometryRef(1) );
+    OGRPoint * myP3 = static_cast<OGRPoint*>( m_Points.getGeometryRef(2) );
+    
+    double X1 = myP1->getX();
+    double Y1 = myP1->getY();
+    double Z1 = myP1->getZ();
+    
+    double X2 = myP2->getX();
+    double Y2 = myP2->getY();
+    double Z2 = myP2->getZ();
+    
+    double X3 = myP3->getX();
+    double Y3 = myP3->getY();
+    double Z3 = myP3->getZ();
+
+    a = (Y2 - Y1)*(Z3 - Z1) - (Z2 - Z1)*(Y3 - Y1);
+    b = (-1)*((X2 - X1)*(Z3 - Z1) - (Z2 -Z1)*(X3 - X1));
+    c = (X2 - X1)*(Y3 - Y1) - (Y2 - Y1)*(X3 - X1);
+    d = (-1)*(a*X1 + b*Y1 + c*Z1);
+}
+
+
+
+double PlIntOperation::_IsUnderOrAbovePlane (const double & a, const double & b, const double & c, const double & d, OGRPoint * pt){
+    double myRetValue = a * pt->getX() + b * pt->getY() + c * pt->getZ() + d;
+    
+    if (myRetValue < 0.0) {
+        return -1;
+    }
+    
+    if (myRetValue > 0.0) {
+        return 1;
+    }
+    
+    return myRetValue;
 }
 
 
