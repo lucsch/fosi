@@ -161,8 +161,8 @@ bool PlIntOperation::_ExtractRaster (vrCoordinate * coord){
     double myGeoTransform[6] = {
         myIntersect.GetLeft(),
         coord->GetPixelSize(),
-        myIntersect.GetTop(),
         0.0,
+        myIntersect.GetTop(),
         0.0,
         coord->GetPixelSize()
     };
@@ -180,7 +180,7 @@ bool PlIntOperation::_ExtractRaster (vrCoordinate * coord){
     for (unsigned int i = 0 ; i < myRasterPxSizeY; i++) {
         
         // TODO: Fix error here !!!!
-        double * imgdata = (double *) malloc( myRasterPxSizeX * 1 );
+        void * imgdata = CPLMalloc(myRasterPxSizeX * GDALGetDataTypeSize(GDT_Float32) / 8);
         if(m_MNT->GetDatasetRef()->RasterIO(GF_Read,
                                          myImgPxExtractedResult.GetLeft(),
                                          myImgPxExtractedResult.GetTop() + ( i * myYinc ),
