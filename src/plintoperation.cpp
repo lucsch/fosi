@@ -184,7 +184,7 @@ bool PlIntOperation::_ExtractRaster (vrCoordinate * coord){
     // read row by row
     double myYinc = myImgPxExtractedResult.GetHeight() / myRasterPxSizeY;
     for (unsigned int i = 0 ; i < myRasterPxSizeY; i++) {
-        double * imgdata = (double*) CPLMalloc(myRasterPxSizeX * GDALGetDataTypeSize(GDT_Float32) / 8);
+        float * imgdata = (float *) CPLMalloc(myRasterPxSizeX * GDALGetDataTypeSize(GDT_Float32) / 8);
         if(m_MNT->GetDatasetRef()->RasterIO(GF_Read,
                                             myImgPxExtractedResult.GetLeft(),
                                             myImgPxExtractedResult.GetTop() + ( i * myYinc ),
@@ -206,9 +206,8 @@ bool PlIntOperation::_ExtractRaster (vrCoordinate * coord){
             myPt.setX( myIntersect.GetLeft() + ( y * coord->GetPixelSize() ) );
             myPt.setY( myIntersect.GetTop() + ( i * coord->GetPixelSize() ) );
             
-            // TODO : Iterating imgdata like that isn't working
-            myPt.setZ( *(imgdata + y) );
-            
+            float myzValue = * (imgdata + y);
+            myPt.setZ( myzValue );
             * (imgdata + y) = _IsUnderOrAbovePlane(a, b, c, d, &myPt);
         }
         
@@ -264,7 +263,7 @@ void PlIntOperation::_ComputeABCD (double & a, double & b, double & c, double & 
 
 
 
-double PlIntOperation::_IsUnderOrAbovePlane (const double & a, const double & b, const double & c, const double & d, OGRPoint * pt){
+float PlIntOperation::_IsUnderOrAbovePlane (const double & a, const double & b, const double & c, const double & d, OGRPoint * pt){
     double myRetValue = a * pt->getX() + b * pt->getY() + c * pt->getZ() + d;
     
     if (myRetValue < 0.0) {
