@@ -14,6 +14,7 @@
 #endif
 #include <wx/overlay.h>
 #include <ogrsf_frmts.h>
+#include <gdal_alg.h>
 #include "vrrealrect.h"
 
 class vrLayerRasterGDAL;

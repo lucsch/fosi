@@ -8,6 +8,7 @@
 #include "plintoperation.h"
 #include "vrlayerraster.h"
 #include "vrcoordinate.h"
+#include "vrlayervector.h"
 
 
 PlIntOperation::PlIntOperation(vrLayerRasterGDAL * mnt, int bandno) {
@@ -164,7 +165,7 @@ bool PlIntOperation::_ExtractRaster (vrCoordinate * coord){
         0.0,
         myIntersect.GetTop(),
         0.0,
-        coord->GetPixelSize()
+        coord->GetPixelSize() * -1.0
     };
     GDALSetGeoTransform(hOutDS, &myGeoTransform[0]);
     
@@ -230,6 +231,45 @@ bool PlIntOperation::_ExtractRaster (vrCoordinate * coord){
         }
         CPLFree(imgdata);
     }
+    
+    
+    ////////////////////////////
+    // Convert raster to polygon
+    ///////////////////////////
+    // TODO: Use in memory polygon layer when working
+    
+    wxFileName myVectorFileName (wxFileName::GetHomeDir(), "test_pling_poly.shp");
+    
+    // try to delete vector file if existing
+    const char *pszVectorDriverName = "ESRI Shapefile";
+    OGRSFDriver * poVectorDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(pszVectorDriverName);
+    if( poVectorDriver == NULL ){
+        wxLogWarning(_("%s driver not available."), pszVectorDriverName );
+        GDALClose(hOutDS);
+        return false;
+    }
+
+    if (poVectorDriver->DeleteDataSource(myVectorFileName.GetFullPath()) != OGRERR_NONE){
+        wxLogWarning(_("Unable to delete : %s"), myVectorFileName.GetFullName());
+    }
+
+    // create polygon file
+    vrLayerVectorOGR myOutVector;
+    if(myOutVector.Create(myVectorFileName.GetFullPath(), 3) == false){ // 3 is for polygon
+        wxLogError( _("Creation of %s file failed."), myVectorFileName.GetFullName());
+    }
+    
+    OGRFieldDefn myFieldDefn ("Value", OFTInteger);
+    myOutVector.AddField(myFieldDefn);
+    
+    GDALPolygonize(GDALGetRasterBand(hOutDS, 1),
+                NULL,
+                   myOutVector.GetLayerRef(),
+                   0,
+                   NULL,
+                   NULL,
+                   NULL);
+    
     
     GDALClose(hOutDS);
 	return true;
