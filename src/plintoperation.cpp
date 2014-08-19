@@ -11,9 +11,10 @@
 #include "vrlayervector.h"
 
 
-PlIntOperation::PlIntOperation(vrLayerRasterGDAL * mnt, int bandno) {
+PlIntOperation::PlIntOperation(vrLayerRasterGDAL * mnt, int bandno, vrLayerVectorOGR * shape) {
     m_MNT = mnt;
     m_MNTBand = bandno;
+    m_Shape = shape;
 }
 
 
@@ -271,10 +272,68 @@ bool PlIntOperation::_ExtractRaster (vrCoordinate * coord){
                    NULL);
     
     
+    ////////////////////////////
+    // Convert to line or
+    // copy to polygon
+    ///////////////////////////
+    
+    // convert to lines
+    if (m_Shape->GetGeometryType() == wkbLineString) {
+        bool bReturn = _ConvertPolygonToLines(&myOutVector);
+        GDALClose(hOutDS);
+        return bReturn;
+    }
+    
+    
+    // TODO: copy to polygons
+    
     GDALClose(hOutDS);
 	return true;
 }
 
+
+bool PlIntOperation::_ConvertPolygonToLines (vrLayerVectorOGR * polyvector){
+    wxASSERT(polyvector);
+    wxASSERT(m_Shape);
+    
+    // create rect, one pixel smaller than the raster extent
+    vrRealRect myEnveloppe;
+    polyvector->GetExtent(myEnveloppe);
+    OGRLinearRing myRing;
+    myRing.addPoint(myEnveloppe.GetLeft(), myEnveloppe.GetTop());
+    myRing.addPoint(myEnveloppe.GetRight(), myEnveloppe.GetTop());
+    myRing.addPoint(myEnveloppe.GetRight(), myEnveloppe.GetBottom());
+    myRing.addPoint(myEnveloppe.GetLeft(), myEnveloppe.GetBottom());
+    myRing.addPoint(myEnveloppe.GetLeft(), myEnveloppe.GetTop());
+    OGRPolygon myIntersectPolygon;
+    myIntersectPolygon.addRing(&myRing);
+    OGRGeometry * myPolyBuffer = myIntersectPolygon.Buffer(-1.0 * m_MNT->GetPixelWidth());
+    
+    // convert polygons with attribut (1) to lines
+    polyvector->SetAttributeFilter("Value=1");
+    OGRFeature * poFeature = NULL;
+	while( (poFeature = polyvector->GetNextFeature(false)) != NULL )
+	{
+        OGRPolygon * myPoly = static_cast<OGRPolygon*>( poFeature->GetGeometryRef());
+        OGRLineString myLineExt;
+        myLineExt.addSubLineString(myPoly->getExteriorRing());
+        OGRGeometry * myIntersectGeom = myPolyBuffer->Intersection(&myLineExt);
+        if (myIntersectGeom) {
+            m_Shape->AddFeature(myIntersectGeom);
+        }
+        
+        for (unsigned int i = 0 ; i< myPoly->getNumInteriorRings(); i++) {
+            OGRLineString myLineInt;
+            myLineInt.addSubLineString(myPoly->getInteriorRing(i));
+            OGRGeometry * myGeom = myPolyBuffer->Intersection(&myLineInt);
+            if (myGeom) {
+                m_Shape->AddFeature(myGeom);
+            }
+        }
+		OGRFeature::DestroyFeature(poFeature);
+	}
+    return true;
+}
 
 
 void PlIntOperation::_ComputeABCD (double & a, double & b, double & c, double & d){

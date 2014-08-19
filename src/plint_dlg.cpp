@@ -223,7 +223,18 @@ PlInt_Tool_DLG::PlInt_Tool_DLG( PlInt_DLG * parent, wxWindowID id, const wxStrin
     vrRenderer * myRenderer = m_ParentDlg->m_ViewerLayerManager->GetRenderer(m_ParentDlg->m_DemListCtrl->GetStringSelection());
     wxASSERT(myRenderer);
     vrLayerRasterGDAL * myLayer = static_cast<vrLayerRasterGDAL* >(myRenderer->GetLayer());
-    m_Operation = new PlIntOperation(myLayer, 0);
+    
+    wxFileName myVectorLayerName (m_ParentDlg->m_VectorListCtrl->GetStringSelection());
+    vrRenderer * myRendererVect = m_ParentDlg->m_ViewerLayerManager->GetRenderer(myVectorLayerName.GetFullPath());
+    // if not found try adding "memory" extension
+    if (myRendererVect == NULL) {
+        myVectorLayerName.SetExt(_T("memory"));
+    }
+    myRendererVect = m_ParentDlg->m_ViewerLayerManager->GetRenderer(myVectorLayerName.GetFullPath());
+    wxASSERT(myRenderer);
+    vrLayerVectorOGR * myLayerVector = static_cast<vrLayerVectorOGR* >(myRendererVect->GetLayer());
+    
+    m_Operation = new PlIntOperation(myLayer, 0, myLayerVector);
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( PlInt_Tool_DLG::OnClose ) );
