@@ -284,7 +284,6 @@ bool PlIntOperation::_ExtractRaster (vrCoordinate * coord){
         return bReturn;
     }
     
-    
     // TODO: copy to polygons
     
     GDALClose(hOutDS);
