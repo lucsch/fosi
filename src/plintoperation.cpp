@@ -94,13 +94,6 @@ bool PlIntOperation::GetPlaneInfo(double & dip, double & direction) {
 
 
 bool PlIntOperation::ComputeLine (vrCoordinate * coord){
-    // extract visible part of the DEM into memory
-    return _ExtractRaster(coord);
-}
-
-
-
-bool PlIntOperation::_ExtractRaster (vrCoordinate * coord){
     
     ////////////////////////////
     // compute visible DEM part and resolution

@@ -39,7 +39,6 @@ private:
     
     OGRPoint _ComputeVector (int index1, int index2);
     OGRPoint _MultiplyVector (OGRPoint v1, OGRPoint v2);
-    bool _ExtractRaster (vrCoordinate * coord);
     bool _ConvertPolygonToLines (vrLayerVectorOGR * polyvector);
     void _ComputeABCD (double & a, double & b, double & c, double & d);
     float _IsUnderOrAbovePlane (const double & a, const double & b, const double & c, const double & d, OGRPoint * pt);
