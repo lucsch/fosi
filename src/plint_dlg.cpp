@@ -184,6 +184,7 @@ void PlInt_DLG::_CreateControls(){
 	
 	m_2PointsCtrl = new wxRadioButton( m_panel1, wxID_ANY, _("Use 2 points and a dip"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer9->Add( m_2PointsCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+    m_2PointsCtrl->Disable();
 	
 	
 	sbSizer4->Add( bSizer9, 1, wxEXPAND, 5 );
@@ -377,8 +378,8 @@ void PlInt_Tool_DLG::_CreateControls(){
 	
 	bSizer6->Add( sbSizer10, 0, wxEXPAND|wxALL, 5 );
 	
-	m_LivePreviewCtrl = new wxCheckBox( m_panel2, wxID_ANY, _("Live preview"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer6->Add( m_LivePreviewCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	/*m_LivePreviewCtrl = new wxCheckBox( m_panel2, wxID_ANY, _("Live preview"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer6->Add( m_LivePreviewCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );*/
 	
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );

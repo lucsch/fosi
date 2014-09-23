@@ -72,7 +72,7 @@ private:
     wxStaticText* m_DirTxtCtrl;
     wxSpinCtrlDouble * m_DipCtrl;
     wxStaticText* m_PtsTxtCtrl;
-    wxCheckBox* m_LivePreviewCtrl;
+    //wxCheckBox* m_LivePreviewCtrl;
     wxButton* m_EditPtsBtn;
     wxButton* m_ClearPtsBtn;
     
