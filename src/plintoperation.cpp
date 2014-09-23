@@ -9,6 +9,7 @@
 #include "vrlayerraster.h"
 #include "vrcoordinate.h"
 #include "vrlayervector.h"
+#include "wx/stdpaths.h"
 
 
 PlIntOperation::PlIntOperation(vrLayerRasterGDAL * mnt, int bandno, vrLayerVectorOGR * shape) {
@@ -232,7 +233,7 @@ bool PlIntOperation::ComputeLine (vrCoordinate * coord){
     ///////////////////////////
     // TODO: Use in memory polygon layer when working
     
-    wxFileName myVectorFileName (wxFileName::GetHomeDir(), "test_pling_poly.shp");
+    wxFileName myVectorFileName (wxStandardPaths::Get().GetTempDir(), "test_pling_poly.shp");
     
     // try to delete vector file if existing
     const char *pszVectorDriverName = "ESRI Shapefile";
@@ -243,7 +244,7 @@ bool PlIntOperation::ComputeLine (vrCoordinate * coord){
         return false;
     }
 
-    if (poVectorDriver->DeleteDataSource(myVectorFileName.GetFullPath()) != OGRERR_NONE){
+    if (myVectorFileName.Exists() && poVectorDriver->DeleteDataSource(myVectorFileName.GetFullPath()) != OGRERR_NONE){
         wxLogWarning(_("Unable to delete : %s"), myVectorFileName.GetFullName());
     }
 
