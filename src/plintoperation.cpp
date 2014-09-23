@@ -142,7 +142,7 @@ bool PlIntOperation::ComputeLine (vrCoordinate * coord){
 		wxLogError(_("Unable to load GTiff Driver, export unavailable!"));
 		return false;
 	}
-    wxFileName destination (wxFileName::GetHomeDir(), "test_pling.tif");
+    wxFileName destination (wxStandardPaths::Get().GetTempDir(), "test_pling.tif");
     
 	GDALDatasetH hOutDS = GDALCreate(hDriver, destination.GetFullPath(),
 									 myRasterPxSizeX,
@@ -298,9 +298,11 @@ bool PlIntOperation::_ConvertPolygonToLines (vrLayerVectorOGR * polyvector){
     myRing.addPoint(myEnveloppe.GetRight(), myEnveloppe.GetBottom());
     myRing.addPoint(myEnveloppe.GetLeft(), myEnveloppe.GetBottom());
     myRing.addPoint(myEnveloppe.GetLeft(), myEnveloppe.GetTop());
+
     OGRPolygon myIntersectPolygon;
     myIntersectPolygon.addRing(&myRing);
     OGRGeometry * myPolyBuffer = myIntersectPolygon.Buffer(-1.0 * m_MNT->GetPixelWidth());
+    wxASSERT_MSG(myPolyBuffer, "Are you using a version of GDAL built without the GEOS library ?");
     
     // convert polygons with attribut (1) to lines
     polyvector->SetAttributeFilter("Value=1");
