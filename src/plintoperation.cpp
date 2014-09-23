@@ -41,6 +41,36 @@ bool PlIntOperation::ComputeAndAddPoint(double x, double y, long index) {
         m_Points.addGeometry(&myPt);
     }
     
+    // TODO: Remove this test code
+    /*
+    if (index == 0) {
+        OGRPoint * myPt = static_cast<OGRPoint*>(m_Points.getGeometryRef(index));
+        wxASSERT(myPt);
+        myPt->setX(598557);
+        myPt->setY(115375);
+        myPt->setZ(913.143);
+    }
+ 
+    
+    if (index == 1) {
+        OGRPoint * myPt = static_cast<OGRPoint*>(m_Points.getGeometryRef(index));
+        wxASSERT(myPt);
+        myPt->setX(598487);
+        myPt->setY(115213);
+        myPt->setZ(861.925);
+    }
+    
+    if (index == 2) {
+        OGRPoint * myPt = static_cast<OGRPoint*>(m_Points.getGeometryRef(index));
+        wxASSERT(myPt);
+        myPt->setX(598579);
+        myPt->setY(115233);
+        myPt->setZ(887.947);
+    }
+    return true;
+    */
+     //
+    
     wxASSERT(m_MNTBand < myValues.GetCount());
     OGRPoint * myPt = static_cast<OGRPoint*>(m_Points.getGeometryRef(index));
     wxASSERT(myPt);
