@@ -90,7 +90,7 @@ install ( TARGETS ${CMAKE_PROJECT_NAME} DESTINATION ${INSTALL_DIR_BIN})
 
 if (WIN32)
     install (
-      PROGRAMS ../bin/Release/gdal110.dll ../bin/Release/geos.dll ../bin/Release/geos_c.dll ../bin/Release/libcurl.dll ../bin/Release/msvcr110.dll
+      PROGRAMS ../bin/Release/gdal111.dll ../bin/Release/geos.dll ../bin/Release/geos_c.dll ../bin/Release/libcurl.dll ../bin/Release/msvcr110.dll
       DESTINATION .
       )
 endif (WIN32)
