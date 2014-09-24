@@ -383,6 +383,15 @@ void PlIntOperation::_ComputeABCD (double & a, double & b, double & c, double & 
     b = (-1)*((X2 - X1)*(Z3 - Z1) - (Z2 -Z1)*(X3 - X1));
     c = (X2 - X1)*(Y3 - Y1) - (Y2 - Y1)*(X3 - X1);
     d = (-1)*(a*X1 + b*Y1 + c*Z1);
+    
+    // checking if plane normal is up or down
+    // suggested by RM.
+    if (c < 0) {
+        a =  -1.0 * a;
+        b = -1.0 * b;
+        c = -1.0 * c;
+        d = -1.0 * d;
+    }
 }
 
 
