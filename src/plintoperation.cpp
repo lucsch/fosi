@@ -179,7 +179,8 @@ bool PlIntOperation::ComputeLineFullResolution (vrCoordinate * coord){
     
     // read row by row the entire DEM
     for (unsigned int height_i = 0 ; height_i < myImgPx.GetHeight() ; height_i++) {
-        float * imgdata = (float *) CPLMalloc(myImgPx.GetWidth() * GDALGetDataTypeSize(GDT_Float32) / 8);
+        double imgdata_size = myImgPx.GetWidth() * GDALGetDataTypeSize(GDT_Float32) / 8;
+        float * imgdata = (float *) CPLMalloc(imgdata_size);
         if(m_MNT->GetDatasetRef()->RasterIO(GF_Read,
                                             0,
                                             height_i,
