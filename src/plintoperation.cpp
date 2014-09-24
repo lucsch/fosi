@@ -124,7 +124,168 @@ bool PlIntOperation::GetPlaneInfo(double & dip, double & direction) {
 
 
 
-bool PlIntOperation::ComputeLine (vrCoordinate * coord){
+bool PlIntOperation::ComputeLineFullResolution (vrCoordinate * coord){
+    vrRealRect myImgReal;
+    m_MNT->GetExtent(myImgReal);
+    wxSize myImgPx = m_MNT->GetPixelSize();
+    
+    /////////////////////////////
+    // Create temporary raster for results
+    ////////////////////////////
+    
+    GDALDriverH	hDriver = GDALGetDriverByName("GTiff");
+	if (hDriver == NULL) {
+		wxLogError(_("Unable to load GTiff Driver, export unavailable!"));
+		return false;
+	}
+    wxFileName destination (wxStandardPaths::Get().GetTempDir(), "test_pling_full.tif");
+    
+	GDALDatasetH hOutDS = GDALCreate(hDriver, destination.GetFullPath(),
+									 myImgPx.GetWidth(),
+                                     myImgPx.GetHeight(),
+									 1, GDT_Float32, NULL);
+	if (hOutDS == NULL) {
+		wxLogError(_("Error creating '%s'!"), destination.GetFullName());
+		return false;
+	}
+	wxLogMessage(_("Creating '%s'"), destination.GetFullPath());
+    
+    
+    wxArrayDouble myGeoTransformArray;
+    m_MNT->GetGeoTransform(myGeoTransformArray);
+    wxASSERT(myGeoTransformArray.GetCount() == 6);
+    
+    double myGeoTransform[6] = {
+        myGeoTransformArray[0],
+        myGeoTransformArray[1],
+        myGeoTransformArray[2],
+        myGeoTransformArray[3],
+        myGeoTransformArray[4],
+        myGeoTransformArray[5]
+    };
+    GDALSetGeoTransform(hOutDS, &myGeoTransform[0]);
+    
+    ////////////////////////////
+    // extract DEM data for
+    // concerned area, compute above or under the plane
+    // and write the result to the temporary raster.
+    ///////////////////////////
+    
+    double a = 0;
+    double b = 0;
+    double c = 0;
+    double d = 0;
+    _ComputeABCD(a, b, c, d);
+    
+    // read row by row the entire DEM
+    for (unsigned int height_i = 0 ; height_i < myImgPx.GetHeight() ; height_i++) {
+        float * imgdata = (float *) CPLMalloc(myImgPx.GetWidth() * GDALGetDataTypeSize(GDT_Float32) / 8);
+        if(m_MNT->GetDatasetRef()->RasterIO(GF_Read,
+                                            0,
+                                            height_i,
+                                            myImgPx.GetWidth(),
+                                            1,
+                                            imgdata,
+                                            myImgPx.GetWidth(),
+                                            1,
+                                            GDT_Float32,
+                                            1,
+                                            NULL, 0, 0, 0) != CE_None){
+            wxLogError(_("Error while reading loop : %d"), height_i);
+            break;
+        }
+        
+        // compute under / above plane
+        for (unsigned int width_i = 0; width_i < myImgPx.GetWidth() ; width_i++) {
+            OGRPoint myPt;
+            myPt.setX( myImgReal.GetLeft() + ( width_i * coord->GetPixelSize() ) );
+            myPt.setY( myImgReal.GetTop() + ( height_i * coord->GetPixelSize() ) );
+            
+            float myzValue = * (imgdata + width_i);
+            myPt.setZ( myzValue );
+            * (imgdata + width_i) = _IsUnderOrAbovePlane(a, b, c, d, &myPt);
+        }
+        
+        if(GDALDatasetRasterIO (hOutDS,
+                                GF_Write,
+                                0,
+                                height_i,
+                                myImgPx.GetWidth(),
+                                1,
+                                imgdata,
+                                myImgPx.GetWidth(),
+                                1,
+                                GDT_Float32,
+                                1,
+                                NULL,
+                                0,
+                                0,
+                                0) != CE_None){
+            break;
+        }
+        CPLFree(imgdata);
+    }
+    
+    
+    ////////////////////////////
+    // Convert raster to polygon
+    ///////////////////////////
+    // TODO: Use in memory polygon layer when working
+    
+    wxFileName myVectorFileName (wxStandardPaths::Get().GetTempDir(), "test_pling_poly.shp");
+    
+    // try to delete vector file if existing
+    const char *pszVectorDriverName = "ESRI Shapefile";
+    OGRSFDriver * poVectorDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(pszVectorDriverName);
+    if( poVectorDriver == NULL ){
+        wxLogWarning(_("%s driver not available."), pszVectorDriverName );
+        GDALClose(hOutDS);
+        return false;
+    }
+
+    if (myVectorFileName.Exists() && poVectorDriver->DeleteDataSource(myVectorFileName.GetFullPath()) != OGRERR_NONE){
+        wxLogWarning(_("Unable to delete : %s"), myVectorFileName.GetFullName());
+    }
+
+    // create polygon file
+    vrLayerVectorOGR myOutVector;
+    if(myOutVector.Create(myVectorFileName.GetFullPath(), 3) == false){ // 3 is for polygon
+        wxLogError( _("Creation of %s file failed."), myVectorFileName.GetFullName());
+    }
+    
+    OGRFieldDefn myFieldDefn ("Value", OFTInteger);
+    myOutVector.AddField(myFieldDefn);
+    
+    GDALPolygonize(GDALGetRasterBand(hOutDS, 1),
+                NULL,
+                   myOutVector.GetLayerRef(),
+                   0,
+                   NULL,
+                   NULL,
+                   NULL);
+    
+    
+    ////////////////////////////
+    // Convert to line or
+    // copy to polygon
+    ///////////////////////////
+    
+    // convert to lines
+    if (m_Shape->GetGeometryType() == wkbLineString) {
+        bool bReturn = _ConvertPolygonToLines(&myOutVector);
+        GDALClose(hOutDS);
+        return bReturn;
+    }
+    
+    // TODO: copy to polygons
+    
+    GDALClose(hOutDS);
+	return true;
+}
+
+
+
+bool PlIntOperation::ComputeLineSmallResolution (vrCoordinate * coord){
     
     ////////////////////////////
     // compute visible DEM part and resolution
@@ -140,27 +301,27 @@ bool PlIntOperation::ComputeLine (vrCoordinate * coord){
     }
     
     // width of image to display (in pixels)
-	int pxWidthVisible = wxRound(myIntersect.m_width * myImgPx.GetWidth() / myImgReal.m_width);
-	int pxHeightVisible = wxRound(myIntersect.m_height * myImgPx.GetHeight() / myImgReal.m_height);
+    int pxWidthVisible = wxRound(myIntersect.m_width * myImgPx.GetWidth() / myImgReal.m_width);
+    int pxHeightVisible = wxRound(myIntersect.m_height * myImgPx.GetHeight() / myImgReal.m_height);
     
-	// starting position from where we get image data (px)
-	int ximg = wxRound((myIntersect.GetLeft() - myImgReal.GetLeft())  * myImgPx.GetWidth() / myImgReal.m_width);
-	int yimg = wxRound((myIntersect.GetTop() - myImgReal.GetTop()) * myImgPx.GetHeight() / myImgReal.m_height);
+    // starting position from where we get image data (px)
+    int ximg = wxRound((myIntersect.GetLeft() - myImgReal.GetLeft())  * myImgPx.GetWidth() / myImgReal.m_width);
+    int yimg = wxRound((myIntersect.GetTop() - myImgReal.GetTop()) * myImgPx.GetHeight() / myImgReal.m_height);
     
-	// returning values
+    // returning values
     wxRect myImgPxExtractedResult;
-	myImgPxExtractedResult.SetTopLeft(wxPoint(ximg, yimg));
-	myImgPxExtractedResult.width = pxWidthVisible;
-	myImgPxExtractedResult.height = pxHeightVisible;
+    myImgPxExtractedResult.SetTopLeft(wxPoint(ximg, yimg));
+    myImgPxExtractedResult.width = pxWidthVisible;
+    myImgPxExtractedResult.height = pxHeightVisible;
     
     double myRasterPxSizeX = wxRound(fabs(myIntersect.m_width / coord->GetPixelSize()));
     double myRasterPxSizeY = wxRound(fabs(myIntersect.m_height / coord->GetPixelSize()));
-
-	if (myImgPxExtractedResult.IsEmpty()) {
-		wxLogMessage("Image is outside the display.");
-		return false;
+    
+    if (myImgPxExtractedResult.IsEmpty()) {
+        wxLogMessage("Image is outside the display.");
+        return false;
         
-	}
+    }
     
     /////////////////////////////
     // Create memory raster for results
@@ -168,21 +329,21 @@ bool PlIntOperation::ComputeLine (vrCoordinate * coord){
     
     //TODO: Change to memory when working
     GDALDriverH	hDriver = GDALGetDriverByName("GTiff");
-	if (hDriver == NULL) {
-		wxLogError(_("Unable to load GTiff Driver, export unavailable!"));
-		return false;
-	}
+    if (hDriver == NULL) {
+        wxLogError(_("Unable to load GTiff Driver, export unavailable!"));
+        return false;
+    }
     wxFileName destination (wxStandardPaths::Get().GetTempDir(), "test_pling.tif");
     
-	GDALDatasetH hOutDS = GDALCreate(hDriver, destination.GetFullPath(),
-									 myRasterPxSizeX,
-									 myRasterPxSizeY,
-									 1, GDT_Float32, NULL);
-	if (hOutDS == NULL) {
-		wxLogError(_("Error creating '%s'!"), destination.GetFullName());
-		return false;
-	}
-	wxLogMessage(_("Creating '%s'"), destination.GetFullPath());
+    GDALDatasetH hOutDS = GDALCreate(hDriver, destination.GetFullPath(),
+                                     myRasterPxSizeX,
+                                     myRasterPxSizeY,
+                                     1, GDT_Float32, NULL);
+    if (hOutDS == NULL) {
+        wxLogError(_("Error creating '%s'!"), destination.GetFullName());
+        return false;
+    }
+    wxLogMessage(_("Creating '%s'"), destination.GetFullPath());
     
     double myGeoTransform[6] = {
         myIntersect.GetLeft(),
@@ -273,11 +434,11 @@ bool PlIntOperation::ComputeLine (vrCoordinate * coord){
         GDALClose(hOutDS);
         return false;
     }
-
+    
     if (myVectorFileName.Exists() && poVectorDriver->DeleteDataSource(myVectorFileName.GetFullPath()) != OGRERR_NONE){
         wxLogWarning(_("Unable to delete : %s"), myVectorFileName.GetFullName());
     }
-
+    
     // create polygon file
     vrLayerVectorOGR myOutVector;
     if(myOutVector.Create(myVectorFileName.GetFullPath(), 3) == false){ // 3 is for polygon
@@ -288,7 +449,7 @@ bool PlIntOperation::ComputeLine (vrCoordinate * coord){
     myOutVector.AddField(myFieldDefn);
     
     GDALPolygonize(GDALGetRasterBand(hOutDS, 1),
-                NULL,
+                   NULL,
                    myOutVector.GetLayerRef(),
                    0,
                    NULL,
@@ -311,8 +472,9 @@ bool PlIntOperation::ComputeLine (vrCoordinate * coord){
     // TODO: copy to polygons
     
     GDALClose(hOutDS);
-	return true;
+    return true;
 }
+
 
 
 bool PlIntOperation::_ConvertPolygonToLines (vrLayerVectorOGR * polyvector){

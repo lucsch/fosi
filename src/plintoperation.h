@@ -29,7 +29,9 @@ public:
     bool ClearPoints();
     bool GetPlaneInfo(double & dip, double & direction);
     OGRMultiPoint * GetPointsRef() {return &m_Points;}
-    bool ComputeLine (vrCoordinate * coord);
+    bool ComputeLineFullResolution (vrCoordinate * coord);
+    bool ComputeLineSmallResolution (vrCoordinate * coord);
+
     
 private:
     vrLayerRasterGDAL * m_MNT;

@@ -305,7 +305,7 @@ void PlInt_Tool_DLG::ComputeLine (){
     
     vrViewerDisplay * myDisplay = m_ParentDlg->m_ViewerLayerManager->GetDisplay();
     wxASSERT(myDisplay);
-    m_Operation->ComputeLine(myDisplay->GetCoordinate());
+    m_Operation->ComputeLineFullResolution(myDisplay->GetCoordinate());
     myDisplay->GetViewerLayerManager()->Reload();
 }
 
