@@ -199,8 +199,8 @@ bool PlIntOperation::ComputeLineFullResolution (vrCoordinate * coord){
         // compute under / above plane
         for (unsigned int width_i = 0; width_i < myImgPx.GetWidth() ; width_i++) {
             OGRPoint myPt;
-            myPt.setX( myImgReal.GetLeft() + ( width_i * coord->GetPixelSize() ) );
-            myPt.setY( myImgReal.GetTop() + ( height_i * coord->GetPixelSize() ) );
+            myPt.setX( myImgReal.GetLeft() + ( width_i * m_MNT->GetPixelWidth() ) );
+            myPt.setY( myImgReal.GetTop() + ( height_i * m_MNT->GetPixelHeight() ) );
             
             float myzValue = * (imgdata + width_i);
             myPt.setZ( myzValue );
