@@ -147,7 +147,7 @@ void PlInt_DLG::_CreateControls(){
 	m_DemListCtrl = new wxComboBox( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	m_DemListCtrl->SetMinSize( wxSize( 250,-1 ) );
 	
-	sbSizer1->Add( m_DemListCtrl, 1, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	sbSizer1->Add( m_DemListCtrl, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
 	bSizer1->Add( sbSizer1, 0, wxALL|wxEXPAND, 5 );

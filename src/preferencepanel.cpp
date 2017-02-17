@@ -157,10 +157,10 @@ PreferencePanel(parent) {
 	wxStaticText* m_staticText5;
 	m_staticText5 = new wxStaticText( this, wxID_ANY, _("Proxy informations:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->Wrap( -1 );
-	bSizer6->Add( m_staticText5, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer6->Add( m_staticText5, 0, wxALL, 5 );
 	
 	m_ProxyInfo = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer6->Add( m_ProxyInfo, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	bSizer6->Add( m_ProxyInfo, 0, wxALL | wxEXPAND, 5 );
 	
 	wxStaticText* m_staticText6;
 	m_staticText6 = new wxStaticText( this, wxID_ANY, _("Please use the following form: myproxy.com:8080"), wxDefaultPosition, wxDefaultSize, 0 );

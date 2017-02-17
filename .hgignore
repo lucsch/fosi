@@ -2,3 +2,5 @@ syntax: glob
 bin/
 *.orig
 build/.idea
+build/cache_build.txt
+build/cache_cmake.txt
