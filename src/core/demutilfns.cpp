@@ -5,15 +5,15 @@
 //#include <boost/format.hpp>
 
 void rasterizeMask( const char* shapeFName, const char* myMaskFName, int pixW, int pixH, double myGeoTransf[], GDALDriver *myDriver, int fg, int bg) {
-	OGRDataSource *shapeDataSource = OGRSFDriverRegistrar::Open( shapeFName );
-	OGRLayerH myShapeLayerOGR = shapeDataSource->GetLayer( 0 );
+    GDALDataset *shapeDataSource = (GDALDataset*) GDALOpenEx(shapeFName, GDAL_OF_VECTOR, NULL, NULL, NULL);
+    OGRLayerH myShapeLayerOGR = shapeDataSource->GetLayer( 0 );
 	GDALDataset* myDataSetMask = myDriver->Create( myMaskFName, pixW, pixH, 1, GDT_Byte, NULL );
 	myDataSetMask->SetGeoTransform( myGeoTransf );
 	myDataSetMask->GetRasterBand(1)->Fill(bg);
 	int bl[] = {1};
 	double bv = fg;
 	CPLErr res = GDALRasterizeLayers( myDataSetMask, 1, bl, 1, &myShapeLayerOGR, NULL, NULL, &bv, NULL, NULL, NULL );
-	OGRDataSource::DestroyDataSource( shapeDataSource );
+    GDALClose( shapeDataSource );
 	GDALClose( myDataSetMask );
 }
 

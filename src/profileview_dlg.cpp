@@ -29,7 +29,10 @@ EVT_COMMAND( wxID_ANY, vrEVT_TOOL_PAN, ProfileView_DLG::OnToolPanAction)
 END_EVENT_TABLE()
 
 
-ProfileView_DLG::ProfileView_DLG( wxWindow* parent, vrLayerManager * layermanager, vrLayer * profile, const vrArrayLayer & raster, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style ){
+ProfileView_DLG::ProfileView_DLG( wxWindow* parent, vrLayerManager * layermanager,
+                                  vrLayer * profile, const vrArrayLayer & raster,
+                                  wxWindowID id, const wxString& title, const wxPoint& pos,
+                                  const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style ){
     m_LayerManagerRef = layermanager;
     m_Display = NULL;
     
@@ -52,7 +55,9 @@ ProfileView_DLG::ProfileView_DLG( wxWindow* parent, vrLayerManager * layermanage
     }
     
     vrLayerVectorOGR * myProfileLayer = static_cast<vrLayerVectorOGR*>(profile);
-    wxString myColours [] = {_T("RED"), _T("GREEN"), _T("BLUE"), _T("PURPLE"),_T("BROWN"),_T("CYAN"),_T("DARK GREY"),_T("ORANGE"),_T("YELLOW"),_T("KHAKI")};
+    wxString myColours [] = {_T("RED"), _T("GREEN"), _T("BLUE"), _T("PURPLE"),
+                             _T("BROWN"),_T("CYAN"),_T("DARK GREY"),
+                             _T("ORANGE"),_T("YELLOW"),_T("KHAKI")};
     // create profiles and add them to the viewerlayermanager
     for (unsigned int i = 0; i< raster.GetCount(); i++) {
         OGRFeature * myFeature = myProfileLayer->GetFeature(myProfileLayer->GetSelectedIDs()->Item(0));
@@ -171,7 +176,7 @@ void ProfileView_DLG::OnToolZoomAction(wxCommandEvent & event) {
     
 	// get real rectangle
 	vrRealRect myRealRect;
-	bool bSuccess = myCoord->ConvertFromPixels(myMsg->m_Rect, myRealRect);
+	bool bSuccess = myCoord->ConvertFromPixels(myMsg->m_rect, myRealRect);
 	wxASSERT(bSuccess == true);
     
 	// get fitted rectangle
@@ -179,7 +184,7 @@ void ProfileView_DLG::OnToolZoomAction(wxCommandEvent & event) {
 	wxASSERT(myFittedRect.IsOk());
     
 	// zoom out
-	if (myMsg->m_EvtType == vrEVT_TOOL_ZOOM) {
+	if (myMsg->m_evtType == vrEVT_TOOL_ZOOM) {
 		m_ViewerLayerManager->Zoom(myFittedRect);
 	}
 	else {
@@ -203,7 +208,7 @@ void ProfileView_DLG::OnToolPanAction(wxCommandEvent & event) {
 	vrCoordinate * myCoord = m_Display->GetCoordinate();
 	wxASSERT(myCoord);
     
-	wxPoint myMovedPos = myMsg->m_Position;
+	wxPoint myMovedPos = myMsg->m_position;
 	wxPoint2DDouble myMovedRealPt;
 	if (myCoord->ConvertFromPixels(myMovedPos, myMovedRealPt)==false){
 		wxLogError("Error converting point : %d, %d to real coordinate",

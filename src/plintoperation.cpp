@@ -237,14 +237,14 @@ bool PlIntOperation::ComputeLineFullResolution (vrCoordinate * coord){
     
     // try to delete vector file if existing
     const char *pszVectorDriverName = "ESRI Shapefile";
-    OGRSFDriver * poVectorDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(pszVectorDriverName);
+    GDALDriver * poVectorDriver = GetGDALDriverManager()->GetDriverByName(pszVectorDriverName);
     if( poVectorDriver == NULL ){
         wxLogWarning(_("%s driver not available."), pszVectorDriverName );
         GDALClose(hOutDS);
         return false;
     }
 
-    if (myVectorFileName.Exists() && poVectorDriver->DeleteDataSource(myVectorFileName.GetFullPath()) != OGRERR_NONE){
+    if (myVectorFileName.Exists() && poVectorDriver->Delete(myVectorFileName.GetFullPath()) != CE_None){
         wxLogWarning(_("Unable to delete : %s"), myVectorFileName.GetFullName());
     }
 
@@ -429,14 +429,14 @@ bool PlIntOperation::ComputeLineSmallResolution (vrCoordinate * coord){
     
     // try to delete vector file if existing
     const char *pszVectorDriverName = "ESRI Shapefile";
-    OGRSFDriver * poVectorDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(pszVectorDriverName);
+    GDALDriver * poVectorDriver = GetGDALDriverManager()->GetDriverByName(pszVectorDriverName);
     if( poVectorDriver == NULL ){
         wxLogWarning(_("%s driver not available."), pszVectorDriverName );
         GDALClose(hOutDS);
         return false;
     }
     
-    if (myVectorFileName.Exists() && poVectorDriver->DeleteDataSource(myVectorFileName.GetFullPath()) != OGRERR_NONE){
+    if (myVectorFileName.Exists() && poVectorDriver->Delete(myVectorFileName.GetFullPath()) != OGRERR_NONE){
         wxLogWarning(_("Unable to delete : %s"), myVectorFileName.GetFullName());
     }
     
