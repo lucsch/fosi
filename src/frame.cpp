@@ -267,7 +267,7 @@ void Frame::_CreateToolbar() {
 	wxString myPanName = _("Pan");
 	m_toolBar1->AddTool( MENU_FRAME_PAN, myPanName, wxBitmap(*_img_toolbar_pan), wxNullBitmap, wxITEM_NORMAL, myPanName, wxEmptyString );
     wxString myEditTxt = _("Start Edition");
-	m_toolBar1->AddTool( MENU_EDITION_START, myEditTxt, wxBitmap(*_img_toolbar_start), wxNullBitmap, wxITEM_NORMAL, myEditTxt, wxEmptyString );
+	m_toolBar1->AddTool( MENU_EDITION_START, myEditTxt, wxBitmap(*_img_toolbar_start_edit), wxNullBitmap, wxITEM_NORMAL, myEditTxt, wxEmptyString );
     myEditTxt = _("Draw");
 	m_toolBar1->AddTool( MENU_TOOL_DRAW, myEditTxt, wxBitmap(*_img_toolbar_edit), wxNullBitmap, wxITEM_NORMAL, myEditTxt, wxEmptyString );
     myEditTxt = _("Modify");
@@ -1324,4 +1324,5 @@ Frame::~Frame() {
 
 	uninitialize_images();
 	vroomgis_clear_images();
+    vroomgis_uninitialize_images_toolbar();
 }
