@@ -9,7 +9,7 @@
 #include "vrlayerraster.h"
 #include "vroperationvectorprofiler.h"
 #include "general_bmp.h"
-
+#include "vroomgis_toolbmp.h"
 
 
 BEGIN_EVENT_TABLE( ProfileView_DLG, wxFrame )
@@ -337,7 +337,7 @@ void ProfileView_DLG::_CreateToolBar(){
     m_toolBar1 = this->CreateToolBar( myStyle, wxID_ANY );
     m_toolBar1->SetToolBitmapSize( wxSize( 32,32 ) );
     wxString myZoomName = _("Zoom to fit");
-    m_toolBar1->AddTool( wxID_ZOOM_FIT, myZoomName, wxBitmap(*_img_toolbar_zoom_fit), wxNullBitmap, wxITEM_NORMAL,myZoomName, wxEmptyString );
+    m_toolBar1->AddTool( wxID_ZOOM_FIT, myZoomName, wxBitmap(*_img_toolbar_zoomfull), wxNullBitmap, wxITEM_NORMAL,myZoomName, wxEmptyString );
     wxString myZoom2Name = _("Zoom");
     m_toolBar1->AddTool( wxID_ZOOM_IN, myZoom2Name , wxBitmap(*_img_toolbar_zoom), wxNullBitmap, wxITEM_NORMAL, myZoom2Name, wxEmptyString );
     wxString myPanName = _("Pan");

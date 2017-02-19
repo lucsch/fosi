@@ -18,6 +18,7 @@
 #include "vrprogress.h"
 #include "vrshapeeditor.h"
 #include "vroomgis_bmp.h"
+#include "vroomgis_toolbmp.h"
 #include "accelerators.h"
 #include "wxhgversion_dlg.h"
 #include "wxhgversion_core.h"
@@ -260,7 +261,7 @@ void Frame::_CreateToolbar() {
 	wxString mySelectName = _("Select");
 	m_toolBar1->AddTool( MENU_FRAME_SELECT, mySelectName , wxBitmap(*_img_toolbar_select), wxNullBitmap, wxITEM_NORMAL, mySelectName, wxEmptyString );
 	wxString myZoomName = _("Zoom to fit");
-	m_toolBar1->AddTool( wxID_ZOOM_FIT, myZoomName, wxBitmap(*_img_toolbar_zoom_fit), wxNullBitmap, wxITEM_NORMAL,myZoomName, wxEmptyString );
+	m_toolBar1->AddTool( wxID_ZOOM_FIT, myZoomName, wxBitmap(*_img_toolbar_zoomfull), wxNullBitmap, wxITEM_NORMAL,myZoomName, wxEmptyString );
 	wxString myZoom2Name = _("Zoom");
 	m_toolBar1->AddTool( wxID_ZOOM_IN, myZoom2Name , wxBitmap(*_img_toolbar_zoom), wxNullBitmap, wxITEM_NORMAL, myZoom2Name, wxEmptyString );
 	wxString myPanName = _("Pan");
@@ -1263,6 +1264,7 @@ wxFrame(NULL, FRAME_WINDOW, title) {
 	// Design interface
 	initialize_images();
 	vroomgis_initialize_images();
+    vroomgis_initialize_images_toolbar();
 	CreateStatusBar(3);
     // disable help menu into statusbar
     SetStatusBarPane(-1);
