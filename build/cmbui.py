@@ -12,7 +12,7 @@ class FileCache(object):
         self.m_questions = []
 
     def _cacheQuestion(self, message, value):
-        data = raw_input("{} (cmake value : {}) ".format(message, value))
+        data = input("{} (cmake value : {}) ".format(message, value))
         return value + "=" + str(data)
 
     def _cacheWrite(self, text, hfile):
@@ -92,7 +92,7 @@ class BuildProject(object):
 
         generator = ""
         if self.cmake_generator != "":
-            generator = " -G'" + self.cmake_generator + "' "
+            generator = ' -G "' + self.cmake_generator + '" '
 
         cmake_filepath = ""
         if use_cmake_filepath is True:
