@@ -4,3 +4,4 @@ bin/
 build/.idea
 build/cache_build.txt
 build/cache_cmake.txt
+*.pyc
