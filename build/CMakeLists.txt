@@ -8,14 +8,8 @@ set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
 set(VERSION_PATCH "0")
 
-# USER DEFINED VARIABLES
-#IF (NOT USER_VARIABLES_NAME)
-#  SET(USER_VARIABLES_NAME "user-vars-${CMAKE_SYSTEM_NAME}.cmake")
-#ENDIF(NOT USER_VARIABLES_NAME)
-#IF (USER_VARIABLES_NAME)
-#  MESSAGE("Including user defined : ${USER_VARIABLES_NAME}")
-#ENDIF (USER_VARIABLES_NAME)
-#INCLUDE(${USER_VARIABLES_NAME})
+# FOR DEBUGGING
+include(CMakeToolsHelpers OPTIONAL)
 
 # SOURCES FILES
 FILE (GLOB_RECURSE SRC_FILES ../src/*.cpp)
@@ -86,6 +80,8 @@ ENDIF (WIN32)
 
 
 # INSTALLER
+# use hg version for package number
+set(VERSION_PATCH ${WXHGVERSION_SOFT_NUMBER})
 
 set(INSTALL_DIR_BIN bin)
 set(INSTALL_DIR_SHARE share/fosi)
@@ -98,7 +94,19 @@ install ( TARGETS ${CMAKE_PROJECT_NAME} DESTINATION ${INSTALL_DIR_BIN})
 
 if (WIN32)
     install (
-      PROGRAMS ../bin/Release/gdal111.dll ../bin/Release/geos.dll ../bin/Release/geos_c.dll ../bin/Release/libcurl.dll ../bin/Release/msvcr110.dll
+      PROGRAMS 
+        ../../bin/libcurl-4.dll
+        ../../bin/libeay32.dll
+        ../../bin/libgcc_s_seh-1.dll
+        ../../bin/libgdal-20.dll
+        ../../bin/libgeos_c-1.dll
+        ../../bin/libgeos-3-6-1.dll
+        ../../bin/libiconv-2.dll
+        ../../bin/libproj-12.dll
+        ../../bin/libsqlite3-0.dll
+        ../../bin/libstdc++-6.dll
+        ../../bin/ssleay32.dll
+        ../../bin/zlib1.dll  
       DESTINATION .
       )
 endif (WIN32)
@@ -113,16 +121,23 @@ set(CPACK_STRIP_FILES ON) # tell cpack to strip all debug symbols from all files
 # IDENTIFY ARCHITECTURE
 
 set(CPACK_PACKAGE_ARCH "unkown-architecture")
-
 if(${CMAKE_SYSTEM_NAME} MATCHES Windows)
     if(CMAKE_CL_64)
         set(CPACK_PACKAGE_ARCH "win64")
     elseif(MINGW)
-        set(CPACK_PACKAGE_ARCH "mingw32")
+        if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+            # 64 bits
+            set(CPACK_PACKAGE_ARCH "mingw64")  
+        elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
+            # 32 bits
+            set(CPACK_PACKAGE_ARCH "mingw32")
+        endif()
     elseif(WIN32)
         set(CPACK_PACKAGE_ARCH "win32")
     endif()
+    message("${CPACK_PACKAGE_ARCH} architecture")
 endif(${CMAKE_SYSTEM_NAME} MATCHES Windows)
+
 
 if(${CMAKE_SYSTEM_NAME} MATCHES Linux)
     if(${CMAKE_SYSTEM_PROCESSOR} MATCHES i686)
