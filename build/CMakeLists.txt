@@ -106,7 +106,8 @@ if (WIN32)
         ../../bin/libsqlite3-0.dll
         ../../bin/libstdc++-6.dll
         ../../bin/ssleay32.dll
-        ../../bin/zlib1.dll  
+        ../../bin/zlib1.dll
+        ../../bin/libwinpthread-1.dll
       DESTINATION .
       )
 endif (WIN32)
