@@ -22,7 +22,7 @@ class App : public wxApp {
   public:
     App();
 	virtual bool OnInit();
-    virtual void OnFatalException();
+    // virtual void OnFatalException();
 };
 DECLARE_APP(App)
 

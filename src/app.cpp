@@ -8,7 +8,7 @@
 
 #include "app.h"
 #include "frame.h"
-#include "lscrashreport.h"
+// #include "lscrashreport.h"
 
 IMPLEMENT_APP(App);
 
@@ -40,27 +40,27 @@ bool App::OnInit(){
 
 
 
-void App::OnFatalException(){
-    lsCrashReport myCrashReport (g_ProgName);
-    if(myCrashReport.PrepareReport(wxDebugReport::Context_Exception)==false){
-        return;
-    }
-    
-    wxConfigBase * myConfig =  wxConfigBase::Get(false);
-    wxASSERT(myConfig);
-    myConfig->SetPath("INTERNET");
-    wxString myProxyInfo = myConfig->Read("PROXY_INFO", wxEmptyString);
-    myConfig->SetPath("..");
-    
-    if (myCrashReport.SendReportWeb(_T("http://www.terranum.ch/crashreport/upload_file.php"), myProxyInfo)==false){
-        wxString myDocPath = wxStandardPaths::Get().GetDocumentsDir();
-        if(myCrashReport.SaveReportFile(myDocPath)==false){
-            wxLogError(_("Unable to save the crashreport!"));
-            return;
-        }
-        wxLogWarning(_("Connection problem! crashreport wasn't sent. crashreport was saved into '%s'\nplease send it manually to lucien.schreiber@gmail.com"), myDocPath);
-    }
-}
+//void App::OnFatalException(){
+//    lsCrashReport myCrashReport (g_ProgName);
+//    if(myCrashReport.PrepareReport(wxDebugReport::Context_Exception)==false){
+//        return;
+//    }
+//
+//    wxConfigBase * myConfig =  wxConfigBase::Get(false);
+//    wxASSERT(myConfig);
+//    myConfig->SetPath("INTERNET");
+//    wxString myProxyInfo = myConfig->Read("PROXY_INFO", wxEmptyString);
+//    myConfig->SetPath("..");
+//
+//    if (myCrashReport.SendReportWeb(_T("http://www.terranum.ch/crashreport/upload_file.php"), myProxyInfo)==false){
+//        wxString myDocPath = wxStandardPaths::Get().GetDocumentsDir();
+//        if(myCrashReport.SaveReportFile(myDocPath)==false){
+//            wxLogError(_("Unable to save the crashreport!"));
+//            return;
+//        }
+//        wxLogWarning(_("Connection problem! crashreport wasn't sent. crashreport was saved into '%s'\nplease send it manually to lucien.schreiber@gmail.com"), myDocPath);
+//    }
+//}
 
 
 

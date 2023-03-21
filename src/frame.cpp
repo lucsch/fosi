@@ -19,8 +19,8 @@
 #include "vrshapeeditor.h"
 #include "vroomgis_bmp.h"
 #include "accelerators.h"
-#include "wxhgversion_dlg.h"
-#include "wxhgversion_core.h"
+//#include "wxhgversion_dlg.h"
+//#include "wxhgversion_core.h"
 #include "general_bmp.h"
 
 
@@ -380,10 +380,10 @@ void Frame::_PreferenceChanged(bool refresh) {
 
 
 void Frame::OnAbout(wxCommandEvent & event) {
-	wxHgVersionDlg * myDlg = new wxHgVersionDlg (this, wxID_ANY, _T(""));
-    myDlg->SetBitmapLogo(*_img_app_sml);
-    myDlg->ShowModal();
-    wxDELETE(myDlg);
+//	wxHgVersionDlg * myDlg = new wxHgVersionDlg (this, wxID_ANY, _T(""));
+//    myDlg->SetBitmapLogo(*_img_app_sml);
+//    myDlg->ShowModal();
+//    wxDELETE(myDlg);
 }
 
 
@@ -395,10 +395,10 @@ void Frame::OnCheckUpdates(wxCommandEvent & event){
     wxString myProxyInfo = myConfig->Read("PROXY_INFO", wxEmptyString);
     myConfig->SetPath("..");
 
-    long mySVNversion = wxNOT_FOUND;
-    wxHgVersion::GetSoftNumber().ToLong(&mySVNversion);
-    WebUpdateThread * myUpdate = new WebUpdateThread(m_InfoBar, myProxyInfo);
-    myUpdate->CheckNewVersion(mySVNversion, true, true, true);
+//    long mySVNversion = wxNOT_FOUND;
+//    wxHgVersion::GetSoftNumber().ToLong(&mySVNversion);
+//    WebUpdateThread * myUpdate = new WebUpdateThread(m_InfoBar, myProxyInfo);
+//    myUpdate->CheckNewVersion(mySVNversion, true, true, true);
 }
 
 
@@ -709,7 +709,7 @@ void Frame::OnToolSelectAction(wxCommandEvent & event) {
 	wxASSERT(myMsg);
 
 	m_vrViewerLayerManager->ClearSelection();
-	if(m_vrViewerLayerManager->Select(myMsg->m_Rect,m_vrViewerLayerManager->GetEditionRenderer()) == wxNOT_FOUND){
+	if(m_vrViewerLayerManager->Select(myMsg->m_rect,m_vrViewerLayerManager->GetEditionRenderer()) == wxNOT_FOUND){
 		wxDELETE(myMsg);
 		return;
 	}
@@ -743,7 +743,7 @@ void Frame::OnToolZoomAction(wxCommandEvent & event) {
 
 	// get real rectangle
 	vrRealRect myRealRect;
-	bool bSuccess = myCoord->ConvertFromPixels(myMsg->m_Rect, myRealRect);
+	bool bSuccess = myCoord->ConvertFromPixels(myMsg->m_rect, myRealRect);
 	wxASSERT(bSuccess == true);
 
 	// get fitted rectangle
@@ -751,7 +751,7 @@ void Frame::OnToolZoomAction(wxCommandEvent & event) {
 	wxASSERT(myFittedRect.IsOk());
 
 	// zoom out
-	if (myMsg->m_EvtType == vrEVT_TOOL_ZOOM) {
+	if (myMsg->m_evtType == vrEVT_TOOL_ZOOM) {
 		m_vrViewerLayerManager->Zoom(myFittedRect);
 	}
 	else {
@@ -775,7 +775,7 @@ void Frame::OnToolPanAction(wxCommandEvent & event) {
 	vrCoordinate * myCoord = m_vrViewerLayerManager->GetDisplay()->GetCoordinate();
 	wxASSERT(myCoord);
 
-	wxPoint myMovedPos = myMsg->m_Position;
+	wxPoint myMovedPos = myMsg->m_position;
 	wxPoint2DDouble myMovedRealPt;
 	if (myCoord->ConvertFromPixels(myMovedPos, myMovedRealPt)==false){
 		wxLogError("Error converting point : %d, %d to real coordinate",
@@ -866,14 +866,14 @@ void Frame::OnToolDrawAction (wxCommandEvent & event){
     }
     
     wxPoint2DDouble myRealPt (0,0);
-    m_vrDisplay->GetCoordinate()->ConvertFromPixels(myMsg->m_Position, myRealPt);
+    m_vrDisplay->GetCoordinate()->ConvertFromPixels(myMsg->m_position, myRealPt);
     wxASSERT(m_Editor);
     m_Editor->AddVertex(myRealPt);
     
-    if (myMsg->m_EvtType == vrEVT_TOOL_EDIT) {
+    if (myMsg->m_evtType == vrEVT_TOOL_EDIT) {
         m_Editor->DrawShapeEdit(myRendererEdit->GetRender());
     }
-    else if (myMsg->m_EvtType == vrEVT_TOOL_EDIT_FINISHED){
+    else if (myMsg->m_evtType == vrEVT_TOOL_EDIT_FINISHED){
         vrLayerVectorOGR * myMemoryLayer = static_cast<vrLayerVectorOGR*>(myRendererEdit->GetLayer());
         long myAddedId = myMemoryLayer->AddFeature(m_Editor->GetGeometryRef());
         myMemoryLayer->SetSelectedID(myAddedId);
@@ -900,7 +900,7 @@ void Frame::OnToolModifySearch (wxCommandEvent & event){
     wxASSERT(myMemoryLayer);
     
     vrRealRect myRealRect;
-    m_vrDisplay->GetCoordinate()->ConvertFromPixels(myMsg->m_Rect, myRealRect);
+    m_vrDisplay->GetCoordinate()->ConvertFromPixels(myMsg->m_rect, myRealRect);
     wxDELETE(myMsg);
     myMemoryLayer->Select(myRealRect);
     wxArrayLong * mySelectedIDs = myMemoryLayer->GetSelectedIDs();
@@ -929,8 +929,8 @@ void Frame::OnToolModifyUpdate (wxCommandEvent & event){
     wxASSERT(myMemoryLayer);
     
     wxPoint2DDouble myRealPt;
-    m_vrDisplay->GetCoordinate()->ConvertFromPixels(myMsg->m_Position, myRealPt);
-    int myVertexIndex = myMsg->m_LongData;
+    m_vrDisplay->GetCoordinate()->ConvertFromPixels(myMsg->m_position, myRealPt);
+    int myVertexIndex = myMsg->m_longData;
     wxDELETE(myMsg);
     
     wxArrayLong * mySelectedIDs = myMemoryLayer->GetSelectedIDs();
@@ -1071,7 +1071,7 @@ wxFrame(NULL, FRAME_WINDOW, title) {
 	CreateStatusBar(3);
     // disable help menu into statusbar
     SetStatusBarPane(-1);
-    SetStatusText(g_ProgName + _(" version: ") + wxHgVersion::GetSoftNumber(), 2);
+    //SetStatusText(g_ProgName + _(" version: ") + wxHgVersion::GetSoftNumber(), 2);
 
 	_CreateControls();
 	_CreateMenus();
@@ -1108,10 +1108,10 @@ wxFrame(NULL, FRAME_WINDOW, title) {
         return;
     }
 
-    long mySVNversion = wxNOT_FOUND;
-    wxHgVersion::GetSoftNumber().ToLong(&mySVNversion);
-    WebUpdateThread * myUpdate = new WebUpdateThread(m_InfoBar, myProxyInfo);
-    myUpdate->CheckNewVersion(mySVNversion, true, false, true);
+//    long mySVNversion = wxNOT_FOUND;
+//    wxHgVersion::GetSoftNumber().ToLong(&mySVNversion);
+//    WebUpdateThread * myUpdate = new WebUpdateThread(m_InfoBar, myProxyInfo);
+//    myUpdate->CheckNewVersion(mySVNversion, true, false, true);
 }
 
 
