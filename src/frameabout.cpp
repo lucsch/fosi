@@ -3,6 +3,7 @@
 #include "gdal_priv.h"
 #include "geos_c.h"
 #include "curl/curl.h"
+#include "toolbarbitmaps.h"
 
 FrameAbout::FrameAbout(wxWindow *parent, wxWindowID id, const wxString &title, const wxPoint &pos, const wxSize &size,
                        long style)
@@ -24,7 +25,7 @@ FrameAbout::FrameAbout(wxWindow *parent, wxWindowID id, const wxString &title, c
     myVersion << wxGetOsDescription();
     m_ctrl_txt->SetValue(myVersion);
 
-    // m_ctrl_bmp->SetBitmap(Bitmaps::GetLogo(wxSize(64,64)));
+    m_ctrl_bmp->SetBitmap(Bitmaps::GetLogo(wxSize(64,64)));
 
     Layout();
     GetSizer()->Fit(this);

@@ -30,6 +30,7 @@
 #include "profileview_dlg.h"
 #include "core/demutil.h"
 #include "frameabout.h"
+#include "toolbarbitmaps.h"
 
 
 BEGIN_EVENT_TABLE(Frame, wxFrame)
@@ -251,37 +252,37 @@ void Frame::_CreateMenus() {
 
 
 void Frame::_CreateToolbar() {
-    long myStyle = wxTB_FLAT | wxTB_HORIZONTAL;
-    // conditionnal compilation for better look under win32
-#ifndef __WXMSW__
-    myStyle += wxTB_TEXT;
+    long my_toolbar_style = wxTB_DEFAULT_STYLE;
+#ifdef __WXOSX__
+    my_toolbar_style = my_toolbar_style | wxTB_TEXT;
 #endif
+    wxToolBar *my_toolbar = this->CreateToolBar(my_toolbar_style);
+    wxASSERT(my_toolbar);
 
-    wxToolBar *m_toolBar1;
-    m_toolBar1 = this->CreateToolBar(myStyle, wxID_ANY);
-    m_toolBar1->SetToolBitmapSize(wxSize(32, 32));
-    wxString mySelectName = _("Select");
-    m_toolBar1->AddTool(MENU_FRAME_SELECT, mySelectName, wxBitmap(*_img_toolbar_select), wxNullBitmap, wxITEM_NORMAL,
-                        mySelectName, wxEmptyString);
-    wxString myZoomName = _("Zoom to fit");
-    m_toolBar1->AddTool(wxID_ZOOM_FIT, myZoomName, wxBitmap(*_img_toolbar_zoomfull), wxNullBitmap, wxITEM_NORMAL,
-                        myZoomName, wxEmptyString);
-    wxString myZoom2Name = _("Zoom");
-    m_toolBar1->AddTool(wxID_ZOOM_IN, myZoom2Name, wxBitmap(*_img_toolbar_zoom), wxNullBitmap, wxITEM_NORMAL,
-                        myZoom2Name, wxEmptyString);
-    wxString myPanName = _("Pan");
-    m_toolBar1->AddTool(MENU_FRAME_PAN, myPanName, wxBitmap(*_img_toolbar_pan), wxNullBitmap, wxITEM_NORMAL, myPanName,
-                        wxEmptyString);
-    wxString myEditTxt = _("Start Edition");
-    m_toolBar1->AddTool(MENU_EDITION_START, myEditTxt, wxBitmap(*_img_toolbar_start_edit), wxNullBitmap, wxITEM_NORMAL,
-                        myEditTxt, wxEmptyString);
-    myEditTxt = _("Draw");
-    m_toolBar1->AddTool(MENU_TOOL_DRAW, myEditTxt, wxBitmap(*_img_toolbar_edit), wxNullBitmap, wxITEM_NORMAL, myEditTxt,
-                        wxEmptyString);
-    myEditTxt = _("Modify");
-    m_toolBar1->AddTool(MENU_TOOL_MODFIY, myEditTxt, wxBitmap(*_img_toolbar_modify), wxNullBitmap, wxITEM_NORMAL,
-                        myEditTxt, wxEmptyString);
-    m_toolBar1->Realize();
+    // support for dark theme
+    wxString str_color = "black";
+    wxSystemAppearance s = wxSystemSettings::GetAppearance();
+    if (s.IsDark()) {
+        str_color = "white";
+    }
+
+    wxString labels[] = {_("Select"), _("Zoom to fit"), _("Zoom"), _("Pan"), _("Start edition"), _("Draw"),
+                         _("Modify")};
+    my_toolbar->AddTool(MENU_FRAME_SELECT, labels[0],
+                        Bitmaps::GetBitmap(Bitmaps::ID::SELECT, str_color, wxSize(24, 24)), labels[0]);
+    my_toolbar->AddTool(wxID_ZOOM_FIT, labels[1], Bitmaps::GetBitmap(Bitmaps::ID::ZOOM_FIT, str_color, wxSize(24, 24)),
+                        labels[1]);
+    my_toolbar->AddTool(wxID_ZOOM_IN, labels[2],
+                        Bitmaps::GetBitmap(Bitmaps::ID::ZOOM, str_color, wxSize(24, 24)), labels[2]);
+    my_toolbar->AddTool(MENU_FRAME_PAN, labels[3],
+                        Bitmaps::GetBitmap(Bitmaps::ID::PAN, str_color, wxSize(24, 24)), labels[3]);
+    my_toolbar->AddTool(MENU_EDITION_START, labels[4],
+                        Bitmaps::GetBitmap(Bitmaps::ID::EDITION_START, str_color, wxSize(24, 24)), labels[4]);
+    my_toolbar->AddTool(MENU_TOOL_DRAW, labels[5],
+                        Bitmaps::GetBitmap(Bitmaps::ID::EDITION_DRAW, str_color, wxSize(24, 24)), labels[4]);
+    my_toolbar->AddTool(MENU_TOOL_MODFIY, labels[6],
+                        Bitmaps::GetBitmap(Bitmaps::ID::EDITION_MODIFY, str_color, wxSize(24, 24)), labels[4]);
+    my_toolbar->Realize();
 }
 
 
