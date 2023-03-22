@@ -2,4 +2,4 @@
 
 Swiss GIS knife
 
-![](art/app_sml.png)
+![](art/fosi_logo.svg)
