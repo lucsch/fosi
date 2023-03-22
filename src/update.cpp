@@ -8,7 +8,7 @@
 
 #include "update.h"
 #include <wx/tokenzr.h>
-#include "frame.h"
+#include "framemain.h"
 
 BEGIN_EVENT_TABLE(WebUpdateInformationBar, wxInfoBar)
 EVT_BUTTON (INFOBAR_DOWNLOAD_BUTTON, WebUpdateInformationBar::OnCommandDownload)

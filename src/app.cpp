@@ -7,7 +7,7 @@
 
 
 #include "app.h"
-#include "frame.h"
+#include "framemain.h"
 // #include "lscrashreport.h"
 
 IMPLEMENT_APP(App);
