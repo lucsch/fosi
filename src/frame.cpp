@@ -20,8 +20,8 @@
 #include "vroomgis_bmp.h"
 #include "vroomgis_toolbmp.h"
 #include "accelerators.h"
-#include "wxhgversion_dlg.h"
-#include "wxhgversion_core.h"
+//#include "wxhgversion_dlg.h"
+//#include "wxhgversion_core.h"
 #include "general_bmp.h"
 #include "createslbl_dlg.h"
 #include "plint_dlg.h"
@@ -410,10 +410,10 @@ void Frame::_PreferenceChanged(bool refresh) {
 
 
 void Frame::OnAbout(wxCommandEvent & event) {
-	wxHgVersionDlg * myDlg = new wxHgVersionDlg (this, wxID_ANY, _T(""));
-    myDlg->SetBitmapLogo(*_img_app_sml);
-    myDlg->ShowModal();
-    wxDELETE(myDlg);
+//	wxHgVersionDlg * myDlg = new wxHgVersionDlg (this, wxID_ANY, _T(""));
+//    myDlg->SetBitmapLogo(*_img_app_sml);
+//    myDlg->ShowModal();
+//    wxDELETE(myDlg);
 }
 
 
@@ -425,10 +425,10 @@ void Frame::OnCheckUpdates(wxCommandEvent & event){
     wxString myProxyInfo = myConfig->Read("PROXY_INFO", wxEmptyString);
     myConfig->SetPath("..");
 
-    long mySVNversion = wxNOT_FOUND;
-    wxHgVersion::GetSoftNumber().ToLong(&mySVNversion);
-    WebUpdateThread * myUpdate = new WebUpdateThread(m_InfoBar, myProxyInfo);
-    myUpdate->CheckNewVersion(mySVNversion, true, true, true);
+//    long mySVNversion = wxNOT_FOUND;
+//    wxHgVersion::GetSoftNumber().ToLong(&mySVNversion);
+//    WebUpdateThread * myUpdate = new WebUpdateThread(m_InfoBar, myProxyInfo);
+//    myUpdate->CheckNewVersion(mySVNversion, true, true, true);
 }
 
 
@@ -1268,7 +1268,7 @@ wxFrame(NULL, FRAME_WINDOW, title) {
 	CreateStatusBar(3);
     // disable help menu into statusbar
     SetStatusBarPane(-1);
-    SetStatusText(g_ProgName + _(" version: ") + wxHgVersion::GetSoftNumber(), 2);
+    //SetStatusText(g_ProgName + _(" version: ") + wxHgVersion::GetSoftNumber(), 2);
 
 	_CreateControls();
 	_CreateMenus();
@@ -1305,10 +1305,10 @@ wxFrame(NULL, FRAME_WINDOW, title) {
         return;
     }
 
-    long mySVNversion = wxNOT_FOUND;
-    wxHgVersion::GetSoftNumber().ToLong(&mySVNversion);
-    WebUpdateThread * myUpdate = new WebUpdateThread(m_InfoBar, myProxyInfo);
-    myUpdate->CheckNewVersion(mySVNversion, true, false, true);
+//    long mySVNversion = wxNOT_FOUND;
+//    wxHgVersion::GetSoftNumber().ToLong(&mySVNversion);
+//    WebUpdateThread * myUpdate = new WebUpdateThread(m_InfoBar, myProxyInfo);
+//    myUpdate->CheckNewVersion(mySVNversion, true, false, true);
 }
 
 
