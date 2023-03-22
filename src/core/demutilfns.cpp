@@ -37,12 +37,18 @@ void saveResDiffs( int nX, int nY, DynArray<MEMARRAYTYPE> &dvResZ, const DynArra
 
 		if( resDiffs ) {
 			resDiffs->SetNoDataValue(nodata);
-			resDiffs->RasterIO( GF_Write, 0, 0, nX, nY, dvResZ[0], nX, nY, GDT_TYPE, 0, 0 );
+			CPLErr err = resDiffs->RasterIO( GF_Write, 0, 0, nX, nY, dvResZ[0], nX, nY, GDT_TYPE, 0, 0 );
+            if (err != CE_None){
+                wxLogError("Error setting no data value");
+            }
 		}
 
 		if( resDO ) {
 			resDO->SetNoDataValue(nodata);
-			resDO->RasterIO( GF_Write, offsetX, offsetY, nX, nY, dvResZ[0], nX, nY, GDT_TYPE, 0, 0 );
+			CPLErr err = resDO->RasterIO( GF_Write, offsetX, offsetY, nX, nY, dvResZ[0], nX, nY, GDT_TYPE, 0, 0 );
+            if (err != CE_None){
+                wxLogError("Error setting no data value");
+            }
 		}
 	}
 }
@@ -125,18 +131,29 @@ int demFit( enumMethod method, GDALRasterBand *resZ, GDALRasterBand *oriZ, GDALR
 	int grsign = (param.increasing ? 1 : -1);
 
 	DynArray<MEMARRAYTYPE> dvOriZ(nY, nX);
-	oriZ->RasterIO( GF_Read, offsetX, offsetY, nX, nY, dvOriZ[0], nX, nY, GDT_TYPE, 0, 0 );
+	CPLErr err = oriZ->RasterIO( GF_Read, offsetX, offsetY, nX, nY, dvOriZ[0], nX, nY, GDT_TYPE, 0, 0 );
+    if(err != CE_None){
+        wxLogError("Error in demFit");
+    }
 
 	DynArray<MEMARRAYTYPE> dvResZ(nY, nX);
 	dvResZ.copy( dvOriZ );
 
 	DynArray<unsigned char> dvFixed( fixed ? nY : 0, fixed ? nX : 0 );
-	if( fixed )
-		fixed->RasterIO( GF_Read,  0, 0, nX, nY, dvFixed[0], nX, nY, GDT_Byte, 0, 0 );
+	if( fixed ) {
+        CPLErr err2 = fixed->RasterIO(GF_Read, 0, 0, nX, nY, dvFixed[0], nX, nY, GDT_Byte, 0, 0);
+        if(err2 != CE_None){
+            wxLogError("Error in demFit");
+        }
+    }
 
 	DynArray<MEMARRAYTYPE> dvBaseZ( param.deepening == ParFit::lowerLimit ? nY : 0, param.deepening == ParFit::lowerLimit ? nX : 0 );
-	if( param.deepening == ParFit::lowerLimit )
-		baseZ->RasterIO( GF_Read, offsetX, offsetY, nX, nY, dvBaseZ[0], nX, nY, GDT_TYPE, 0, 0 );
+	if( param.deepening == ParFit::lowerLimit ) {
+        CPLErr err3 = baseZ->RasterIO(GF_Read, offsetX, offsetY, nX, nY, dvBaseZ[0], nX, nY, GDT_TYPE, 0, 0);
+        if(err3 != CE_None){
+            wxLogError("Error in demFit");
+        }
+    }
 
 	DynArray<MEMARRAYTYPE> dvBorder( nY, nX );
 	dvBorder.copy( dvResZ );
@@ -233,11 +250,19 @@ int demFit( enumMethod method, GDALRasterBand *resZ, GDALRasterBand *oriZ, GDALR
             }*/
 	}
 
-	if( resZ )
-		resZ->RasterIO( GF_Write, 0, 0, nX, nY, dvResZ[0], nX, nY, GDT_TYPE, 0, 0 );
+	if( resZ ) {
+        CPLErr err4 = resZ->RasterIO(GF_Write, 0, 0, nX, nY, dvResZ[0], nX, nY, GDT_TYPE, 0, 0);
+        if(err4 != CE_None){
+            wxLogError("Error in demFit: resZ");
+        }
+    }
 
-	if( resZO )
-		resZO->RasterIO( GF_Write, offsetX, offsetY, nX, nY, dvResZ[0], nX, nY, GDT_TYPE, 0, 0 );
+	if( resZO ) {
+        CPLErr err5 = resZO->RasterIO(GF_Write, offsetX, offsetY, nX, nY, dvResZ[0], nX, nY, GDT_TYPE, 0, 0);
+        if(err5 != CE_None){
+            wxLogError("Error in demFit: resZ0");
+        }
+    }
 
 	param.volume = 0;
 	for( int row = 0; row < nY; row++ )
@@ -300,7 +325,10 @@ double planeSlopes( GDALDataset *res, GDALRasterBand *oriZ, double dx, double dy
 	int nX = oriZ->GetXSize(), nY = oriZ->GetYSize();
 
 	DynArray<MEMARRAYTYPE> dvOriZ(nY, nX);
-	oriZ->RasterIO( GF_Read,  0, 0, nX, nY, dvOriZ[0], nX, nY, GDT_TYPE, 0, 0 );
+	CPLErr err6 = oriZ->RasterIO( GF_Read,  0, 0, nX, nY, dvOriZ[0], nX, nY, GDT_TYPE, 0, 0 );
+    if(err6 != CE_None){
+        wxLogError("Error in planeSlopes");
+    }
 
 	DynArray<unsigned char> dvr(nY, nX);
 	DynArray<unsigned char> dvg(nY, nX);
@@ -330,9 +358,12 @@ double planeSlopes( GDALDataset *res, GDALRasterBand *oriZ, double dx, double dy
 				dvr[row][col] = dvg[row][col] = dvb[row][col] = 255;
 		}
 
-	res->GetRasterBand(1)->RasterIO( GF_Write, 0, 0, nX, nY, dvr[0], nX, nY, GDT_Byte, 0, 0 );
-	res->GetRasterBand(2)->RasterIO( GF_Write, 0, 0, nX, nY, dvg[0], nX, nY, GDT_Byte, 0, 0 );
-	res->GetRasterBand(3)->RasterIO( GF_Write, 0, 0, nX, nY, dvb[0], nX, nY, GDT_Byte, 0, 0 );
+	CPLErr err_band1 = res->GetRasterBand(1)->RasterIO( GF_Write, 0, 0, nX, nY, dvr[0], nX, nY, GDT_Byte, 0, 0 );
+    CPLErr err_band2 = res->GetRasterBand(2)->RasterIO( GF_Write, 0, 0, nX, nY, dvg[0], nX, nY, GDT_Byte, 0, 0 );
+    CPLErr err_band3 = res->GetRasterBand(3)->RasterIO( GF_Write, 0, 0, nX, nY, dvb[0], nX, nY, GDT_Byte, 0, 0 );
+    if (err_band1 != CE_None || err_band2 != CE_None || err_band3 != CE_None){
+        wxLogError("Error writing image bands!");
+    }
 
 	printf( "MinOrient: %g\nMaxOrient: %g\n", minorient * 180. / M_PI, maxorient * 180. / M_PI);
 
@@ -342,7 +373,10 @@ double planeSlopes( GDALDataset *res, GDALRasterBand *oriZ, double dx, double dy
 
 bool hasNoData( GDALRasterBand *inpZ, int nX, int nY, int offsetX, int offsetY ) {
 	DynArray<double> dvInpZ(nY, nX);
-	inpZ->RasterIO( GF_Read, offsetX, offsetY, nX, nY, dvInpZ[0], nX, nY, GDT_Float64, 0, 0 );
+	CPLErr err = inpZ->RasterIO( GF_Read, offsetX, offsetY, nX, nY, dvInpZ[0], nX, nY, GDT_Float64, 0, 0 );
+    if (err != CE_None){
+        wxLogError("Error reading raster (hasNoData)");
+    }
 	int success;
 	double nodata = inpZ->GetNoDataValue( &success );
 	for( int row = 0; row < nY; row++ )
