@@ -27,7 +27,7 @@ endif (UNIX)
 
 ##### VROOMGIS
 include(FetchContent)
-set(VROOMGIS_GIT_TAG 59e92e6c814ed89b26aa4dc964c8abed25eb1480)
+set(VROOMGIS_GIT_TAG 32d8ea0f42d191667b3ef55eae9b088bb5e119b4)
 FetchContent_Declare(
         vroomgis
         GIT_REPOSITORY https://github.com/terranum-ch/vroomgis.git
