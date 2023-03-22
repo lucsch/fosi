@@ -8,7 +8,6 @@
 #include "profileview_dlg.h"
 #include "vrlayerraster.h"
 #include "vroperationvectorprofiler.h"
-#include "general_bmp.h"
 #include "vroomgis_toolbmp.h"
 
 

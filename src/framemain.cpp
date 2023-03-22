@@ -23,7 +23,6 @@
 //#include "wxhgversion_dlg.h"
 //#include "wxhgversion_core.h"
 #include "version.h"
-#include "general_bmp.h"
 #include "createslbl_dlg.h"
 #include "plint_dlg.h"
 #include "profile_dlg.h"
@@ -1226,7 +1225,6 @@ Frame::Frame(const wxString &title) :
     m_Editor = nullptr;
 
     // Design interface
-    initialize_images();
     vroomgis_initialize_images();
     vroomgis_initialize_images_toolbar();
     CreateStatusBar(3);
@@ -1243,7 +1241,7 @@ Frame::Frame(const wxString &title) :
 
     // add icon (windows / linux)
     wxIcon myIcon;
-    myIcon.CopyFromBitmap(*_img_app_sml);
+    myIcon.CopyFromBitmap(Bitmaps::GetLogo());
     SetIcon(myIcon);
 
     // vroomGIS
@@ -1288,7 +1286,6 @@ Frame::~Frame() {
 
     delete wxLog::SetActiveTarget(NULL);
 
-    uninitialize_images();
     vroomgis_clear_images();
     vroomgis_uninitialize_images_toolbar();
 }
