@@ -70,6 +70,7 @@ set_source_files_properties(${ICON_PATH} PROPERTIES MACOSX_PACKAGE_LOCATION Reso
 # Executable
 ADD_EXECUTABLE (${CMAKE_PROJECT_NAME}
         MACOSX_BUNDLE WIN32
+        ${ICON_PATH}
         ${SRC_FILES}
         src/resource.rc
 )

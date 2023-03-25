@@ -54,7 +54,7 @@ class Fosi(ConanFile):
         if self.settings.os == "Linux":
             self.copy("proj.db", dst="bin", src="res", root_package="proj")
         if self.settings.os == "Macos":
-            self.copy("*", dst="bin/ToolMap.app/Contents/share/proj", src="res", root_package="proj")
+            self.copy("*", dst="bin/Fosi.app/Contents/share/proj", src="res", root_package="proj")
 
     def build(self):
         cmake = CMake(self)
