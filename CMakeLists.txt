@@ -105,6 +105,7 @@ IF (APPLE)
    " COMPONENT Runtime)
 ENDIF (APPLE)
 
-
+# create installer using CPACK
+include("build/cpack_installer.cmake")
 
 
