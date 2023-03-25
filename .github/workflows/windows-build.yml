@@ -58,7 +58,7 @@ jobs:
       working-directory: ${{github.workspace}}/bin
       run: |
         cpack -C ${{env.BUILD_TYPE}} -G ZIP
-        cpack -C ${{env.BUILD_TYPE}} -G WIX
+# cpack -C ${{env.BUILD_TYPE}} -G WIX
 
     - name: Upload
       uses: actions/upload-artifact@v3

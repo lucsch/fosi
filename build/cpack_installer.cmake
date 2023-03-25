@@ -25,7 +25,7 @@ endif ()
 if (WIN32)
     # install proj files
     install(DIRECTORY ${PROJ_SHARE_PATH} DESTINATION share)
-    install(FILES resources/set-env.bat DESTINATION .)
+    install(FILES build/set-env.bat DESTINATION .)
 
     # install Microsoft Visual Studio librairies (MSVCP140.DLL, etc.)
     include(InstallRequiredSystemLibraries)
