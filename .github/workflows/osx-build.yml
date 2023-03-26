@@ -59,9 +59,10 @@ jobs:
           dsymutil bin/Fosi.app/Contents/MacOS/Fosi -o Fosi.dSYM
 
       - name: Upload debug symbols
+        if: github.event_name == 'release' && github.event.action == 'created'
         run: |
           cd ${{github.workspace}}/bin
-          sentry-cli --auth-token 0894f6f8a43641b092fe0ad0b992f576967f2172c7154904b76f2f8daf04b579 upload-dif --org terranum --project fosi bin
+          sentry-cli --auth-token 0894f6f8a43641b092fe0ad0b992f576967f2172c7154904b76f2f8daf04b579 upload-dif --org terranum --project fosi bin --include-sources
 
       - name: Installer DND
         run: |
