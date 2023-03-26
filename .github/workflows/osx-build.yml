@@ -30,6 +30,10 @@ jobs:
           conan remote add gitlab https://gitlab.com/api/v4/packages/conan
           conan user gitlab+deploy-token-653038 -r gitlab -p sBwmejFz5Pn-gZPSNFMy
 
+      - name: Install sentry-cli
+        run: |
+          pip install sentry-cli
+
       - name: Install libraries
         run: |
           mkdir ${{github.workspace}}/bin
@@ -44,6 +48,16 @@ jobs:
         run: |
           cd ${{github.workspace}}/bin
           conan build ..
+
+      - name: Extract debug symbols
+        run: |
+          cd ${{github.workspace}}/bin
+          dsymutil bin/Fosi.app/Contents/MacOS/Fosi -o Fosi.dSYM
+
+      - name: Upload debug symbols
+        run: |
+          cd ${{github.workspace}}/bin
+          sentry-cli --auth-token 0894f6f8a43641b092fe0ad0b992f576967f2172c7154904b76f2f8daf04b579 upload-dif --org terranum --project Fosi bin
 
       - name: Installer DND
         run: |
