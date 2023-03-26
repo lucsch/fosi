@@ -73,6 +73,7 @@ jobs:
         with:
           path: |
             ${{github.workspace}}/bin/*.dmg
+            ${{github.workspace}}/bin/*.dSYM
 
   upload_all:
     name: Upload if release
@@ -91,7 +92,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: "dist/*.dmg"
+          file: "dist/*.dmg;dist/*.dSYM"
           tags: true
           draft: true
           verbose: true
