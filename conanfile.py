@@ -60,6 +60,11 @@ class Fosi(ConanFile):
         if self.settings.os == "Macos":
             self.copy("*", dst="bin/Fosi.app/Contents/share/proj", src="res", root_package="proj")
 
+        # copy crashpad binary
+        self.copy("crashpad_handler*", dst="bin", src="bin", root_package="sentry-crashpad")
+        if self.settings.os == "Macos":
+            self.copy("crashpad_handler*", dst="bin/Fosi.app/Contents/MacOS", src="bin", root_package="sentry-crashpad")
+
     def build(self):
         cmake = CMake(self)
         # if self.options.unit_test:
