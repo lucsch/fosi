@@ -49,7 +49,7 @@ jobs:
 
       - name: Build
         working-directory: ${{github.workspace}}/bin
-        run: | 
+        run: |
           cmake --build . --config ${{env.BUILD_TYPE}}
           cmake --build . --target install
 
@@ -76,34 +76,34 @@ jobs:
             ${{github.workspace}}/bin/*.dmg
             ${{github.workspace}}/bin/*.dSYM
 
-      - name: Upload release
-        if: github.event_name == 'release' && github.event.action == 'created'
+  #      - name: Upload release
+  #        if: github.event_name == 'release' && github.event.action == 'created'
+  #        uses: xresloader/upload-to-github-release@v1
+  #        env:
+  #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #        with:
+  #          file: "bin/*.dmg;bin/*.dSYM"
+  #          tags: true
+  #          draft: true
+
+  upload_all:
+    name: Upload if release
+    needs: [ build ]
+    runs-on: ubuntu-22.04
+    if: github.event_name == 'release' && github.event.action == 'created'
+
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: artifact
+          path: dist
+
+      - name: Upload to releases
         uses: xresloader/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: "bin/*.dmg;bin/*.dSYM"
+          file: "dist/*.dmg;dist/*.dSYM"
           tags: true
           draft: true
-
-#  upload_all:
-#    name: Upload if release
-#    needs: [build]
-#    runs-on: ubuntu-22.04
-#    if: github.event_name == 'release' && github.event.action == 'created'
-#
-#    steps:
-#      - uses: actions/download-artifact@v3
-#        with:
-#          name: artifact
-#          path: dist
-#
-#      - name: Upload to releases
-#        uses: xresloader/upload-to-github-release@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          file: "dist/*.dmg;dist/*.dSYM"
-#          tags: true
-#          draft: true
-#          verbose: true
+          verbose: true
