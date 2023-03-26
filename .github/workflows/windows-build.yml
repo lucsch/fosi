@@ -17,85 +17,95 @@ jobs:
       PROJ_LIB: ${{github.workspace}}/bin/share/proj
 
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.8
-
-    - name: Install conan
-      run: |
-        python -m pip install --upgrade pip
-        pip install conan==1.*
-
-        # gitlab support
-        conan config set general.revisions_enabled=1
-        conan remote add gitlab https://gitlab.com/api/v4/packages/conan
-        conan user gitlab+deploy-token-653038 -r gitlab -p sBwmejFz5Pn-gZPSNFMy
-
-    - name: Install sentry-cli
-      run: |
-        pip install sentry-cli
-
-    - name: Install libraries
-      run: |
-        mkdir ${{github.workspace}}/bin
-        cd ${{github.workspace}}/bin
-        conan install .. --build=libtiff
-
-    - name: Configure
-      working-directory: ${{github.workspace}}/bin
-      run: cmake .. -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
-
-    - name: Build
-      working-directory: ${{github.workspace}}/bin
-      run: cmake --build . --config ${{env.BUILD_TYPE}}
-
-    - name: Upload debug symbols
-      if: github.event_name == 'release' && github.event.action == 'created'
-      run: |
-        cd ${{github.workspace}}/bin
-        sentry-cli --auth-token 0894f6f8a43641b092fe0ad0b992f576967f2172c7154904b76f2f8daf04b579 upload-dif --org terranum --project fosi bin --include-sources
-
-#    - name: Run tests
-#      working-directory: ${{github.workspace}}/bin/bin
-#      run: .\UnitTests
-
-    - name: CPack
-      working-directory: ${{github.workspace}}/bin
-      run: |
-        cpack -C ${{env.BUILD_TYPE}} -G ZIP
-# cpack -C ${{env.BUILD_TYPE}} -G WIX
-
-    - name: Upload
-      uses: actions/upload-artifact@v3
-      with:
-        path: |
-          ${{github.workspace}}/bin/*.zip
-          ${{github.workspace}}/bin/*.msi
-          ${{github.workspace}}/bin/bin/*.pdb
-
-  upload_all:
-    name: Upload if release
-    needs: [build]
-    runs-on: ubuntu-22.04
-    if: github.event_name == 'release' && github.event.action == 'created'
-
-    steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/checkout@v3
         with:
-          name: artifact
-          path: dist
+          fetch-depth: 0
 
-      - name: Upload to releases
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+
+      - name: Install conan
+        run: |
+          python -m pip install --upgrade pip
+          pip install conan==1.*
+          
+          # gitlab support
+          conan config set general.revisions_enabled=1
+          conan remote add gitlab https://gitlab.com/api/v4/packages/conan
+          conan user gitlab+deploy-token-653038 -r gitlab -p sBwmejFz5Pn-gZPSNFMy
+
+      - name: Install sentry-cli
+        run: |
+          pip install sentry-cli
+
+      - name: Install libraries
+        run: |
+          mkdir ${{github.workspace}}/bin
+          cd ${{github.workspace}}/bin
+          conan install .. --build=libtiff
+
+      - name: Configure
+        working-directory: ${{github.workspace}}/bin
+        run: cmake .. -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+      - name: Build
+        working-directory: ${{github.workspace}}/bin
+        run: cmake --build . --config ${{env.BUILD_TYPE}}
+
+      - name: Upload debug symbols
+        if: github.event_name == 'release' && github.event.action == 'created'
+        run: |
+          cd ${{github.workspace}}/bin
+          sentry-cli --auth-token 0894f6f8a43641b092fe0ad0b992f576967f2172c7154904b76f2f8daf04b579 upload-dif --org terranum --project fosi bin --include-sources
+
+      #    - name: Run tests
+      #      working-directory: ${{github.workspace}}/bin/bin
+      #      run: .\UnitTests
+
+      - name: CPack
+        working-directory: ${{github.workspace}}/bin
+        run: |
+          cpack -C ${{env.BUILD_TYPE}} -G ZIP
+      # cpack -C ${{env.BUILD_TYPE}} -G WIX
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          path: |
+            ${{github.workspace}}/bin/*.zip
+            ${{github.workspace}}/bin/*.msi
+            ${{github.workspace}}/bin/bin/*.pdb
+
+      - name: Upload release
+        if: github.event_name == 'release' && github.event.action == 'created'
         uses: xresloader/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: "dist/*.zip;dist/*.msi;dist/bin/*.pdb"
+          file: "*.zip;*.msi;bin/*.pdb"
           tags: true
           draft: true
-          verbose: true
+
+#  upload_all:
+#    name: Upload if release
+#    needs: [build]
+#    runs-on: ubuntu-22.04
+#    if: github.event_name == 'release' && github.event.action == 'created'
+#
+#    steps:
+#      - uses: actions/download-artifact@v3
+#        with:
+#          name: artifact
+#          path: dist
+#
+#      - name: Upload to releases
+#        uses: xresloader/upload-to-github-release@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          file: "dist/*.zip;dist/*.msi;dist/bin/*.pdb"
+#          tags: true
+#          draft: true
+#          verbose: true
