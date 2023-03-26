@@ -21,6 +21,12 @@ if (WIN32)
     )
 endif ()
 
+#install crashpad_handler
+if (WIN32)
+    install(FILES "${CMAKE_BINARY_DIR}/bin/crashpad_handler.exe" 
+    DESTINATION bin)
+endif()
+
 
 if (WIN32)
     # install proj files
