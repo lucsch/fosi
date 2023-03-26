@@ -78,6 +78,7 @@ ADD_EXECUTABLE (${CMAKE_PROJECT_NAME}
 add_dependencies(${CMAKE_PROJECT_NAME} vroomgis)
 target_link_libraries(${CMAKE_PROJECT_NAME} CONAN_PKG::libpng)
 target_link_libraries(${CMAKE_PROJECT_NAME} CONAN_PKG::gdal)
+target_link_libraries(${CMAKE_PROJECT_NAME} CONAN_PKG::sentry-native)
 target_link_libraries(${CMAKE_PROJECT_NAME} vroomgis)
 
 

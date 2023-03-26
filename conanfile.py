@@ -11,7 +11,11 @@ class Fosi(ConanFile):
         "libdeflate/1.12",
         "proj/9.0.1",
         "libjpeg/9e",
-        "libpng/1.6.38"
+        "libpng/1.6.38",
+        "sentry-native/0.6.0",
+        "sentry-crashpad/0.6.0",
+        "libcurl/7.85.0",
+        "zlib/1.2.13"
     ]
 
     # options = {

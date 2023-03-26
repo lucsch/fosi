@@ -30,6 +30,7 @@
 #include "core/demutil.h"
 #include "frameabout.h"
 #include "toolbarbitmaps.h"
+#include <sentry.h>
 
 
 BEGIN_EVENT_TABLE(Frame, wxFrame)
@@ -413,13 +414,23 @@ void Frame::_PreferenceChanged(bool refresh) {
 
 
 void Frame::OnAbout(wxCommandEvent &event) {
+    sentry_capture_event(sentry_value_new_message_event(
+        /*   level */ SENTRY_LEVEL_INFO,
+        /*  logger */ "custom",
+        /* message */ "It works!"
+        ));
     FrameAbout myAboutDlg(this);
     myAboutDlg.ShowModal();
 }
 
 
 void Frame::OnCheckUpdates(wxCommandEvent &event) {
+
+    // crash
     wxConfigBase *myConfig = wxConfigBase::Get(false);
+    myConfig = nullptr;
+    myConfig->SetPath("INTERNET");
+
     wxASSERT(myConfig);
     myConfig->SetPath("INTERNET");
     wxString myProxyInfo = myConfig->Read("PROXY_INFO", wxEmptyString);
@@ -1209,6 +1220,18 @@ void Frame::OnUpdateUIPlaneIntersection(wxUpdateUIEvent &event) {
 
 Frame::Frame(const wxString &title) :
         wxFrame(nullptr, FRAME_WINDOW, title) {
+    // crash logging
+    sentry_options_t *options = sentry_options_new();
+    sentry_options_set_dsn(options, "https://7ef21540a4d44fdd9c50f64b3e36c536@o4504901722177536.ingest.sentry.io/4504901725519872");
+    // This is also the default-path. For further information and recommendations:
+    // https://docs.sentry.io/platforms/native/configuration/options/#database-path
+
+    sentry_options_set_database_path(options, ".sentry-native");
+    sentry_options_set_release(options, "my-project-name@2.3.12");
+    sentry_options_set_debug(options, 1);
+    sentry_init(options);
+
+
     // Logging
     wxLog::SetLogLevel(wxLOG_Info);
     wxLog *myDlgLog = new tmLogGuiSeverity(wxLOG_Warning);
@@ -1288,4 +1311,5 @@ Frame::~Frame() {
 
     vroomgis_clear_images();
     vroomgis_uninitialize_images_toolbar();
+    sentry_close();
 }
