@@ -58,6 +58,8 @@ const int MENU_FRAME_CREATE_SLBL = wxID_HIGHEST + 27;
 const int MENU_FRAME_PLINT_DIALOG = wxID_HIGHEST + 28;
 const int MENU_FRAME_PROFILE_DIALOG = wxID_HIGHEST + 31;
 const int MENU_FRAME_PROFILE_VIEW = wxWindow::NewControlId();
+const int MENU_SENTRY_SEND_MESSAGE = wxWindow::NewControlId();
+const int MENU_SENTRY_SEND_CRASH = wxWindow::NewControlId();
 
 // DND support
 class Frame;
@@ -206,6 +208,10 @@ private:
     void OnUpdateUISaveSelectedLayer(wxUpdateUIEvent &event);
 
     void OnUpdateUIPlaneIntersection(wxUpdateUIEvent &event);
+
+    void OnSentrySendMessage(wxCommandEvent & event);
+
+    void OnSentrySendCrash(wxCommandEvent & event);
 
 DECLARE_EVENT_TABLE();
 };

@@ -63,6 +63,8 @@ EVT_MENU(MENU_TOOL_DRAW, Frame::OnToolDraw)
 EVT_MENU(MENU_TOOL_MODFIY, Frame::OnToolModify)
 EVT_MENU(MENU_FEATURE_DELETE, Frame::OnDeleteFeature)
 EVT_MENU(MENU_DATA_SAVE_SELECTED, Frame::OnSaveSelectedLayer)
+EVT_MENU(MENU_SENTRY_SEND_MESSAGE, Frame::OnSentrySendMessage)
+EVT_MENU(MENU_SENTRY_SEND_CRASH, Frame::OnSentrySendCrash)
 EVT_COMMAND(wxID_ANY, vrEVT_TOOL_ZOOM, Frame::OnToolZoomAction)
 EVT_COMMAND(wxID_ANY, vrEVT_TOOL_ZOOMOUT, Frame::OnToolZoomAction)
 EVT_COMMAND(wxID_ANY, vrEVT_TOOL_PAN, Frame::OnToolPanAction)
@@ -231,7 +233,9 @@ void Frame::_CreateMenus() {
     m_menu3->Append(new wxMenuItem(m_menu3, wxID_HELP, _("User Manual"), wxEmptyString, wxITEM_NORMAL));
     m_menu3->Append(new wxMenuItem(m_menu3, MENU_WEBSITE, _("Website"), wxEmptyString, wxITEM_NORMAL));
     m_menu3->AppendSeparator();
-    m_menu3->Append(new wxMenuItem(m_menu3, MENU_CHECK_UPDATE, _("Check for updates"), wxEmptyString, wxITEM_NORMAL));
+    // m_menu3->Append(new wxMenuItem(m_menu3, MENU_CHECK_UPDATE, _("Check for updates"), wxEmptyString, wxITEM_NORMAL));
+    m_menu3->Append(new wxMenuItem(m_menu3, MENU_SENTRY_SEND_MESSAGE, _("Send telemetry message!"), wxEmptyString, wxITEM_NORMAL));
+    m_menu3->Append(new wxMenuItem(m_menu3, MENU_SENTRY_SEND_CRASH, _("Generate a crash"), wxEmptyString, wxITEM_NORMAL));
     m_menubar1->Append(m_menu3, _("Help"));
     this->SetMenuBar(m_menubar1);
 
@@ -396,10 +400,6 @@ void Frame::_PreferenceChanged(bool refresh) {
 }
 
 void Frame::OnAbout(wxCommandEvent& event) {
-    sentry_capture_event(sentry_value_new_message_event(
-        /*   level */ SENTRY_LEVEL_INFO,
-        /*  logger */ "custom",
-        /* message */ "It works!"));
     FrameAbout myAboutDlg(this);
     myAboutDlg.ShowModal();
 }
@@ -407,9 +407,6 @@ void Frame::OnAbout(wxCommandEvent& event) {
 void Frame::OnCheckUpdates(wxCommandEvent& event) {
     // crash
     wxConfigBase* myConfig = wxConfigBase::Get(false);
-    myConfig = nullptr;
-    myConfig->SetPath("INTERNET");
-
     wxASSERT(myConfig);
     myConfig->SetPath("INTERNET");
     wxString myProxyInfo = myConfig->Read("PROXY_INFO", wxEmptyString);
@@ -1227,4 +1224,16 @@ Frame::~Frame() {
     vroomgis_clear_images();
     vroomgis_uninitialize_images_toolbar();
     sentry_close();
+}
+
+void Frame::OnSentrySendMessage(wxCommandEvent& event) {
+    sentry_capture_event(sentry_value_new_message_event(
+        /*   level */ SENTRY_LEVEL_INFO,
+        /*  logger */ "custom",
+        /* message */ "Hello from FOSI"));
+}
+
+void Frame::OnSentrySendCrash(wxCommandEvent& event) {
+    int * p = nullptr;
+    *p = 12;
 }
