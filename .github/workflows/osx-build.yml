@@ -49,7 +49,9 @@ jobs:
 
       - name: Build
         working-directory: ${{github.workspace}}/bin
-        run: cmake --build . --config ${{env.BUILD_TYPE}}
+        run: | 
+          cmake --build . --config ${{env.BUILD_TYPE}}
+          cmake --build . --target install
 
       - name: Extract debug symbols
         run: |
