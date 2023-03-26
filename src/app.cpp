@@ -8,7 +8,7 @@
 
 #include "app.h"
 #include "framemain.h"
-// #include "lscrashreport.h"
+#include "version.h"
 
 IMPLEMENT_APP(App);
 
@@ -31,7 +31,7 @@ bool App::OnInit(){
 #endif
     
     
-    m_Frame = new Frame(g_ProgName);
+    m_Frame = new Frame(SOFTWARE_NAME);
     m_Frame->CenterOnScreen(wxBOTH);
 	m_Frame->SetSize(50, 50, 800, 600);
 	m_Frame->Show(true);

@@ -31,6 +31,7 @@ endif ()
 set(VERSION
         "#ifndef _VERSION_H_
         #define _VERSION_H_
+        const char* const SOFTWARE_NAME=\"${PROJECT_NAME}\";
         const char* const ${PROJECT_NAME}_MAJOR_VERSION=\"${${PROJECT_NAME}_MAJOR_VERSION}\";
         const char* const ${PROJECT_NAME}_MINOR_VERSION=\"${${PROJECT_NAME}_MINOR_VERSION}\";
         const char* const GIT_REV=\"${GIT_REV}\";

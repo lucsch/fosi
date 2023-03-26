@@ -8,7 +8,7 @@
 
 #include "update.h"
 #include <wx/tokenzr.h>
-#include "framemain.h"
+#include "version.h"
 
 BEGIN_EVENT_TABLE(WebUpdateInformationBar, wxInfoBar)
 EVT_BUTTON (INFOBAR_DOWNLOAD_BUTTON, WebUpdateInformationBar::OnCommandDownload)
@@ -40,7 +40,7 @@ void WebUpdateInformationBar::OnNewVersion(wxThreadEvent & event) {
     _ClearBar();
     AddButton(INFOBAR_DOWNLOAD_BUTTON, _("Download"));
     wxString myMessage = wxString::Format(_("New version of %s is available: %s (%d)"),
-                                          g_ProgName,
+                                          SOFTWARE_NAME,
                                           event.GetString(),
                                           event.GetInt());
     ShowMessage(myMessage);
@@ -49,7 +49,7 @@ void WebUpdateInformationBar::OnNewVersion(wxThreadEvent & event) {
 void WebUpdateInformationBar::OnNoNewVersion(wxThreadEvent & event) {
     _ClearBar();
     wxString myMessage = wxString::Format(_("No new version of %s is available!"),
-                                          g_ProgName); 
+                                          SOFTWARE_NAME);
 	ShowMessage(myMessage);
 }
 

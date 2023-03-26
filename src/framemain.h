@@ -59,8 +59,6 @@ const int MENU_FRAME_PLINT_DIALOG = wxID_HIGHEST + 28;
 const int MENU_FRAME_PROFILE_DIALOG = wxID_HIGHEST + 31;
 const int MENU_FRAME_PROFILE_VIEW = wxWindow::NewControlId();
 
-const wxString g_ProgName = "Fosi";
-
 // DND support
 class Frame;
 
