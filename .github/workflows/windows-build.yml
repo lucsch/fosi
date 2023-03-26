@@ -84,7 +84,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: "*.zip;*.msi;bin/*.pdb"
+          file: "bin/*.zip;bin/*.msi;bin/bin/*.pdb"
           tags: true
           draft: true
 
