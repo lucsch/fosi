@@ -15,7 +15,8 @@ class Fosi(ConanFile):
         "sentry-native/0.6.0",
         "sentry-crashpad/0.6.0",
         "libcurl/7.85.0",
-        "zlib/1.2.13"
+        "zlib/1.2.13",
+        "openssl/1.1.1s"
     ]
 
     # options = {
